@@ -1,19 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Eka Jaya Nagara - Software Engginner",
@@ -33,13 +21,9 @@ export default function RootLayout({
         type="image/<generated>"
         sizes="<generated>"
       />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         <Header />
-        <main className="justify-center min-h-screen p-8 gap-10 ">
-          {children}
-        </main>
+        <main className="justify-center min-h-screen gap-10 ">{children}</main>
         <Footer />
       </body>
     </html>
