@@ -2,13 +2,23 @@ import Link from "next/link";
 import React from "react";
 
 export default function Footer() {
+  const RouteName = {
+    home: "/",
+    about: "/about",
+    blog: "#",
+    project_academic: "/project-academic",
+    project_open_source: "/project-open-source",
+    project_paid: "/project-paid",
+    project_profesional: "/project-profesional",
+  };
+
   return (
     <>
       <footer className="block md:hidden lg:hidden xl:hidden">
         <div className="fixed z-50 w-10/12 h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-900 dark:border-gray-800">
           <div className="grid h-full max-w-lg grid-cols-7 mx-auto">
             <Link
-              href={"/"}
+              href={RouteName?.home}
               className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
@@ -23,7 +33,7 @@ export default function Footer() {
               <span className="sr-only">Home</span>
             </Link>
             <Link
-              href={"/"}
+              href={RouteName?.project_academic}
               data-tooltip-target="tooltip-wallet"
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
@@ -38,7 +48,7 @@ export default function Footer() {
               <span className="sr-only">Academic Project</span>
             </Link>
             <Link
-              href={"/"}
+              href={RouteName?.project_open_source}
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
@@ -53,7 +63,7 @@ export default function Footer() {
             </Link>
 
             <Link
-              href={"/"}
+              href={RouteName?.project_paid}
               className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
@@ -67,7 +77,7 @@ export default function Footer() {
               <span className="sr-only">Paid Project</span>
             </Link>
             <Link
-              href={"/"}
+              href={RouteName?.project_profesional}
               className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
@@ -81,7 +91,7 @@ export default function Footer() {
               <span className="sr-only">Profesional Project</span>
             </Link>
             <Link
-              href={"/"}
+              href={RouteName?.blog}
               className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
@@ -95,7 +105,7 @@ export default function Footer() {
               <span className="sr-only">Blog</span>
             </Link>
             <Link
-              href={"/about"}
+              href={RouteName?.about}
               className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg

@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useMediaQuery } from "react-responsive";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "swiper/css";
 import dynamic from "next/dynamic";
 
@@ -13,6 +13,7 @@ const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 import "plyr-react/plyr.css";
 import Link from "next/link";
 import Image from "next/image";
+import Loading from "@/components/Loading";
 
 function Hero() {
   return (
@@ -21,7 +22,7 @@ function Hero() {
         <div className="max-w-md">
           <h1 className="text-4xl font-bold">Eka Jaya Nagara</h1>
           <p className="py-3">Software Engineer</p>
-          <p className="-mt-2 mb-3">PHP - Laravel - JS - React</p>
+          <p className="-mt-2 mb-3">PHP - Laravel - JS/TS - React</p>
         </div>
       </section>
     </>
@@ -166,24 +167,26 @@ function Playlist() {
                   description="Music Favorite, Slide Dams for get more"
                   link="https://music.youtube.com/@miyukinagara"
                 />
-                <Swiper
-                  spaceBetween={20}
-                  slidesPerView={slidesPerView}
-                  navigation
-                  pagination={{ clickable: true }}
-                  scrollbar={{ draggable: true }}
-                  onSlideChange={() => console.log("slide change")}
-                  onSwiper={(swiper) => console.log(swiper)}
-                >
-                  {videoItems.map((value, index) => (
-                    <SwiperSlide key={index}>
-                      <ListMusic
-                        source={value.source}
-                        provider={value.provider}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                <Suspense fallback={<Loading />}>
+                  <Swiper
+                    spaceBetween={20}
+                    slidesPerView={slidesPerView}
+                    navigation
+                    pagination={{ clickable: true }}
+                    scrollbar={{ draggable: true }}
+                    // onSlideChange={() => console.log("slide change")}
+                    // onSwiper={(swiper) => console.log(swiper)}
+                  >
+                    {videoItems.map((value, index) => (
+                      <SwiperSlide key={index}>
+                        <ListMusic
+                          source={value.source}
+                          provider={value.provider}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </Suspense>
               </section>
             </div>
           </div>
@@ -217,8 +220,8 @@ function Coding() {
               />
             </div>
             <p className="text-sm mt-10 mb-10">
-              i am longer move coding activity to gitlab, cause 3 years i work
-              in company and they used gitlab
+              I'm longer move coding activity to gitlab, caused 3 years ago I'm
+              work for company and they are used gitlab
             </p>
             <SectionHeader
               title="Gitlab"
@@ -233,6 +236,39 @@ function Coding() {
 }
 
 function Certification() {
+  const CertificationItems = [
+    {
+      date: "2020",
+      title: "CCNA R&S: Introduction to Networks",
+      academy: "Cisco",
+      Instructor: "Herianto - Darma Persada",
+    },
+    {
+      date: "2020",
+      title: "Introduction to Cybersecurity",
+      academy: "Cisco",
+      Instructor: "Jackson Smith - Self Face",
+    },
+    {
+      date: "2020",
+      title: "Partner: NDG Linux Unhatched",
+      academy: "Cisco",
+      Instructor: "Jackson Smith - Self Face",
+    },
+    {
+      date: "2020",
+      title: "Introduction to IoT",
+      academy: "Cisco",
+      Instructor: "Jackson Smith - Self Face",
+    },
+    {
+      date: "2021",
+      title: "IT Essentials: PC Hardware and Software",
+      academy: "Cisco",
+      Instructor: "Suzuki Syofian - Darma Persada",
+    },
+  ];
+
   return (
     <>
       <section className="md:mx-auto lg:mx-auto w-full md:w-3/4 ">
@@ -244,8 +280,20 @@ function Certification() {
               </h1>
 
               <p className="mt-1.5 text-sm text-gray-500">
-                Certification what i got it
+                Certification what i got it, you can see in detail{" "}
+                <Link className="text-red-600 mx-1 font-bold" href={"/about"}>
+                  About me
+                </Link>
+                For Check About My Long Journey
               </p>
+
+              <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
+                {CertificationItems.map((value, index) => (
+                  <li key={index}>
+                    {value.title} - {value.academy}, {value.Instructor}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
