@@ -230,11 +230,11 @@ function Education() {
           <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 sm:text-3xl">
-                Certification
+                Education
               </h1>
 
               <p className="mt-1.5 text-sm text-gray-500">
-                Certification what i got it This is very long journey
+                Education what i got it This is also long journey
               </p>
 
               <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
