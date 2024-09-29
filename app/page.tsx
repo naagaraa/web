@@ -38,17 +38,32 @@ function ListMusic({ source = "", provider = "youtube" }: listProps) {
   return (
     <>
       <div className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
-        <Plyr
-          source={{
-            type: "video",
-            // @ts-expect-error: Plyr's type definition doesn't match source object structure
-            sources: [{ src: source, provider: provider }],
-          }}
-        />
+        {/* <Suspense fallback={<Loading />}>
+          <iframe
+            width="560"
+            height="315"
+            src={"https://www.youtube.com/embed/" + source}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </Suspense> */}
+        <Suspense fallback={<Loading />}>
+          <Plyr
+            source={{
+              type: "video",
+              // @ts-expect-error: Plyr's type definition doesn't match source object structure
+              sources: [{ src: source, provider: provider }],
+            }}
+          />
+        </Suspense>
       </div>
     </>
   );
 }
+
 type sectionHeaderProps = {
   title: string;
   description: string;
@@ -167,26 +182,27 @@ function Playlist() {
                   description="Music Favorite, Slide Dams for get more"
                   link="https://music.youtube.com/@miyukinagara"
                 />
-                <Suspense fallback={<Loading />}>
-                  <Swiper
-                    spaceBetween={20}
-                    slidesPerView={slidesPerView}
-                    navigation
-                    pagination={{ clickable: true }}
-                    scrollbar={{ draggable: true }}
-                    // onSlideChange={() => console.log("slide change")}
-                    // onSwiper={(swiper) => console.log(swiper)}
-                  >
-                    {videoItems.map((value, index) => (
-                      <SwiperSlide key={index}>
+
+                <Swiper
+                  spaceBetween={20}
+                  slidesPerView={slidesPerView}
+                  navigation
+                  pagination={{ clickable: true }}
+                  scrollbar={{ draggable: true }}
+                  // onSlideChange={() => console.log("slide change")}
+                  // onSwiper={(swiper) => console.log(swiper)}
+                >
+                  {videoItems.map((value, index) => (
+                    <SwiperSlide key={index}>
+                      <Suspense fallback={<Loading />}>
                         <ListMusic
                           source={value.source}
                           provider={value.provider}
                         />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </Suspense>
+                      </Suspense>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </section>
             </div>
           </div>
@@ -214,7 +230,7 @@ function Coding() {
                 alt="GitHub Contributions"
                 width={800} // Set the width according to your requirements
                 height={200}
-                layout="responsive"
+                // layout="responsive"
                 priority
                 unoptimized={true}
               />

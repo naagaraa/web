@@ -61,10 +61,9 @@ export default function Footer() {
               </svg>
               <span className="sr-only">Open Source Project</span>
             </Link>
-
             <Link
               href={RouteName?.project_paid}
-              className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+              className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
                 className="w-5 h-5 mb-1 text-gray-100 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-500"
@@ -78,7 +77,7 @@ export default function Footer() {
             </Link>
             <Link
               href={RouteName?.project_profesional}
-              className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+              className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
                 fill="currentColor"
@@ -92,7 +91,7 @@ export default function Footer() {
             </Link>
             <Link
               href={RouteName?.blog}
-              className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+              className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
                 className="w-5 h-5 mb-1 text-gray-100 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-500"

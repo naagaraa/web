@@ -7,6 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import "swiper/css";
 import Loading from "@/components/Loading";
 import Image from "next/image";
+import Link from "next/link";
 
 function Heading() {
   return (
@@ -70,8 +71,8 @@ listProps) {
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             {description}
           </p>
-          <a
-            href="#"
+          <Link
+            href="/project-academic/1"
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >
             See Detail
@@ -90,7 +91,7 @@ listProps) {
                 d="M1 5h12m0 0L9 1m4 4L9 9"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </>
@@ -130,7 +131,7 @@ function Project() {
     } else if (isBigScreen) {
       setSlidesPerView(3);
     } else {
-      setSlidesPerView(2);
+      setSlidesPerView(1);
     }
   }, [isDesktopOrLaptop, isBigScreen]);
 
@@ -139,16 +140,16 @@ function Project() {
       id: "1",
       image:
         "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "project 1",
-      description: "project 1",
+      title: "Orion Scanner",
+      description: "Document Similarity",
       // other_image: [],
     },
   ];
 
   return (
     <>
-      <section className="md:mx-auto lg:mx-auto w-full md:w-3/4">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <section className="md:mx-auto lg:mx-auto w-full md:w-3/4 md:mb-10">
+        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 mb-36">
           <div className="items-start gap-4md:items-center md:justify-between">
             <div>
               <section className="music mt-5">

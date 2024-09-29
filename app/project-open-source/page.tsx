@@ -7,6 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import "swiper/css";
 import Loading from "@/components/Loading";
 import Image from "next/image";
+import Link from "next/link";
 
 function Heading() {
   return (
@@ -33,6 +34,7 @@ type listProps = {
   image?: string | { url: string }; // Specify the correct type here
   title?: string;
   description?: string;
+  link?: string;
   // other_image?: [] | any;
 };
 
@@ -41,6 +43,7 @@ function ListProject({
   image = "",
   title = "",
   description = "",
+  link = "",
 }: // other_image,
 listProps) {
   return (
@@ -70,8 +73,8 @@ listProps) {
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
             {description}
           </p>
-          <a
-            href="#"
+          <Link
+            href={link}
             className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >
             See Detail
@@ -90,7 +93,7 @@ listProps) {
                 d="M1 5h12m0 0L9 1m4 4L9 9"
               />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </>
@@ -138,33 +141,21 @@ function Project() {
     {
       id: "1",
       image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "project 1",
-      description: "project 1",
+        "https://eluminoustechnologies.com/blog/wp-content/uploads/2023/11/2.png",
+      title: "php libraries",
+      description:
+        "php libraries common use in final project, see detail for more information",
+      link: "https://naagaraa.github.io/web-metode-skripsi/",
       // other_image: [],
     },
     {
       id: "1",
       image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "project 1",
-      description: "project 1",
-      // other_image: [],
-    },
-    {
-      id: "1",
-      image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "project 1",
-      description: "project 1",
-      // other_image: [],
-    },
-    {
-      id: "1",
-      image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "project 1",
-      description: "project 1",
+        "https://eluminoustechnologies.com/blog/wp-content/uploads/2023/11/2.png",
+      title: "mini mvc php",
+      description:
+        "framework php mini project learning php, this long journey, see detail for more information",
+      link: "https://nagara.gitbook.io/code-zero-project",
       // other_image: [],
     },
   ];
@@ -197,6 +188,7 @@ function Project() {
                           title={value.title}
                           description={value.description}
                           image={value.image}
+                          link={value.link}
                           // other_image={value?.other_image}
                         />
                       </SwiperSlide>

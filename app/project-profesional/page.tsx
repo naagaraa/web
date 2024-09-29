@@ -15,11 +15,11 @@ function Heading() {
         <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
           <div className="max-w-3xl text-start">
             <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
-              Paid Project
+              Profesional Project
             </h1>
 
             <p className="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
-              All My Project in Paid Work as Kuli (remote work) / Freelance
+              All My Project in Profesional Work onsite and hybrite
             </p>
           </div>
         </div>
