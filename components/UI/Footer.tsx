@@ -1,16 +1,8 @@
 import Link from "next/link";
 import React from "react";
+import { RouteName } from "@/routes/navigation";
 
 export default function Footer() {
-  const RouteName = {
-    home: "/",
-    about: "/about",
-    blog: "#",
-    project_academic: "/project-academic",
-    project_open_source: "/project-open-source",
-    project_paid: "/project-paid",
-    project_profesional: "/project-profesional",
-  };
 
   return (
     <>

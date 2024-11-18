@@ -41,14 +41,6 @@ function Project() {
                   </li>
                 ))}
               </ul>
-
-              {/* <p className="mt-5 text-sm text-gray-500">
-                That Very Long Journey Right?, and Why I am Not have actually
-                have a lot profesional Project cause this, long journey in
-                academic, and currently i am try learn English A1 - B2, focus
-                for comunication skill, and learn other technology, like react,
-                docker, VM, Network, Linux, Android, Bussiness, Electronic
-              </p> */}
             </div>
           </div>
         </div>

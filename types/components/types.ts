@@ -1,3 +1,10 @@
+import React from "react"
+
+//  children or props
+export type ChildrenProps = {
+    slot?: React.ReactNode
+}
+
 // heading props
 export type StackProps = {
     available?: boolean
