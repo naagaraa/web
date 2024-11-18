@@ -1,27 +1,9 @@
 "use client";
 
 import React from "react";
-
-function Heading() {
-  return (
-    <>
-      <section className="bg-gradient-to-r from-purple-400/10 via-pink-500/10 to-red-500/10 md:pb-10">
-        <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
-          <div className="max-w-3xl text-start">
-            <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
-              Eka Jaya Nagara
-            </h1>
-
-            <p className="mt-4 max-w-xl sm:text-xl/relaxed">
-              Software Engineer
-            </p>
-            <p className="mt-1 mb-3">PHP - Laravel - JS - React</p>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
+import Heading from "@/components/UI/Heading";
+import { CertificationItems } from "@/data/Certification";
+import { EducationItems } from "@/data/Education";
 
 function Story() {
   return (
@@ -63,106 +45,6 @@ function Story() {
 }
 
 function Certification() {
-  const CertificationItems = [
-    {
-      date: "2020",
-      title: "CCNA R&S: Introduction to Networks",
-      academy: "Cisco",
-      Instructor: "Herianto - Darma Persada",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "Introduction to Cybersecurity",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "Partner: NDG Linux Unhatched",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "Introduction to IoT",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-      part: [],
-    },
-    {
-      date: "2021",
-      title: "IT Essentials: PC Hardware and Software",
-      academy: "Cisco",
-      Instructor: "Suzuki Syofian - Darma Persada",
-      part: [],
-    },
-    {
-      date: "2021",
-      title: "Architecting on AWS (Membangun Arsitektur Cloud di AWS)",
-      academy: "Dicoding x AWS",
-      Instructor: "Dicoding Indonesia",
-      part: [],
-    },
-    {
-      date: "2021",
-      title: "Cloud Practitioner Essentials (Belajar Dasar AWS Cloud)",
-      academy: "Dicoding x AWS",
-      Instructor: "Dicoding Indonesia",
-      part: [],
-    },
-    {
-      date: "2021",
-      title: "Belajar Dasar Visualisasi Data",
-      academy: "Dicoding x Google Developers Authorized Training Partner",
-      Instructor: "Dicoding Indonesia",
-      part: [],
-    },
-    {
-      date: "2022",
-      title: "Administrasi Sistem dan Layanan Infrastruktur TI",
-      academy: "Digital Talent x Google X Coursera",
-      Instructor: "Google",
-      part: [
-        "1. Dasar-Dasar Dukungan Teknis (Operating Systems and You: Becoming a Power User)",
-        "2. Seluk Beluk Jaringan Komputer (The Ins and Outs of Computer Networks)",
-        "3. Sistem Operasi dan Anda: Menjadi Pengguna yang Berdaya (Operating Systems and You: Becoming a Power User)",
-        "4. Not Complete",
-        "5. Not Complete",
-      ],
-    },
-    {
-      date: "2019",
-      title: "Belajar Membuat Aplikasi Android untuk Pemula",
-      academy: "Dicoding x Google Developers Authorized Training Partner",
-      Instructor: "Dicoding Indonesia",
-      part: [],
-    },
-    {
-      date: "2019",
-      title: "Belajar Dasar Pemrograman Web",
-      academy: "Dicoding x Google Developers Authorized Training Partner",
-      Instructor: "Dicoding Indonesia",
-      part: [],
-    },
-    {
-      date: "2024",
-      title: "The Basics of Linux Command Line",
-      academy: "Udemy",
-      Instructor: "Pragmatic Programmer",
-      part: [],
-    },
-    {
-      date: "2023",
-      title: "Become a bug bounty hunter",
-      academy: "Udemy",
-      Instructor: "Andrei Neagoie & Aleksa Tamburkovski, ZTM",
-      part: [],
-    },
-  ];
-
   return (
     <>
       <section className="grid items-start sm:items-start justify-items-center mt-5 mb-10">
@@ -213,16 +95,6 @@ function Certification() {
   );
 }
 function Education() {
-  const CertificationItems = [
-    {
-      date: "2020",
-      title: "Bachelor of Computer Sains",
-      Univ: "Univercity Of Darma Persada",
-      Faculty: "Enggineering",
-      Prodi: "Technology Information",
-    },
-  ];
-
   return (
     <>
       <section className="grid items-start sm:items-start justify-items-center mt-5 mb-10">
@@ -238,7 +110,7 @@ function Education() {
               </p>
 
               <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-                {CertificationItems.map((value, index) => (
+                {EducationItems.map((value, index) => (
                   <li key={index}>
                     {value.title} - {value.Prodi} {value.Faculty}, {value.Univ}
                   </li>
@@ -291,7 +163,10 @@ function Experience() {
 export default function About() {
   return (
     <>
-      <Heading />
+      <Heading name="Eka Jaya Nagara" title="Software Developer" stack={{
+        available: true,
+        title: "PHP - JS/TS - LARAVEL - VUE"
+      }} />
       <Story />
       <Certification />
       <Education />

@@ -1,65 +1,10 @@
 "use client";
 
 import React from "react";
-
-function Heading() {
-  return (
-    <>
-      <section className="bg-gradient-to-r from-purple-400/10 via-pink-500/10 to-red-500/10">
-        <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
-          <div className="max-w-3xl text-start">
-            <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
-              Paid Project
-            </h1>
-
-            <p className="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
-              All My Project in Paid Work as Kuli (remote work) / Freelance
-            </p>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
+import Heading from "@/components/UI/Heading";
+import { PaidProjectItems } from "@/data/PaidProject";
 
 function Project() {
-  const CertificationItems = [
-    {
-      date: "2020",
-      title: "simple image processing ( extraction data to text )",
-      academy: "PHP, MYSQL, LARAVEL, tesseract engine ",
-      Instructor: "REMOTE",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "simple enkrip information use kriptografi alogorithm",
-      academy: "PHP, MYSQL",
-      Instructor: "REMOTE",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "sentiment analysis use NLP tool,",
-      academy: "PHP, LARAVEL, NLP",
-      Instructor: "REMOTE",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "protype IOT automation on off electrict AC/Van and Light",
-      academy: "PHP, LARAVEL, BLYNK, ARDUINO C++",
-      Instructor: "REMOTE",
-      part: [],
-    },
-    {
-      date: "2020",
-      title: "protype IOT fire and flood alarms",
-      academy: "PHP, LARAVEL, BLYNK, ARDUINO C++",
-      Instructor: "REMOTE",
-      part: [],
-    },
-  ];
 
   return (
     <>
@@ -77,7 +22,7 @@ function Project() {
               </p>
 
               <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-                {CertificationItems.map((value, index) => (
+                {PaidProjectItems.map((value, index) => (
                   <li key={index}>
                     See Detail - {value.title} - {value.academy},{" "}
                     {value.Instructor}
@@ -115,7 +60,7 @@ function Project() {
 export default function ProjectPaid() {
   return (
     <>
-      <Heading />
+      <Heading name="Paid Project" title=" All My Project in Paid Work as Kuli (remote work) / Freelance" />
       <Project />
     </>
   );

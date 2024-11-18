@@ -13,28 +13,13 @@ const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 import "plyr-react/plyr.css";
 import Link from "next/link";
 import Image from "next/image";
-import Loading from "@/components/Loading";
+import Loading from "@/components/UI/Loading";
+import Hero from "@/components/UI/Hero";
+import { sectionHeaderProps, listMusicProps } from "@/types/components/types";
+import { VideoYoutubeItems } from "@/data/VideoYoutube";
 
-function Hero() {
-  return (
-    <>
-      <section className="grid hero-content text-center items-start sm:items-start justify-items-center mt-36">
-        <div className="max-w-md">
-          <h1 className="text-4xl font-bold">Eka Jaya Nagara</h1>
-          <p className="py-3">Software Engineer</p>
-          <p className="-mt-2 mb-3">PHP - Laravel - JS/TS - React</p>
-        </div>
-      </section>
-    </>
-  );
-}
 
-type listProps = {
-  source: string;
-  provider?: string;
-};
-
-function ListMusic({ source = "", provider = "youtube" }: listProps) {
+function ListMusic({ source = "", provider = "youtube" }: listMusicProps) {
   return (
     <>
       <div className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
@@ -64,16 +49,7 @@ function ListMusic({ source = "", provider = "youtube" }: listProps) {
   );
 }
 
-type sectionHeaderProps = {
-  title: string;
-  description: string;
-  link?: string;
-};
-function SectionHeader({
-  title = "",
-  description = "",
-  link = "/",
-}: sectionHeaderProps) {
+function SectionHeader({ title = "", description = "", link = "/" }: sectionHeaderProps) {
   return (
     <>
       <div className="mb-5 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
@@ -123,52 +99,6 @@ function Playlist() {
     }
   }, [isDesktopOrLaptop, isBigScreen]);
 
-  const videoItems = [
-    {
-      source: "d4u7QQ1DYzg",
-      provider: "youtube",
-    },
-    {
-      source: "FckmtuCWcm0",
-      provider: "youtube",
-    },
-    {
-      source: "YL6amT-XmAg",
-      provider: "youtube",
-    },
-    {
-      source: "sJpvWUFyFH4",
-      provider: "youtube",
-    },
-    {
-      source: "y6hf8jik6fc",
-      provider: "youtube",
-    },
-    {
-      source: "rq30yqhZCQ8",
-      provider: "youtube",
-    },
-    {
-      source: "bVZLw3fhBIE",
-      provider: "youtube",
-    },
-    {
-      source: "jV-4o5zckhw",
-      provider: "youtube",
-    },
-    {
-      source: "iQuEMnVCsTM",
-      provider: "youtube",
-    },
-    {
-      source: "hw6tYhE6XzE",
-      provider: "youtube",
-    },
-    {
-      source: "Z7cgTzSQiFU",
-      provider: "youtube",
-    },
-  ];
 
   return (
     <>
@@ -189,10 +119,10 @@ function Playlist() {
                   navigation
                   pagination={{ clickable: true }}
                   scrollbar={{ draggable: true }}
-                  // onSlideChange={() => console.log("slide change")}
-                  // onSwiper={(swiper) => console.log(swiper)}
+                // onSlideChange={() => console.log("slide change")}
+                // onSwiper={(swiper) => console.log(swiper)}
                 >
-                  {videoItems.map((value, index) => (
+                  {VideoYoutubeItems.map((value, index) => (
                     <SwiperSlide key={index}>
                       <Suspense fallback={<Loading />}>
                         <ListMusic
@@ -321,8 +251,11 @@ function Certification() {
 export default function Home() {
   return (
     <>
-      <Hero />
-      <Playlist />
+      <Hero name="Eka Jaya Nagara" title="Software Engineer" stack={{
+        available: true,
+        title: "PHP - JS/TS - LARAVEL - Vue"
+      }} />
+      {/* <Playlist /> */}
       <Certification />
       <Coding />
     </>

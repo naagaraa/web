@@ -5,29 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useMediaQuery } from "react-responsive";
 import { Suspense, useEffect, useState } from "react";
 import "swiper/css";
-import Loading from "@/components/Loading";
+import Loading from "@/components/UI/Loading";
 import Image from "next/image";
 import Link from "next/link";
-
-function Heading() {
-  return (
-    <>
-      <section className="bg-gradient-to-r from-purple-400/10 via-pink-500/10 to-red-500/10">
-        <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
-          <div className="max-w-3xl text-start">
-            <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
-              Open Source Project
-            </h1>
-
-            <p className="mx-auto mt-4 max-w-xl sm:text-xl/relaxed">
-              All My Project in Open Source or Personal
-            </p>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
+import Heading from "@/components/UI/Heading";
 
 type listProps = {
   id: string | number;
@@ -45,7 +26,7 @@ function ListProject({
   description = "",
   link = "",
 }: // other_image,
-listProps) {
+  listProps) {
   return (
     <>
       <div
@@ -178,8 +159,8 @@ function Project() {
                     navigation
                     pagination={{ clickable: true }}
                     scrollbar={{ draggable: true }}
-                    // onSlideChange={() => console.log("slide change")}
-                    // onSwiper={(swiper) => console.log(swiper)}
+                  // onSlideChange={() => console.log("slide change")}
+                  // onSwiper={(swiper) => console.log(swiper)}
                   >
                     {videoItems.map((value, index) => (
                       <SwiperSlide key={index}>
@@ -189,7 +170,7 @@ function Project() {
                           description={value.description}
                           image={value.image}
                           link={value.link}
-                          // other_image={value?.other_image}
+                        // other_image={value?.other_image}
                         />
                       </SwiperSlide>
                     ))}
@@ -206,7 +187,7 @@ function Project() {
 export default function ProjectOpenSource() {
   return (
     <>
-      <Heading />
+      <Heading name="Open Source Project" title="All My Project in Open Source or Personal" />
       <Project />
     </>
   );
