@@ -1,20 +1,23 @@
 import React from 'react'
 import Link from 'next/link'
 import { SubTitleProps } from '@/types/components/types'
+import useLoading from '@/composables/hook/useLoading'
+import Skeleton from 'react-loading-skeleton'
+
 
 export default function SubTitle({ value, externalLink }: SubTitleProps) {
+    const { isLoading } = useLoading(true, 500)
     return (
         <div>
             <p className="mt-1.5 text-sm text-gray-500">
-                {value}
+                {isLoading ? <Skeleton width={300} /> : value}
                 {externalLink ? (
                     <Link className="text-red-600 mx-1 font-bold" href={externalLink?.route}>
-                        {externalLink?.value}
+                        {isLoading ? <Skeleton width={500} /> : externalLink?.value}
                     </Link>
                 ) : (
-                    <div></div>
+                    ""
                 )}
-
             </p>
         </div>
     )

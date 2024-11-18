@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/UI/Header";
-import Footer from "@/components/UI/Footer";
+import Header from "@/components/Layout/Header";
+import Footer from "@/components/Layout/Footer";
+import { SkeletonTheme } from "react-loading-skeleton";
+import { ChildrenProps } from "@/types/components/types";
 
 export const metadata: Metadata = {
   title: "Eka Jaya Nagara - Software Engginner",
@@ -10,9 +12,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<ChildrenProps>) {
   return (
     <html lang="en">
       <link
@@ -23,7 +23,9 @@ export default function RootLayout({
       />
       <body>
         <Header />
-        <main className="justify-center min-h-screen gap-10 ">{children}</main>
+        <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
+          <main className="justify-center min-h-screen gap-10 ">{children}</main>
+        </SkeletonTheme>
         <Footer />
       </body>
     </html>

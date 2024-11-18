@@ -1,10 +1,16 @@
 "use client";
 
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
 import React from "react";
 import Heading from "@/components/UI/Heading";
 import { PaidProjectItems } from "@/data/PaidProject";
+import useLoading from "@/composables/hook/useLoading";
 
 function Project() {
+
+  // laoding
+  const { isLoading } = useLoading(true, 500);
 
   return (
     <>
@@ -13,20 +19,21 @@ function Project() {
           <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 sm:text-3xl">
-                All Paid Project
+                {isLoading ? <Skeleton width={100} /> : "Paid Project"}
               </h1>
 
               <p className="mt-1.5 text-sm text-gray-500">
-                I'm Accept Every Project From Task, Website, Apps, and Other, if
-                i do that. just do it
+                {isLoading ? <Skeleton width={300} /> : `I'm Accept Every Project From Task, Website, Apps, and Other, if
+                i do that. just do it`}
               </p>
 
               <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
                 {PaidProjectItems.map((value, index) => (
                   <li key={index}>
-                    See Detail - {value.title} - {value.jobs}, Tahun {value.date} - Stack:
-                    {" " + value.stack}
-                    {value.part?.length > 0 && (
+                    {isLoading ? <Skeleton width={300} /> : `See Detail - ${value.title} - ${value.jobs}, Tahun ${value.date} - Stack:
+                    ${" " + value.stack}`}
+
+                    {/* {value.part?.length > 0 && (
                       <>
                         <h5 className="font-bold text-small my-2">
                           Part Certification of {value.title}
@@ -37,7 +44,7 @@ function Project() {
                           ))}
                         </ul>
                       </>
-                    )}
+                    )} */}
                   </li>
                 ))}
               </ul>

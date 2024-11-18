@@ -5,6 +5,9 @@ import { useMediaQuery } from "react-responsive";
 import { Suspense, useEffect, useState } from "react";
 import "swiper/css";
 import dynamic from "next/dynamic";
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
+import useLoading from "@/composables/hook/useLoading";
 
 // Disable SSR for this component
 const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
@@ -140,39 +143,43 @@ function Playlist() {
 }
 
 function Coding() {
+  const { isLoading } = useLoading(true, 500)
   return (
     <WraperContent>
-
-      <SectionHeader
-        title="Github Activity"
-        description="coding activity at github"
-        link="https://github.com/naagaraa"
-      />
-      <div className="justify-center">
-        <Image
-          className="w-full"
-          src="https://ghchart.rshah.org/naagaraa"
-          alt="GitHub Contributions"
-          // Set the width according to your requirements
-          width={800}
-          height={200}
-          // layout="responsive"
-          priority
-          unoptimized={true}
-          style={{
-            maxWidth: "100%",
-            height: "auto"
-          }} />
-      </div>
-      <p className="text-sm mt-10 mb-10">
-        I'm longer move coding activity to gitlab, caused 3 years ago I'm
-        work for company and they are used gitlab
-      </p>
-      <SectionHeader
-        title="Gitlab"
-        description="coding activity at gitlab"
-        link="https://gitlab.com/naagaraa"
-      />
+      {isLoading ? <Skeleton count={10} width={500} /> : (
+        <>
+          <SectionHeader
+            title="Github Activity"
+            description="coding activity at github"
+            link="https://github.com/naagaraa"
+          />
+          <div className="justify-center">
+            <Image
+              className="w-full"
+              src="https://ghchart.rshah.org/naagaraa"
+              alt="GitHub Contributions"
+              // Set the width according to your requirements
+              width={800}
+              height={200}
+              // layout="responsive"
+              priority
+              unoptimized={true}
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
+          </div>
+          <p className="text-sm mt-10 mb-10">
+            I'm longer move coding activity to gitlab, caused 3 years ago I'm
+            work for company and they are used gitlab
+          </p>
+          <SectionHeader
+            title="Gitlab"
+            description="coding activity at gitlab"
+            link="https://gitlab.com/naagaraa"
+          />
+        </>
+      )}
     </WraperContent>
 
   );
@@ -181,23 +188,29 @@ function Coding() {
 
 function Certification() {
   const CertificationItem = CertificationItems.slice(0, 5);
+  const { isLoading } = useLoading(true, 500)
   return (
     <>
-      <WraperContent>
-        <Title value="Certification" />
-        <SubTitle value="Certification what i got it, you can see in detail
-                For Check About My Long Journey" externalLink={{
-            value: "about",
-            route: "/about"
-          }} />
 
-        <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-          {CertificationItem.map((value, index) => (
-            <li key={index}>
-              {value.title} - {value.academy}, {value.Instructor}
-            </li>
-          ))}
-        </ul>
+      <WraperContent>
+        {isLoading ? <Skeleton count={10} width={500} /> : (
+          <>
+            <Title value="Certification" />
+            <SubTitle value="Certification what i got it, you can see in detail
+                For Check About My Long Journey" externalLink={{
+                value: "about",
+                route: "/about"
+              }} />
+
+            <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
+              {CertificationItem.map((value, index) => (
+                <li key={index}>
+                  {value.title} - {value.academy}, {value.Instructor}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </WraperContent>
     </>
   );
