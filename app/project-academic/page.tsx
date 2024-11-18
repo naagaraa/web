@@ -9,6 +9,7 @@ import Loading from "@/components/UI/Loading";
 import Image from "next/image";
 import Link from "next/link";
 import Heading from "@/components/UI/Heading";
+import { EducationProjectItems } from "@/data/EducationProject";
 
 
 type listProps = {
@@ -26,58 +27,60 @@ function ListProject({
   description = "",
 }: // other_image,
   listProps) {
-  return (
-    <>
-      <div
-        key={id}
-        className="max-w-sm bg-white border border-gray-900 rounded-lg shadow dark:border-gray-900"
-      >
+  return (<>
+    <div
+      key={id}
+      className="max-w-sm bg-white border border-gray-900 rounded-lg shadow dark:border-gray-900"
+    >
+      <a href="#">
+        <Image
+          className="rounded-t-lg"
+          src={typeof image === "string" ? image : image?.url}
+          alt="GitHub Contributions"
+          // Set the width according to your requirements
+          width={800}
+          height={200}
+          priority
+          unoptimized={true}
+          sizes="100vw"
+          style={{
+            width: "100%",
+            height: "auto"
+          }} />
+      </a>
+      <div className="p-5">
         <a href="#">
-          <Image
-            className="rounded-t-lg"
-            src={typeof image === "string" ? image : image?.url}
-            alt="GitHub Contributions"
-            width={800} // Set the width according to your requirements
-            height={200}
-            layout="responsive"
-            priority
-            unoptimized={true}
-          />
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-black">
+            {title}
+          </h5>
         </a>
-        <div className="p-5">
-          <a href="#">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-black">
-              {title}
-            </h5>
-          </a>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            {description}
-          </p>
-          <Link
-            href="/project-academic/1"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+        <p className="mb-3 font-sm text-gray-700 dark:text-gray-400">
+          {description}
+        </p>
+        <Link
+          href="/project-academic/1"
+          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+        >
+          See Detail
+          <svg
+            className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
           >
-            See Detail
-            <svg
-              className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </Link>
-        </div>
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
+            />
+          </svg>
+        </Link>
       </div>
-    </>
-  );
+    </div>
+  </>);
 }
 
 type sectionHeaderProps = {
@@ -105,7 +108,7 @@ function SectionHeader({ title = "", description = "" }: sectionHeaderProps) {
 function Project() {
   const isDesktopOrLaptop = useMediaQuery({ query: "(min-width: 1224px)" });
   const isBigScreen = useMediaQuery({ query: "(min-width: 768px)" });
-  const [slidesPerView, setSlidesPerView] = useState(3);
+  const [slidesPerView, setSlidesPerView] = useState(2);
 
   useEffect(() => {
     if (isDesktopOrLaptop) {
@@ -117,16 +120,6 @@ function Project() {
     }
   }, [isDesktopOrLaptop, isBigScreen]);
 
-  const videoItems = [
-    {
-      id: "1",
-      image:
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      title: "Orion Scanner",
-      description: "Document Similarity",
-      // other_image: [],
-    },
-  ];
 
   return (
     <>
@@ -141,7 +134,7 @@ function Project() {
                 />
                 <Suspense fallback={<Loading />}>
                   <Swiper
-                    spaceBetween={10}
+                    spaceBetween={20}
                     slidesPerView={slidesPerView}
                     navigation
                     pagination={{ clickable: true }}
@@ -149,7 +142,7 @@ function Project() {
                   // onSlideChange={() => console.log("slide change")}
                   // onSwiper={(swiper) => console.log(swiper)}
                   >
-                    {videoItems.map((value, index) => (
+                    {EducationProjectItems.map((value, index) => (
                       <SwiperSlide key={index}>
                         <ListProject
                           id={value.id}

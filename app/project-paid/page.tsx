@@ -24,8 +24,8 @@ function Project() {
               <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
                 {PaidProjectItems.map((value, index) => (
                   <li key={index}>
-                    See Detail - {value.title} - {value.academy},{" "}
-                    {value.Instructor}
+                    See Detail - {value.title} - {value.jobs}, Tahun {value.date} - Stack:
+                    {" " + value.stack}
                     {value.part?.length > 0 && (
                       <>
                         <h5 className="font-bold text-small my-2">

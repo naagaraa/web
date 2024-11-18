@@ -2,7 +2,24 @@ import React from "react"
 
 //  children or props
 export type ChildrenProps = {
-    slot?: React.ReactNode
+    children?: React.ReactNode
+}
+
+// title Props
+export type titleProps = {
+    value?: string
+}
+
+// externalLinkProps
+export type externalLinkProps = {
+    value: string
+    route: string
+}
+
+// subtitle props
+export type SubTitleProps = {
+    value?: string
+    externalLink?: externalLinkProps
 }
 
 // heading props

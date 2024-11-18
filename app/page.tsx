@@ -15,9 +15,13 @@ import Link from "next/link";
 import Image from "next/image";
 import Loading from "@/components/UI/Loading";
 import Hero from "@/components/UI/Hero";
-import { sectionHeaderProps, listMusicProps } from "@/types/components/types";
+import { sectionHeaderProps, listMusicProps, ChildrenProps } from "@/types/components/types";
 import { VideoYoutubeItems } from "@/data/VideoYoutube";
-
+import Title from "@/components/common/Title";
+import SubTitle from "@/components/common/SubTitle";
+import { CertificationItems } from "@/data/Certification";
+import WraperContent from "@/components/UI/WrapperContent";
+import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
 
 function ListMusic({ source = "", provider = "youtube" }: listMusicProps) {
   return (
@@ -101,149 +105,100 @@ function Playlist() {
 
 
   return (
-    <>
-      <section className="md:mx-auto lg:mx-auto w-full md:w-3/4 mt-36">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-          <div className="items-start gap-4md:items-center md:justify-between">
-            <div>
-              <section className="music mt-5">
-                <SectionHeader
-                  title="Music Favorite"
-                  description="Music Favorite, Slide Dams for get more"
-                  link="https://music.youtube.com/@miyukinagara"
-                />
+    <WrapperContentSlide>
+      <section className="music mt-5">
+        <SectionHeader
+          title="Music Favorite"
+          description="Music Favorite, Slide Dams for get more"
+          link="https://music.youtube.com/@miyukinagara"
+        />
 
-                <Swiper
-                  spaceBetween={20}
-                  slidesPerView={slidesPerView}
-                  navigation
-                  pagination={{ clickable: true }}
-                  scrollbar={{ draggable: true }}
-                // onSlideChange={() => console.log("slide change")}
-                // onSwiper={(swiper) => console.log(swiper)}
-                >
-                  {VideoYoutubeItems.map((value, index) => (
-                    <SwiperSlide key={index}>
-                      <Suspense fallback={<Loading />}>
-                        <ListMusic
-                          source={value.source}
-                          provider={value.provider}
-                        />
-                      </Suspense>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </section>
-            </div>
-          </div>
-        </div>
+        <Swiper
+          spaceBetween={20}
+          slidesPerView={slidesPerView}
+          navigation
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+        // onSlideChange={() => console.log("slide change")}
+        // onSwiper={(swiper) => console.log(swiper)}
+        >
+          {VideoYoutubeItems.map((value, index) => (
+            <SwiperSlide key={index}>
+              <Suspense fallback={<Loading />}>
+                <ListMusic
+                  source={value.source}
+                  provider={value.provider}
+                />
+              </Suspense>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </section>
-    </>
+    </WrapperContentSlide>
+
   );
 }
 
 function Coding() {
   return (
-    <>
-      <section className="md:mx-auto lg:mx-auto w-full md:w-3/4 ">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-          <div className="items-start gap-4 md:flex-row md:items-center md:justify-between">
-            <SectionHeader
-              title="Github Activity"
-              description="coding activity at github"
-              link="https://github.com/naagaraa"
-            />
-            <div className="justify-center">
-              <Image
-                className="w-full"
-                src="https://ghchart.rshah.org/naagaraa"
-                alt="GitHub Contributions"
-                width={800} // Set the width according to your requirements
-                height={200}
-                // layout="responsive"
-                priority
-                unoptimized={true}
-              />
-            </div>
-            <p className="text-sm mt-10 mb-10">
-              I'm longer move coding activity to gitlab, caused 3 years ago I'm
-              work for company and they are used gitlab
-            </p>
-            <SectionHeader
-              title="Gitlab"
-              description="coding activity at gitlab"
-              link="https://gitlab.com/naagaraa"
-            />
-          </div>
-        </div>
-      </section>
-    </>
+    <WraperContent>
+
+      <SectionHeader
+        title="Github Activity"
+        description="coding activity at github"
+        link="https://github.com/naagaraa"
+      />
+      <div className="justify-center">
+        <Image
+          className="w-full"
+          src="https://ghchart.rshah.org/naagaraa"
+          alt="GitHub Contributions"
+          // Set the width according to your requirements
+          width={800}
+          height={200}
+          // layout="responsive"
+          priority
+          unoptimized={true}
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
+      </div>
+      <p className="text-sm mt-10 mb-10">
+        I'm longer move coding activity to gitlab, caused 3 years ago I'm
+        work for company and they are used gitlab
+      </p>
+      <SectionHeader
+        title="Gitlab"
+        description="coding activity at gitlab"
+        link="https://gitlab.com/naagaraa"
+      />
+    </WraperContent>
+
   );
 }
 
-function Certification() {
-  const CertificationItems = [
-    {
-      date: "2020",
-      title: "CCNA R&S: Introduction to Networks",
-      academy: "Cisco",
-      Instructor: "Herianto - Darma Persada",
-    },
-    {
-      date: "2020",
-      title: "Introduction to Cybersecurity",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-    },
-    {
-      date: "2020",
-      title: "Partner: NDG Linux Unhatched",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-    },
-    {
-      date: "2020",
-      title: "Introduction to IoT",
-      academy: "Cisco",
-      Instructor: "Jackson Smith - Self Face",
-    },
-    {
-      date: "2021",
-      title: "IT Essentials: PC Hardware and Software",
-      academy: "Cisco",
-      Instructor: "Suzuki Syofian - Darma Persada",
-    },
-  ];
 
+function Certification() {
+  const CertificationItem = CertificationItems.slice(0, 5);
   return (
     <>
-      <section className="md:mx-auto lg:mx-auto w-full md:w-3/4 ">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-          <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-                Certification
-              </h1>
+      <WraperContent>
+        <Title value="Certification" />
+        <SubTitle value="Certification what i got it, you can see in detail
+                For Check About My Long Journey" externalLink={{
+            value: "about",
+            route: "/about"
+          }} />
 
-              <p className="mt-1.5 text-sm text-gray-500">
-                Certification what i got it, you can see in detail{" "}
-                <Link className="text-red-600 mx-1 font-bold" href={"/about"}>
-                  About me
-                </Link>
-                For Check About My Long Journey
-              </p>
-
-              <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-                {CertificationItems.map((value, index) => (
-                  <li key={index}>
-                    {value.title} - {value.academy}, {value.Instructor}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+        <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
+          {CertificationItem.map((value, index) => (
+            <li key={index}>
+              {value.title} - {value.academy}, {value.Instructor}
+            </li>
+          ))}
+        </ul>
+      </WraperContent>
     </>
   );
 }
