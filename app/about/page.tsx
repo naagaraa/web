@@ -5,18 +5,17 @@ import Heading from "@/components/UI/Heading";
 import { CertificationItems } from "@/data/Certification";
 import { EducationItems } from "@/data/Education";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
 import Paragraph from "@/components/common/Paragraph";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import Section from "@/components/UI/Section";
+import SubHeading from "@/components/common/SubHeading";
+import List from "@/components/common/List";
 
 
 function Story() {
   return (
     <Section>
-
-      {/* <h1 className="text-4xl font-bold">About Me</h1> */}
       <Title value="About Me" />
       <Paragraph value="I am a dedicated Information Technology student with a robust
             foundation in programming and technical support. Over the past three
@@ -38,8 +37,6 @@ function Story() {
       <Paragraph value="I am passionate about continuous learning and thrive in
             collaborative environments, always eager to embrace new challenges
             in the ever-evolving tech landscape." />
-
-
     </Section>
 
   );
@@ -58,9 +55,10 @@ function Certification() {
             {value.Instructor}
             {value.part?.length > 0 && (
               <>
-                <h5 className="font-bold text-small my-2">
-                  {isLoading ? <Skeleton /> : ` Part Certification of ${value.title}`}
-                </h5>
+                <SubHeading
+                  value={`Part Certification of ${value.title}`}
+                />
+
                 <ul className="ml-5 mb-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
                   {value.part.map((part, index) => (
                     <li key={index}>{part}</li>
@@ -71,14 +69,11 @@ function Certification() {
           </li>
         ))}
       </ul>
-
-      <p className="mt-5 text-sm text-gray-500">
-        {isLoading ? <Skeleton /> : `That Very Long Journey Right?, and Why I am Not have actually
+      <Paragraph value="That Very Long Journey Right?, and Why I am Not have actually
                 have a lot profesional Project cause this, long journey in
                 academic, and currently i am try learn English A1 - B2, focus
                 for comunication skill, and learn other technology, like react,
-                docker, VM, Network, Linux, Android, Bussiness, Electronic`}
-      </p>
+                docker, VM, Network, Linux, Android, Bussiness, Electronic" />
     </Section>
   );
 }
@@ -88,14 +83,7 @@ function Education() {
     <Section>
       <Title value="Education" />
       <SubTitle value="Education what i got it This is also long journey" />
-
-      <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-        {EducationItems.map((value, index) => (
-          <li key={index}>
-            isLoading ? <Skeleton width={300} /> : {value.title} - {value.Prodi} {value.Faculty}, {value.Univ}
-          </li>
-        ))}
-      </ul>
+      <List modelItem="education" dataItems={EducationItems} />
     </Section>
   );
 }

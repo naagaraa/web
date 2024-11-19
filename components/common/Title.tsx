@@ -10,7 +10,7 @@ export default function Title({ value }: titleProps) {
     return (
         <div>
             <h1 className="text-4xl font-bold text-gray-900 sm:text-3xl">
-                {isLoading ? <Skeleton width={100} /> : value}
+                {isLoading ? <Skeleton /> : value}
             </h1>
         </div>
     )

@@ -10,10 +10,10 @@ export default function SubTitle({ value, externalLink }: SubTitleProps) {
     return (
         <div>
             <p className="mt-1.5 text-sm text-gray-500">
-                {isLoading ? <Skeleton width={300} /> : value}
+                {isLoading ? <Skeleton /> : value}
                 {externalLink ? (
                     <Link className="text-red-600 mx-1 font-bold" href={externalLink?.route}>
-                        {isLoading ? <Skeleton width={500} /> : externalLink?.value}
+                        {isLoading ? <Skeleton /> : externalLink?.value}
                     </Link>
                 ) : (
                     ""

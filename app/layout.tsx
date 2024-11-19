@@ -4,6 +4,7 @@ import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { ChildrenProps } from "@/types/components/types";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const metadata: Metadata = {
   title: "Eka Jaya Nagara - Software Engginner",
