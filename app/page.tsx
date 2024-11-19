@@ -16,9 +16,8 @@ const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 import "plyr-react/plyr.css";
 import Link from "next/link";
 import Image from "next/image";
-import Loading from "@/components/UI/Loading";
 import Hero from "@/components/UI/Hero";
-import { sectionHeaderProps, listMusicProps, ChildrenProps } from "@/types/components/types";
+import { sectionHeaderProps, listMusicProps } from "@/types/components/types";
 import { VideoYoutubeItems } from "@/data/VideoYoutube";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
@@ -42,7 +41,7 @@ function ListMusic({ source = "", provider = "youtube" }: listMusicProps) {
             allowFullScreen
           ></iframe>
         </Suspense> */}
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Skeleton />}>
           <Plyr
             source={{
               type: "video",
@@ -127,7 +126,7 @@ function Playlist() {
         >
           {VideoYoutubeItems.map((value, index) => (
             <SwiperSlide key={index}>
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<Skeleton />}>
                 <ListMusic
                   source={value.source}
                   provider={value.provider}

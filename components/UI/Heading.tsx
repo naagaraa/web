@@ -11,12 +11,13 @@ export default function Heading({ name, title, stack }: HeadingProps) {
                 <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
                     <div className="max-w-3xl text-start">
                         <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
-                            {isLoading ? <Skeleton width={100} /> : name}
+                            {isLoading ? <Skeleton /> : name}
                         </h1>
+
                         <p className="mt-4 max-w-xl sm:text-xl/relaxed">
-                            {isLoading ? <Skeleton width={300} /> : title}
+                            {isLoading ? <Skeleton /> : title}
                         </p>
-                        <p className="mt-1 mb-3">{isLoading ? <Skeleton width={500} /> : stack?.title}</p>
+                        <p className="mt-1 mb-3">{isLoading ? <Skeleton /> : stack?.title}</p>
                     </div>
                 </div>
             </section>

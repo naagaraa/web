@@ -2,8 +2,6 @@
 
 import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import Loading from "@/components/UI/Loading";
 import Heading from "@/components/UI/Heading";
 import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
 import Title from "@/components/common/Title";
@@ -11,6 +9,7 @@ import SubTitle from "@/components/common/SubTitle";
 import CardProject from "@/components/UI/CardProject";
 import useSlideScreen from "@/composables/hook/useSlideScreen";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
+import Skeleton from "react-loading-skeleton";
 
 function Project() {
   const { slidesPerView } = useSlideScreen();
@@ -20,7 +19,7 @@ function Project() {
       <Title value="Project" />
       <SubTitle value="This Portofolio Project What I build in Open Source / Personal Project Slide for check another" />
 
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Skeleton />}>
         <Swiper
           spaceBetween={10}
           slidesPerView={slidesPerView}

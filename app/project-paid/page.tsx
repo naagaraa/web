@@ -1,6 +1,6 @@
 "use client";
 
-import 'react-loading-skeleton/dist/skeleton.css'
+
 import React from "react";
 import Heading from "@/components/UI/Heading";
 import { PaidProjectItems } from "@/data/PaidProject";

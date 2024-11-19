@@ -2,7 +2,6 @@
 
 import React, { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Loading from "@/components/UI/Loading";
 import Heading from "@/components/UI/Heading";
 import { EducationProjectItems } from "@/data/EducationProject";
 import useSlideScreen from "@/composables/hook/useSlideScreen";
@@ -10,6 +9,7 @@ import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import CardProject from "@/components/UI/CardProject";
+import Skeleton from "react-loading-skeleton";
 
 
 function Project() {
@@ -18,7 +18,7 @@ function Project() {
     <WrapperContentSlide>
       <Title value="Project" />
       <SubTitle value="This Portofolio Project What I build in Academic Slide for check another" />
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Skeleton />}>
         <Swiper
           spaceBetween={20}
           slidesPerView={slidesPerView}

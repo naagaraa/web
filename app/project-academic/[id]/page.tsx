@@ -4,13 +4,13 @@ import React from "react";
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import Loading from "@/components/UI/Loading";
 
 // Disable SSR for this component
 const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
 
 // import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
+import Skeleton from "react-loading-skeleton";
 
 type sectionHeaderProps = {
   title: string;
@@ -76,7 +76,7 @@ export default function page({ params }: { params: { id: any } }) {
                   description="This Portofolio Project What I build in Academic Slide for check another"
                 />
                 <div className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm">
-                  <Suspense fallback={<Loading />}>
+                  <Suspense fallback={<Skeleton />}>
                     <Plyr
                       source={{
                         type: "video",

@@ -13,10 +13,10 @@ export default function Hero({
         <>
             <section className="grid hero-content text-center items-start sm:items-start justify-items-center mt-36">
                 <div className="max-w-md">
-                    <h1 className="text-4xl font-bold">{isLoading ? <Skeleton width={300} /> : name}</h1>
-                    <p className="py-3">{isLoading ? <Skeleton width={200} /> : title}</p>
+                    <h1 className="text-4xl font-bold">{isLoading ? <Skeleton /> : name}</h1>
+                    <p className="py-3">{isLoading ? <Skeleton /> : title}</p>
                     {stack ? (
-                        <p className="py-3 -mt-2 mb-3">{isLoading ? <Skeleton width={300} /> : stack.title}</p>
+                        <p className="py-3 -mt-2 mb-3">{isLoading ? <Skeleton /> : stack.title}</p>
                     ) : (
                         <p className="py-3 -mt-2 mb-3">null</p>
                     )}
