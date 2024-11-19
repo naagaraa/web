@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 export default function SubTitle({ value, externalLink }: SubTitleProps) {
     const { isLoading } = useLoading(true, 500)
     return (
-        <div>
+        <div className='mb-5'>
             <p className="mt-1.5 text-sm text-gray-500">
                 {isLoading ? <Skeleton /> : value}
                 {externalLink ? (

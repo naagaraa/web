@@ -4,12 +4,10 @@ import React from "react";
 import Heading from "@/components/UI/Heading";
 import { CertificationItems } from "@/data/Certification";
 import { EducationItems } from "@/data/Education";
-import useLoading from "@/composables/hook/useLoading";
 import Paragraph from "@/components/common/Paragraph";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import Section from "@/components/UI/Section";
-import SubHeading from "@/components/common/SubHeading";
 import List from "@/components/common/List";
 
 
@@ -43,32 +41,11 @@ function Story() {
 }
 
 function Certification() {
-  const { isLoading } = useLoading(true, 500)
   return (
     <Section>
       <Title value="Certification" />
       <SubTitle value="Certification what i got it This is very long journey" />
-      <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-        {CertificationItems.map((value, index) => (
-          <li key={index}>
-            {value.date} - {value.title} - {value.academy},{" "}
-            {value.Instructor}
-            {value.part?.length > 0 && (
-              <>
-                <SubHeading
-                  value={`Part Certification of ${value.title}`}
-                />
-
-                <ul className="ml-5 mb-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-                  {value.part.map((part, index) => (
-                    <li key={index}>{part}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+      <List modelItem="certification" dataItems={CertificationItems} />
       <Paragraph value="That Very Long Journey Right?, and Why I am Not have actually
                 have a lot profesional Project cause this, long journey in
                 academic, and currently i am try learn English A1 - B2, focus

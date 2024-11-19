@@ -2,12 +2,9 @@
 import { HeadingProps } from "@/types/components/types";
 import useLoading from "@/composables/hook/useLoading";
 import Skeleton from "react-loading-skeleton";
-export default function Heading({
-    name, title, stack
-}: HeadingProps) {
 
+export default function Heading({ name, title, stack }: HeadingProps) {
     const { isLoading } = useLoading(true, 500)
-
     return (
         <>
             <section className="bg-gradient-to-r from-purple-400/10 via-pink-500/10 to-red-500/10 md:pb-10">

@@ -8,11 +8,15 @@ export default function ListPaidProject({ dataItems }: PaidProjectProps) {
     return (
         <div>
             <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
-                {dataItems?.map((value, index) => (
-                    <li key={index}>
-                        {isLoading ? <Skeleton width={300} /> : `${value.title} - ${value.Prodi} ${value.Faculty}, ${value.Univ}`}
-                    </li>
-                ))}
+                {
+                    isLoading ? <Skeleton count={dataItems?.length} /> :
+                        dataItems?.map((value, index) => (
+                            <li key={index}>
+                                See Detail - {value.title} - {value.jobs}, Tahun {value.date} - Stack:
+                                {" " + value.stack}
+                            </li>
+                        ))
+                }
             </ul>
         </div>
     )
