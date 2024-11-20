@@ -19,7 +19,7 @@ import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import Heading from "@/components/UI/Heading";
 
-export default function page({ params }: { params: { id: any } }) {
+export default function Page({ params }: { params: { id: any } }) {
   const [data, setData] = useState<educationProjectModel>();
 
   useEffect(() => {
