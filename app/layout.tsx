@@ -10,8 +10,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 // import store from "@/stores";
 
 export const metadata: Metadata = {
-  title: "Eka Jaya Nagara - Software Engginner",
-  description: "Freelance and Software Enggineer base in bekasi",
+  title: "Eka Jaya Nagara - Software Developer",
+  description: "Freelance and Software Developer base in bekasi",
 };
 
 export default function RootLayout({

@@ -9,7 +9,7 @@ export default function Heading({ name, title, stack }: HeadingProps) {
         <>
             <section className="bg-gradient-to-r from-purple-400/10 via-pink-500/10 to-red-500/10 md:pb-10">
                 <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex md:h-1 lg:items-center">
-                    <div className="max-w-3xl text-start">
+                    <div className="max-w-3xl text-start md:mt-10 lg:mt-36">
                         <h1 className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl">
                             {isLoading ? <Skeleton /> : name}
                         </h1>

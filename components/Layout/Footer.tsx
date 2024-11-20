@@ -6,12 +6,13 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="block md:hidden lg:hidden xl:hidden">
-        <div className="fixed z-50 w-10/12 h-16 max-w-lg -translate-x-1/2 bg-white border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-gray-900 dark:border-gray-800">
-          <div className="grid h-full max-w-lg grid-cols-7 mx-auto">
+      <footer className="block mt-10 md:hidden lg:hidden xl:hidden">
+        <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t dark:bg-gray-900 dark:border-gray-800">
+          <div className="grid h-full max-w-lg grid-cols-7 mx-auto font-medium">
             <Link
+              prefetch={true}
               href={RouteName?.home}
-              className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+              className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
                 className="w-5 h-5 mb-1 text-gray-100 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-500"
@@ -25,6 +26,7 @@ export default function Footer() {
               <span className="sr-only">Home</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.project_academic}
               data-tooltip-target="tooltip-wallet"
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
@@ -40,6 +42,7 @@ export default function Footer() {
               <span className="sr-only">Academic Project</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.project_open_source}
               className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
@@ -54,6 +57,7 @@ export default function Footer() {
               <span className="sr-only">Open Source Project</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.project_paid}
               className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
@@ -68,6 +72,7 @@ export default function Footer() {
               <span className="sr-only">Paid Project</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.project_profesional}
               className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
@@ -82,6 +87,7 @@ export default function Footer() {
               <span className="sr-only">Profesional Project</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.blog}
               className="inline-flex flex-col items-center justify-center px-5  hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
@@ -96,8 +102,9 @@ export default function Footer() {
               <span className="sr-only">Blog</span>
             </Link>
             <Link
+              prefetch={true}
               href={RouteName?.about}
-              className="inline-flex flex-col items-center justify-center px-5 rounded-e-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
+              className="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >
               <svg
                 className="w-5 h-5 mb-1 text-gray-100 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-500"
@@ -111,6 +118,7 @@ export default function Footer() {
             </Link>
           </div>
         </div>
+
       </footer>
     </>
   );

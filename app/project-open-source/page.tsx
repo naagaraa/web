@@ -6,7 +6,7 @@ import Heading from "@/components/UI/Heading";
 import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
-import CardProject from "@/components/UI/CardProject";
+import CardProject from "@/components/UI/card/CardProject";
 import useSlideScreen from "@/composables/hook/useSlideScreen";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
 import Skeleton from "react-loading-skeleton";

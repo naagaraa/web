@@ -1,6 +1,8 @@
 export type educationProjectModel = {
-    id: string,
+    id: number,
     image: string,
     title: string,
     description: string,
+    video?: string,
+    content?: string
 }

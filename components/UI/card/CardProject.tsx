@@ -31,21 +31,26 @@ export default function CardProject({ id = 1, image = "", title = "", descriptio
                             // Set the width according to your requirements
                             width={800}
                             height={200}
+                            sizes="(min-width: 808px) 50vw, 100vw"
+                            style={{
+                                objectFit: 'cover', // cover, contain, none
+                            }}
                             priority
                             unoptimized={true}
-                            sizes="100vw"
-                            style={{
-                                width: "100%",
-                                height: "auto"
-                            }} />
+                        // sizes="100vw"
+                        // style={{
+                        //     width: "100%",
+                        //     height: "auto"
+                        // }}
+                        />
                     </a>
                     <div className="p-5">
                         <a href="#">
-                            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-black">
+                            <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-black">
                                 {title}
                             </h5>
                         </a>
-                        <p className="mb-3 font-sm text-gray-700 dark:text-gray-400">
+                        <p className="mb-3 text-sm text-gray-700 dark:text-gray-400">
                             {description}
                         </p>
                         <Link

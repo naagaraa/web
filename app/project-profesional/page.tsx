@@ -8,7 +8,7 @@ import { ProfesionalProjectItems } from "@/data/ProfesionalProject";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
-import CardProject from "@/components/UI/CardProject";
+import CardProject from "@/components/UI/card/CardProject";
 import Skeleton from "react-loading-skeleton";
 
 function Project() {

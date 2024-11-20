@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: "ghchart.rshah.org",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 };
