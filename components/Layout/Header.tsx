@@ -67,7 +67,7 @@ export default function Header() {
     },
     {
       title: "Blog",
-      link: "https://dev.to/naagaraa",
+      link: "https://medium.com/@naagaraa",
     },
     {
       title: "Academic project",
