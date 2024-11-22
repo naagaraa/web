@@ -24,7 +24,7 @@ export default function Page({ params }: { params: { id: any } }) {
 
   useEffect(() => {
     const itemId = parseInt(params.id); // Convert params.id to a number, if necessary
-    const item = EducationProjectItems.find((data) => data.id === itemId); // Find the item by id
+    const item = EducationProjectItems.find((value) => value.id === itemId); // Find the item by id
     console.log("Selected Item:", item);
 
     if (!item) {
