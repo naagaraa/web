@@ -18,6 +18,7 @@ import { educationProjectModel } from "@/types/model/education.project";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
 import Heading from "@/components/UI/Heading";
+import Link from "next/link";
 
 export default function Page({ params }: { params: { id: any } }) {
   const [data, setData] = useState<educationProjectModel>();
@@ -31,19 +32,15 @@ export default function Page({ params }: { params: { id: any } }) {
       // If item is not found, trigger a 404
       notFound();
     } else {
-      setData(item)
+      setData(item);
     }
+  }, [params.id]);
 
-  }, [params.id,])
-
-  const { isLoading } = useLoading(true, 500)
+  const { isLoading } = useLoading(true, 500);
 
   return (
     <>
-      <Heading
-        name={data?.title}
-        title={data?.description}
-      />
+      <Heading name={data?.title} title={data?.description} />
       <section className="md:mx-auto lg:mx-auto w-full md:w-3/4">
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <div className="items-start gap-4md:items-center md:justify-between">
@@ -69,9 +66,15 @@ export default function Page({ params }: { params: { id: any } }) {
                 </div>
               </section>
               <section className="mt-5 mb-36">
-                <p>
-                  {data?.content}
-                </p>
+                <p>{data?.content}</p>
+                {data?.link?.length >= 0 ? (
+                  <Link
+                    href={data?.link}
+                    className="mt-5 inline-flex btn-sm items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                  >
+                    Check Detail
+                  </Link>
+                ) : null}
               </section>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import Skeleton from "react-loading-skeleton";
-import 'react-loading-skeleton/dist/skeleton.css'
+import "react-loading-skeleton/dist/skeleton.css";
 import useLoading from "@/composables/hook/useLoading";
 import "plyr-react/plyr.css";
 import Link from "next/link";
@@ -16,8 +16,11 @@ import { CertificationItems } from "@/data/Certification";
 import WraperContent from "@/components/UI/WrapperContent";
 import List from "@/components/common/List";
 
-
-function SectionHeader({ title = "", description = "", link = "/" }: sectionHeaderProps) {
+function SectionHeader({
+  title = "",
+  description = "",
+  link = "/",
+}: sectionHeaderProps) {
   return (
     <>
       <div className="mb-5 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
@@ -49,12 +52,13 @@ function SectionHeader({ title = "", description = "", link = "/" }: sectionHead
   );
 }
 
-
 function Coding() {
-  const { isLoading } = useLoading(true, 500)
+  const { isLoading } = useLoading(true, 500);
   return (
     <WraperContent>
-      {isLoading ? <Skeleton count={10} width={500} /> : (
+      {isLoading ? (
+        <Skeleton count={10} width={500} />
+      ) : (
         <>
           <SectionHeader
             title="Github Activity"
@@ -74,8 +78,9 @@ function Coding() {
               unoptimized={true}
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </div>
           <p className="text-sm mt-10 mb-10">
             I'm longer move coding activity to gitlab, caused 3 years ago I'm
@@ -89,27 +94,34 @@ function Coding() {
         </>
       )}
     </WraperContent>
-
   );
 }
 
-
 function Certification() {
   const CertificationItem = CertificationItems.slice(0, 5);
-  const { isLoading } = useLoading(true, 500)
+  const { isLoading } = useLoading(true, 500);
   return (
     <>
-
       <WraperContent>
-        {isLoading ? <Skeleton count={10} width={500} /> : (
+        {isLoading ? (
+          <Skeleton count={10} width={500} />
+        ) : (
           <>
-            <p className="text-sm mb-5 mt-5">This Website Build with Nextjs and Netlify, Journey Learn Modern Framework like React or Vue. I don't know what actually state and props drill work, and in react like re render how to keep optimize perfomance, what best solution for faster developement</p>
+            <p className="text-sm mb-5 mt-5">
+              This Website Build with Nextjs and Netlify, Journey Learn Modern
+              Framework like React or Vue. I don't know what actually state and
+              props drill work, and also in react like re render how to keep
+              optimize perfomance, what best solution for faster developement
+            </p>
             <Title value="Certification" />
-            <SubTitle value="Certification what i got it, you can see in detail
-                For Check About My Long Journey" externalLink={{
+            <SubTitle
+              value="Certification what i got it, you can see in detail
+                For Check About My Long Journey"
+              externalLink={{
                 value: "about",
-                route: "/about"
-              }} />
+                route: "/about",
+              }}
+            />
             <List modelItem="certification" dataItems={CertificationItem} />
           </>
         )}
@@ -121,10 +133,14 @@ function Certification() {
 export default function Home() {
   return (
     <>
-      <Hero name="Eka Jaya Nagara" title="Software Engineer" stack={{
-        available: true,
-        title: "PHP - JS/TS - LARAVEL - Vue"
-      }} />
+      <Hero
+        name="Eka Jaya Nagara"
+        title="Software Engineer"
+        stack={{
+          available: true,
+          title: "PHP - JS/TS - LARAVEL - Vue",
+        }}
+      />
       <Certification />
       <Coding />
     </>
