@@ -14,7 +14,7 @@ export default function ListPaidProject({ dataItems }: PaidProjectProps) {
           <Skeleton count={dataItems?.length} />
         ) : (
           dataItems?.map((value, index) => (
-            <li key={index}>
+            <li className="text-sm" key={index}>
               <Link
                 className="text-red-500 font-bold px-3"
                 href={`${RouteName?.project_paid}/${value.id}`}

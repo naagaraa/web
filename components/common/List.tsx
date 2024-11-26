@@ -9,6 +9,7 @@ const componentsMap: Record<string, LazyComponentLoader> = {
     education: () => import('@/components/UI/list/ListEducation'),
     education_project: () => import('@/components/UI/list/ListEducationProject'),
     certification: () => import('@/components/UI/list/ListCertification'),
+    experience: () => import('@/components/UI/list/ListXperience'),
     paid_project: () => import('@/components/UI/list/ListPaidProject'),
     video_youtube: () => import('@/components/UI/list/ListVideoYoutube'),
 };

@@ -1,90 +1,108 @@
-import React from "react"
-import { educationProjectModel } from "@/type/model/education.project"
-import { certificationModel } from "@/type/model/certification"
-import { paidProjectModel } from "@/type/model/paid.project"
-import { EducationModel } from "@/type/model/education"
-import { videoYoutubeModel } from "@/type/model/video.youtube"
+import React from "react";
+import { educationProjectModel } from "@/type/model/education.project";
+import { certificationModel } from "@/type/model/certification";
+import { paidProjectModel } from "@/type/model/paid.project";
+import { EducationModel } from "@/type/model/education";
+import { videoYoutubeModel } from "@/type/model/video.youtube";
+import { ExperienceModel } from "../model/xperience";
 
 //  children or props
 export type ChildrenProps = {
-    children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
 
 // title Props
 export type titleProps = {
-    value?: string
-}
+  value?: string;
+};
 
 // externalLinkProps
 export type externalLinkProps = {
-    value: string
-    route: string
-}
+  value: string;
+  route: string;
+};
 
 // subtitle props
 export type SubTitleProps = {
-    value?: string
-    externalLink?: externalLinkProps
-}
+  value?: string;
+  externalLink?: externalLinkProps;
+};
 
 // heading props
 export type StackProps = {
-    available?: boolean
-    title?: string
-}
+  available?: boolean;
+  title?: string;
+};
 export type HeadingProps = {
-    name?: string,
-    title?: string,
-    stack?: StackProps
-}
+  name?: string;
+  title?: string;
+  stack?: StackProps;
+};
 
 // hero props
 export type HeroProps = {
-    name?: string,
-    title?: string,
-    stack?: StackProps
-}
+  name?: string;
+  title?: string;
+  stack?: StackProps;
+};
 
 // sectionHeader Props
 export type sectionHeaderProps = {
-    title: string;
-    description: string;
-    link?: string;
+  title: string;
+  description: string;
+  link?: string;
 };
 
 // list music props
 export type listMusicProps = {
-    source: string;
-    provider?: string;
+  source: string;
+  provider?: string;
 };
 
 // education model props
 export type EducationProps = {
-    dataItems?: Array<EducationModel>
-}
+  dataItems?: Array<EducationModel>;
+};
 
 // certification model props
 export type certificationProps = {
-    dataItems?: Array<certificationModel>
-}
+  dataItems?: Array<certificationModel>;
+};
+
+export type experienceProps = {
+  dataItems?: Array<ExperienceModel>;
+};
 
 // education project model props
 export type EducationProjectProps = {
-    dataItems?: Array<educationProjectModel>
-}
+  dataItems?: Array<educationProjectModel>;
+};
 
 // paid project model props
 export type PaidProjectProps = {
-    dataItems?: Array<paidProjectModel>
-}
+  dataItems?: Array<paidProjectModel>;
+};
 
 // paid project model props
 export type VideoYoutubeProps = {
-    dataItems?: Array<videoYoutubeModel>
-}
+  dataItems?: Array<videoYoutubeModel>;
+};
 
 // data list props
 export type ListProps = {
-    modelItem: 'education' | 'certification' | 'education_project' | 'paid_project' | 'video_youtube',
-    dataItems?: Array<EducationModel | certificationModel | educationProjectModel | paidProjectModel | videoYoutubeModel>
-}
+  modelItem:
+    | "education"
+    | "certification"
+    | "experience"
+    | "education_project"
+    | "paid_project"
+    | "video_youtube";
+  dataItems?: Array<
+    | EducationModel
+    | certificationModel
+    | ExperienceModel
+    | educationProjectModel
+    | paidProjectModel
+    | videoYoutubeModel
+  >;
+};

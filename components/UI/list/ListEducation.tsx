@@ -11,7 +11,7 @@ export default function ListEducation({ dataItems }: EducationProps) {
                 {
                     isLoading ? <Skeleton count={dataItems?.length} /> :
                         dataItems?.map((value, index) => (
-                            <li key={index}>
+                            <li className='text-sm' key={index}>
                                 {value.title} - {value.Prodi} {value.Faculty}, {value.Univ}
                             </li>
                         ))

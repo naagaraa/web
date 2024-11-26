@@ -15,6 +15,8 @@ import SubTitle from "@/components/common/SubTitle";
 import { CertificationItems } from "@/data/Certification";
 import WraperContent from "@/components/UI/WrapperContent";
 import List from "@/components/common/List";
+import { RouteName } from "@/routes/navigation";
+import Describe from "@/components/common/Describe";
 
 function SectionHeader({
   title = "",
@@ -82,10 +84,10 @@ function Coding() {
               }}
             />
           </div>
-          <p className="text-sm mt-10 mb-10">
-            I'm longer move coding activity to gitlab, caused 3 years ago I'm
-            work for company and they are used gitlab
-          </p>
+          <Describe
+            value=" I'm longer move coding activity to gitlab, caused 3 years ago I'm
+            work for company and they are used gitlab"
+          />
           <SectionHeader
             title="Gitlab"
             description="coding activity at gitlab"
@@ -107,12 +109,21 @@ function Certification() {
           <Skeleton count={10} width={500} />
         ) : (
           <>
-            <p className="text-sm mb-5 mt-5">
-              This Website Build with Nextjs and Netlify, Journey Learn Modern
+            <Describe
+              value=" This Website Build with Nextjs and Netlify, Journey Learn Modern
               Framework like React or Vue. I don't know what actually state and
               props drill work, and also in react like re render how to keep
-              optimize perfomance, what best solution for faster developement
-            </p>
+              optimize perfomance, what best solution for faster developement"
+            />
+            <Describe
+              value="  Currently, i just learn 3 things, english skill, vue/nuxtjs and flutter for developer skill
+              and in day by day but not often i'am try build digital product about system information
+              with laravel and inertia, modular monolit architecture. pure laravel not used filament.
+              for frontend used tailwind and boostrap5. for database mysql or pgsql. you can check project at"
+              link={RouteName.project_paid}
+              linkText="Paid Project"
+            />
+
             <Title value="Certification" />
             <SubTitle
               value="Certification what i got it, you can see in detail

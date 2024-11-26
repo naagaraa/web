@@ -11,7 +11,7 @@ export default function ListCertification({ dataItems }: certificationProps) {
             <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
                 {isLoading ? <Skeleton count={dataItems?.length} /> : (
                     dataItems?.map((value, index) => (
-                        <li key={index}>
+                        <li className='text-sm' key={index}>
                             {value.date} - {value.title} - {value.academy},{" "}
                             {value.Instructor}
                             {value.part?.length > 0 && (
