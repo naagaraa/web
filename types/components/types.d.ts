@@ -88,6 +88,14 @@ export type VideoYoutubeProps = {
   dataItems?: Array<videoYoutubeModel>;
 };
 
+export type SectionPortofolioProps = {
+  title: string;
+  paragraph: string;
+  foto: {
+    image: any;
+    title: string;
+  };
+};
 // data list props
 export type ListProps = {
   modelItem:

@@ -81,4 +81,15 @@ export const PaidProjectItems = [
     jobs: "REMOTE",
     part: [],
   },
+  {
+    id: 6,
+    date: "middle years of 2024",
+    title: "Digital Product",
+    stack: "Laravel, Inertia, Vue3, Tailwind CSS",
+    content: `this project about monolith architecture for manage modules each apps like ERP, but module base, see detail i will tell about story.`,
+    link: "asd",
+    cover: landingPageCover,
+    jobs: "REMOTE",
+    part: [],
+  },
 ];

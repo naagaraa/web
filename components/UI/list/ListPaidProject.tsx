@@ -15,12 +15,21 @@ export default function ListPaidProject({ dataItems }: PaidProjectProps) {
         ) : (
           dataItems?.map((value, index) => (
             <li className="text-sm" key={index}>
-              <Link
-                className="text-red-500 font-bold px-3"
-                href={`${RouteName?.project_paid}/${value.id}`}
-              >
-                See Detail
-              </Link>
+              {value.link !== "" ? (
+                <Link
+                  className="text-red-500 font-bold px-3"
+                  href={`${RouteName?.product}`}
+                >
+                  See Detail
+                </Link>
+              ) : (
+                <Link
+                  className="text-red-500 font-bold px-3"
+                  href={`${RouteName?.project_paid}/${value.id}`}
+                >
+                  See Detail
+                </Link>
+              )}
               <span>
                 {value.title} - {value.jobs}, Years {value.date}
               </span>
