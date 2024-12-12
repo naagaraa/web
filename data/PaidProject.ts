@@ -1,4 +1,4 @@
-import landingPageCover from "@/assets/portofolio-11.jpg";
+import landingPageCover from "@/assets/portofolio-12.jpg";
 
 export const PaidProjectItems = [
   {
@@ -87,8 +87,8 @@ export const PaidProjectItems = [
     title: "Digital Product",
     stack: "Laravel, Inertia, Vue3, Tailwind CSS",
     content: `this project about monolith architecture for manage modules each apps like ERP, but module base, see detail i will tell about story.`,
-    link: "asd",
-    cover: landingPageCover,
+    link: "product",
+    cover: "",
     jobs: "REMOTE",
     part: [],
   },
