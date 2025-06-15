@@ -254,24 +254,6 @@ type MenuProps = {
 function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
-  // Close menu when clicking outside
-  React.useEffect(() => {
-    if (!Object.values(openMenus).some(Boolean)) return;
-
-    const handleClick = (e: MouseEvent) => {
-      // Only close if click is outside any menu/list
-      // Find closest nav or aside
-      const nav = document.querySelector("nav[aria-label='Global']");
-      if (nav && !nav.contains(e.target as Node)) {
-        setOpenMenus({});
-        if (onClickItem) onClickItem();
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openMenus]);
-
   const handleToggle = (key: string) => {
     setOpenMenus((prev) => {
       const isOpen = !!prev[key];
@@ -315,6 +297,9 @@ function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
                 }))
               : undefined}
           </List>
+          {/* {value.children && !!openMenus[key] && isMobile && (
+            <ul>{renderList(value.children as MenuProps["list"], key)}</ul>
+          )} */}
         </li>
       );
     });
@@ -347,22 +332,22 @@ export default function Header() {
         {
           title: "Productivity",
           children: [
-            { title: "Task Manager", link: "/apps/task-manager" },
-            { title: "Notes", link: "/apps/notes" },
+            { title: "Task Manager", link: "#" },
+            { title: "Notes", link: "#" },
           ],
         },
         {
           title: "Utilities",
           children: [
-            { title: "Calculator", link: "/apps/calculator" },
-            { title: "Weather", link: "/apps/weather" },
+            { title: "Calculator", link: "#" },
+            { title: "Weather", link: "#" },
           ],
         },
         {
           title: "Socical",
           children: [
-            { title: "Calculator", link: "/apps/calculator" },
-            { title: "Weather", link: "/apps/weather" },
+            { title: "Calculator", link: "#" },
+            { title: "Weather", link: "#" },
           ],
         },
       ],
