@@ -1,90 +1,385 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
+import icon from "@/assets/dev-to.svg";
+import "./header.css"; // Import your custom CSS for animations
 
 function Logo() {
   return (
-    <>
-      <Link className="block text-teal-600" href="/">
-        <span className="sr-only">Home</span>
-
-        <svg
-          className="h-8"
-          fill="red"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512"
-        >
-          <path d="M504.4 115.8a5.7 5.7 0 0 0 -.3-.7 8.5 8.5 0 0 0 -.5-1.3 6 6 0 0 0 -.5-.7 9.4 9.4 0 0 0 -.7-.9c-.2-.2-.5-.4-.8-.6a8.8 8.8 0 0 0 -.9-.7L404.4 55.6a8 8 0 0 0 -8 0L300.1 111h0a8.1 8.1 0 0 0 -.9 .7 7.7 7.7 0 0 0 -.8 .6 8.2 8.2 0 0 0 -.7 .9c-.2 .2-.4 .5-.5 .7a9.7 9.7 0 0 0 -.5 1.3c-.1 .2-.2 .4-.3 .7a8.1 8.1 0 0 0 -.3 2.1V223.2l-80.2 46.2V63.4a7.8 7.8 0 0 0 -.3-2.1c-.1-.2-.2-.5-.3-.7a8.4 8.4 0 0 0 -.5-1.2c-.1-.3-.4-.5-.5-.7a9.4 9.4 0 0 0 -.7-.9 9.5 9.5 0 0 0 -.8-.6 9.8 9.8 0 0 0 -.9-.7h0L115.6 1.1a8 8 0 0 0 -8 0L11.3 56.5h0a6.5 6.5 0 0 0 -.9 .7 7.8 7.8 0 0 0 -.8 .6 8.2 8.2 0 0 0 -.7 .9c-.2 .3-.4 .5-.6 .7a7.9 7.9 0 0 0 -.5 1.2 6.5 6.5 0 0 0 -.3 .7 8.2 8.2 0 0 0 -.3 2.1v329.7a8 8 0 0 0 4 7l192.5 110.8a8.8 8.8 0 0 0 1.3 .5c.2 .1 .4 .2 .6 .3a7.9 7.9 0 0 0 4.1 0c.2-.1 .4-.2 .6-.2a8.6 8.6 0 0 0 1.4-.6L404.4 400.1a8 8 0 0 0 4-7V287.9l92.2-53.1a8 8 0 0 0 4-7V117.9A8.6 8.6 0 0 0 504.4 115.8zM111.6 17.3h0l80.2 46.2-80.2 46.2L31.4 63.4zm88.3 60V278.6l-46.5 26.8-33.7 19.4V123.5l46.5-26.8zm0 412.8L23.4 388.5V77.3L57.1 96.7l46.5 26.8V338.7a6.9 6.9 0 0 0 .1 .9 8 8 0 0 0 .2 1.2h0a5.9 5.9 0 0 0 .4 .9 6.4 6.4 0 0 0 .4 1v0a8.5 8.5 0 0 0 .6 .8 7.6 7.6 0 0 0 .7 .8l0 0c.2 .2 .5 .4 .8 .6a8.9 8.9 0 0 0 .9 .7l0 0 0 0 92.2 52.2zm8-106.2-80.1-45.3 84.1-48.4 92.3-53.1 80.1 46.1-58.8 33.6zm184.5 4.6L215.9 490.1V397.8L346.6 323.2l45.8-26.2zm0-119.1L358.7 250l-46.5-26.8V131.8l33.7 19.4L392.4 178zm8-105.3-80.2-46.2 80.2-46.2 80.2 46.2zm8 105.3V178L455 151.2l33.7-19.4v91.4h0z" />
-        </svg>
-      </Link>
-    </>
+    <Link className="block text-teal-600" href="/">
+      <span className="sr-only">Home</span>
+      <Image src={icon} height={30} width={30} alt="Dev.to logo" />
+    </Link>
   );
 }
 
-type listProps = {
+type ListProps = {
   title: string;
-  link: string;
+  link?: string;
+  children?: ListProps[];
+  megaMenu?: boolean;
+  isMobile?: boolean;
+  open?: boolean;
+  onToggle?: () => void;
+  onClickItem?: () => void; // Untuk auto-close
 };
 
-function List({ title = "", link = "" }: listProps) {
+export function List({
+  title = "",
+  link = "",
+  children,
+  megaMenu,
+  isMobile = false,
+  open,
+  onToggle,
+  onClickItem,
+}: ListProps) {
+  // State untuk submenu di mobile
+  const [openIndexes, setOpenIndexes] = useState<Record<number, boolean>>({});
+
+  const handleToggleChild = (idx: number) => {
+    setOpenIndexes((prev) => ({
+      ...prev,
+      [idx]: !prev[idx],
+    }));
+  };
+
+  // Desktop Dropdown
+  if (children && children.length > 0 && !isMobile && !megaMenu) {
+    return (
+      <div className="relative group">
+        <button
+          className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
+          onClick={onToggle}
+          type="button"
+        >
+          {title}
+          <svg
+            className={`w-4 h-4 ml-1 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+        {open && (
+          <div className="absolute right-1/2 mt-2 w-56 bg-white border rounded shadow-lg z-50 animate-fadeIn">
+            <ul>
+              {children.map((child, idx) => (
+                <li key={idx}>
+                  <Link
+                    prefetch={true}
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    href={child.link ?? "#"}
+                    onClick={onClickItem}
+                  >
+                    {child.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Desktop Mega Menu
+  if (children && children.length > 0 && !isMobile && megaMenu) {
+    return (
+      <div className="relative group">
+        <button
+          className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
+          onClick={onToggle}
+          type="button"
+        >
+          {title}
+          <svg
+            className={`w-4 h-4 ml-1 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+        {open && (
+          <div className="absolute right-1/2 -translate-x-1/2 mt-2 w-[28rem] bg-white border rounded shadow-lg z-50 animate-fadeIn">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6">
+              {children.map((child, idx) => (
+                <div key={idx}>
+                  <Link
+                    prefetch={true}
+                    className="block font-semibold text-gray-700 mb-2 hover:text-teal-600"
+                    href={child.link ?? "#"}
+                    onClick={onClickItem}
+                  >
+                    {child.title}
+                  </Link>
+                  {child.children && (
+                    <ul>
+                      {child.children.map((sub, subIdx) => (
+                        <li key={subIdx}>
+                          {sub.children ? (
+                            <List
+                              {...sub}
+                              isMobile={isMobile}
+                              open={!!openIndexes[subIdx]}
+                              onToggle={() => handleToggleChild(subIdx)}
+                              onClickItem={onClickItem}
+                            />
+                          ) : (
+                            <Link
+                              prefetch={true}
+                              className="block px-2 py-1 text-gray-500 hover:text-teal-600"
+                              href={sub.link ?? "#"}
+                              onClick={onClickItem}
+                            >
+                              {sub.title}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Mobile Nested Dropdown
+  if (children && children.length > 0 && isMobile) {
+    return (
+      <div>
+        <button
+          className="flex items-center justify-between w-full text-gray-700 py-2"
+          onClick={onToggle}
+          type="button"
+        >
+          <span>{title}</span>
+          <svg
+            className={`w-4 h-4 ml-1 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        {open && (
+          <div className="pl-4 border-l-2 border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
+            <ul>
+              {children.map((child, idx) => (
+                <li key={idx}>
+                  {child.children ? (
+                    <List
+                      {...child}
+                      isMobile
+                      open={!!openIndexes[idx]}
+                      onToggle={() => handleToggleChild(idx)}
+                      onClickItem={onClickItem}
+                    />
+                  ) : (
+                    <Link
+                      prefetch={true}
+                      className="block py-2 text-gray-700 hover:text-teal-600"
+                      href={child.link ?? "#"}
+                      onClick={onClickItem}
+                    >
+                      {child.title}
+                    </Link>
+                    // <p>kosong</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Normal Link
   return (
-    <>
-      <Link
-        prefetch={true}
-        className="text-gray-500 transition hover:text-gray-500/75"
-        href={link}
-      >
-        {title}
-      </Link>
-    </>
+    <Link
+      prefetch={true}
+      className="text-gray-500 transition hover:text-gray-500/75 my-5"
+      href={link ?? "#"}
+      onClick={onClickItem}
+    >
+      {title}
+    </Link>
   );
 }
 
 type MenuProps = {
-  list: Array<listProps>;
+  list: Array<{
+    title: string;
+    link?: string;
+    children?: ListProps[];
+    megaMenu?: boolean;
+  }>;
+  isMobile?: boolean;
+  onClickItem?: () => void;
 };
 
-function Menu({ list }: MenuProps) {
+function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    if (!Object.values(openMenus).some(Boolean)) return;
+
+    const handleClick = (e: MouseEvent) => {
+      // Only close if click is outside any menu/list
+      // Find closest nav or aside
+      const nav = document.querySelector("nav[aria-label='Global']");
+      if (nav && !nav.contains(e.target as Node)) {
+        setOpenMenus({});
+        if (onClickItem) onClickItem();
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openMenus]);
+
+  const handleToggle = (key: string) => {
+    setOpenMenus((prev) => {
+      const isOpen = !!prev[key];
+      if (isOpen) {
+        return { ...prev, [key]: false };
+      } else {
+        // Only allow one open at a time at the current level
+        const newState: Record<string, boolean> = {};
+        Object.keys(prev).forEach((k) => {
+          if (k.startsWith(key.split("-").slice(0, -1).join("-"))) {
+            newState[k] = false;
+          }
+        });
+        newState[key] = true;
+        return { ...prev, ...newState };
+      }
+    });
+  };
+
+  // Recursive render for nested children, supporting megaMenu
+  const renderList = (
+    items: MenuProps["list"],
+    parentKey = ""
+  ): React.ReactNode => {
+    return items.map((value, index) => {
+      const key = parentKey ? `${parentKey}-${index}` : `menu-${index}`;
+      // If this item has megaMenu, pass it recursively
+      return (
+        <li key={key}>
+          <List
+            {...value}
+            isMobile={isMobile}
+            open={!!openMenus[key]}
+            onToggle={() => handleToggle(key)}
+            onClickItem={onClickItem}
+          >
+            {value.children
+              ? value.children.map((child) => ({
+                  ...child,
+                  megaMenu: value.megaMenu, // propagate megaMenu recursively
+                }))
+              : undefined}
+          </List>
+        </li>
+      );
+    });
+  };
+
   return (
-    <>
-      <nav aria-label="Global">
-        <ul className="flex items-center gap-6 text-sm">
-          {list.map((value, index) => (
-            <li key={index}>
-              <List title={value.title} link={value.link} />
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </>
+    <nav aria-label="Global">
+      <ul
+        className={`flex ${
+          isMobile
+            ? "flex-col gap-2"
+            : "flex-col md:flex-row items-start md:items-center gap-6"
+        } text-sm`}
+      >
+        {renderList(list)}
+      </ul>
+    </nav>
   );
 }
 
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
   const menuItems = [
+    { title: "Home", link: "/" },
     {
-      title: "About",
-      link: "/about",
+      title: "Apps",
+      megaMenu: true,
+      children: [
+        {
+          title: "Productivity",
+          children: [
+            { title: "Task Manager", link: "/apps/task-manager" },
+            { title: "Notes", link: "/apps/notes" },
+          ],
+        },
+        {
+          title: "Utilities",
+          children: [
+            { title: "Calculator", link: "/apps/calculator" },
+            { title: "Weather", link: "/apps/weather" },
+          ],
+        },
+        {
+          title: "Socical",
+          children: [
+            { title: "Calculator", link: "/apps/calculator" },
+            { title: "Weather", link: "/apps/weather" },
+          ],
+        },
+      ],
     },
     {
-      title: "Blog",
-      link: "https://medium.com/@naagaraa",
+      title: "Project",
+      children: [
+        { title: "Academic project", link: "/project/academic" },
+        { title: "Open source project", link: "/project/open-source" },
+        { title: "Paid project", link: "/project/paid" },
+        { title: "Profesional project", link: "/project/profesional" },
+      ],
     },
-    {
-      title: "Academic project",
-      link: "/project-academic",
-    },
-    {
-      title: "Open source project",
-      link: "/project-open-source",
-    },
-    {
-      title: "Paid project",
-      link: "/project-paid",
-    },
-    {
-      title: "Profesional project",
-      link: "/project-profesional",
-    },
+    { title: "Blog", link: "https://medium.com/@naagaraa" },
+    { title: "About", link: "/about" },
+    { title: "Contact", link: "/contact" },
+    { title: "Sponsorship", link: "#" },
   ];
 
   return (
@@ -96,14 +391,80 @@ export default function Header() {
               <Logo />
             </div>
 
+            {/* Desktop Menu */}
             <div className="hidden md:block">
               <Menu list={menuItems} />
             </div>
 
-            <div className="flex items-center gap-4"></div>
+            {/* Mobile Hamburger */}
+            <div className="md:hidden flex items-center gap-4">
+              <button
+                onClick={() => setOpen(true)}
+                className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-600"
+                aria-label="Open menu"
+              >
+                <svg
+                  className="h-6 w-6 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </header>
+
+      {/* Sidenav Overlay */}
+      {open && (
+        <div>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-40 z-30"
+            onClick={() => setOpen(false)}
+          />
+
+          {/* Drawer */}
+          <aside className="fixed top-0 left-0 z-40 h-full w-64 bg-white shadow-lg flex flex-col p-6 transition-transform duration-300">
+            <div className="flex items-center justify-between mb-8">
+              <Logo />
+              <button
+                onClick={() => setOpen(false)}
+                className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-600"
+                aria-label="Close menu"
+              >
+                <svg
+                  className="h-6 w-6 text-gray-700"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Mobile menu with dropdown */}
+            <Menu
+              list={menuItems}
+              isMobile
+              onClickItem={() => setOpen(false)}
+            />
+          </aside>
+        </div>
+      )}
     </>
   );
 }

@@ -7,4 +7,5 @@ export const RouteName = {
   project_open_source: "/project-open-source",
   project_paid: "/project-paid",
   project_profesional: "/project-profesional",
+  contact: "/contact",
 };

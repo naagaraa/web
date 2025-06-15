@@ -51,17 +51,17 @@ export default function CardProject({
             <a href="#">
               <h5 className="text-base md:text-xl font-bold tracking-tight text-gray-900 dark:text-black">
                 {title.length > 18 ? (
-                  <div>{title.substring(0, 18)} ...</div>
+                  <span>{title.substring(0, 18)} ...</span>
                 ) : (
-                  <div>{title}</div>
+                  <span>{title}</span>
                 )}
               </h5>
             </a>
             <p className="mb-2 text-justify min-h-28 h-4/6 overflow-hidden text-sm text-gray-700 dark:text-gray-400">
               {description.length > 60 ? (
-                <div>{description.substring(0, 60)} ...</div>
+                <span>{description.substring(0, 60)} ...</span>
               ) : (
-                <div>{description}</div>
+                <span>{description}</span>
               )}
             </p>
             <Link

@@ -1,5 +1,31 @@
 export const ExperienceItems = [
   {
+    date: "April 2025 - Jun 2025 (3 Month)",
+    type: "Onsite",
+    title: "Programmer (Intern)",
+    company: "PT Prakarsa Alam Segar",
+    location: "Bekasi, Medan Satria",
+    jobdesk: [
+      "developer : Debugging and resolving system bugs to ensure smooth functionality",
+      "developer : Assisting the development team in various technical tasks and feature implementation",
+      "developer : Contributing to the development of new system modules and features",
+      "developer : Supporting development workflows by building internal tools and utilities",
+      "developer : Writing automation scripts for database backups and environment setup",
+    ],
+    responsibilty: [
+      "Attending meetings with users to gather requirements and provide technical input",
+      "Collaborating effectively with cross-functional team members",
+      "Preparing and submitting internship reports, as well as maintaining task documentation",
+      "Supporting junior staff with technical guidance and onboarding assistance",
+      "Contributing proactive ideas to solve technical and administrative challenges, such as drafting SOPs for help desk ticketing systems tailored for the development team",
+    ],
+    skill: [
+      "framework:laravel 7, bootstrap, jquery, React",
+      "programming:php 7, js, ts, sql, css, html",
+      "other: firebase,qrcode, rfid, dbgate, heidisql",
+    ],
+  },
+  {
     date: "Jul 2022 - Jun 2024 (2 year)",
     type: "Hybrid",
     title: "Developer and IT Support",

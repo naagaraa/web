@@ -11,7 +11,6 @@ import SubTitle from "@/components/common/SubTitle";
 import CardProject from "@/components/UI/card/CardProject";
 import Skeleton from "react-loading-skeleton";
 
-
 function Project() {
   const { slidesPerView } = useSlideScreen(3);
   return (
@@ -25,8 +24,8 @@ function Project() {
           navigation
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
-        // onSlideChange={() => console.log("slide change")}
-        // onSwiper={(swiper) => console.log(swiper)}
+          // onSlideChange={() => console.log("slide change")}
+          // onSwiper={(swiper) => console.log(swiper)}
         >
           {EducationProjectItems.map((value, index) => (
             <SwiperSlide key={index}>
@@ -35,7 +34,7 @@ function Project() {
                 title={value.title}
                 description={value.description}
                 image={value.image}
-              // other_image={value?.other_image}
+                // other_image={value?.other_image}
               />
             </SwiperSlide>
           ))}
