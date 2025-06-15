@@ -197,7 +197,7 @@ interface SectionHeaderProps {
   link?: string;
 }
 
-export const SectionHeader = ({
+const SectionHeader = ({
   title,
   description,
   link = "#",
