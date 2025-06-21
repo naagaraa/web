@@ -248,7 +248,7 @@ const services = [
   },
 ];
 
-export function Services() {
+function Services() {
   return (
     <section id="services" className="py-20 bg-gray-50">
       <div className="container mx-auto px-6">
@@ -430,7 +430,7 @@ const tools: Tool[] = [
 
 const categories = Array.from(new Set(tools.map((tool) => tool.category)));
 
-export function ProductivityTools() {
+function ProductivityTools() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredTools = selectedCategory

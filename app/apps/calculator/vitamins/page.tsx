@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import VitaminCalculator from "./VitaminCalculator";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -32,5 +33,7 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <VitaminCalculator />;
+  <Suspense fallback={<div>Loading...</div>}>
+    <VitaminCalculator />
+  </Suspense>;
 }

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import BMICalculator from "./BMICalculator";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -32,5 +33,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <BMICalculator />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BMICalculator />
+    </Suspense>
+  );
 }

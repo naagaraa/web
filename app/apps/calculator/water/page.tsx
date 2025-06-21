@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import WaterCalculator from "./WaterCalculator";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -35,5 +36,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <WaterCalculator />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WaterCalculator />
+    </Suspense>
+  );
 }

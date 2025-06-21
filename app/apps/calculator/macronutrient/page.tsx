@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import MacronutrientCalc from "./MacronutrientCalc";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -31,5 +32,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <MacronutrientCalc />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MacronutrientCalc />
+    </Suspense>
+  );
 }

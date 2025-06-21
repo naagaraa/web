@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import SleepTimeCalc from "./SleepTimeCalc";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -30,5 +31,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <SleepTimeCalc />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SleepTimeCalc />
+    </Suspense>
+  );
 }

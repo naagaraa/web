@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import PregnancyCalc from "./PregnancyCalc";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   searchParams,
@@ -30,5 +31,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <PregnancyCalc />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PregnancyCalc />
+    </Suspense>
+  );
 }
