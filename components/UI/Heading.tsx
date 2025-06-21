@@ -7,38 +7,37 @@ export default function Heading({ name, title, stack }: HeadingProps) {
   const { isLoading } = useLoading(true, 500);
 
   return (
-    <section className="bg-gradient-to-r from-gray-300 via-gray-400 to-gray-600 md:pb-10">
-      <div className="mx-auto max-w-screen-xl px-4 py-20 md:py-32 lg:flex md:h-1 lg:items-center">
-        <div className="max-w-3xl text-start mt-16 md:mt-10 lg:mt-36 mx-12">
+    <section className="bg-gradient-to-b from-white to-gray-50">
+      <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
+        <div className="max-w-3xl mx-auto text-center">
           <motion.h1
-            className="bg-clip-text text-black text-3xl font-extrabold sm:text-5xl"
+            className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
           >
-            {isLoading ? <Skeleton key="heading-skeleton-name" /> : name}
+            {isLoading ? <Skeleton height={40} width={300} /> : name}
           </motion.h1>
 
           <motion.p
-            className="mt-4 max-w-xl sm:text-xl/relaxed"
-            initial={{ opacity: 0, y: 40 }}
+            className="mt-6 text-lg md:text-xl text-gray-600"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {isLoading ? <Skeleton key="heading-skeleton-title" /> : title}
+            {isLoading ? <Skeleton height={24} width={350} /> : title}
           </motion.p>
-          <motion.p
-            className="mt-1 mb-3"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-          >
-            {isLoading ? (
-              <Skeleton key="heading-skeleton-stack" />
-            ) : (
-              stack?.title ?? ""
-            )}
-          </motion.p>
+
+          {stack?.title && (
+            <motion.p
+              className="mt-2 text-sm text-gray-500"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              {isLoading ? <Skeleton height={20} width={200} /> : stack.title}
+            </motion.p>
+          )}
         </div>
       </div>
     </section>

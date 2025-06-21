@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CalorieCalculator from "./CalorieCalculator";
+import BMRCalculator from "./BMRCalculator";
 
 export async function generateMetadata({
   searchParams,
@@ -8,21 +8,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = searchParams?.locale === "id" ? "id" : "en";
 
-  const title =
-    locale === "id" ? "Kalkulator Kalori Harian" : "Daily Calorie Calculator";
+  const title = locale === "id" ? "Kalkulator BMR" : "BMR Calculator";
   const description =
     locale === "id"
-      ? "Hitung kebutuhan kalori harian Anda secara akurat."
-      : "Calculate your daily calorie needs accurately.";
+      ? "Hitung BMR (Basal Metabolic Rate) Anda untuk mengetahui kebutuhan kalori saat istirahat total."
+      : "Calculate your BMR (Basal Metabolic Rate) to know how many calories your body needs at rest.";
 
   return {
     title,
     description,
     keywords: [
-      "calorie calculator",
-      "kalori harian",
       "BMR calculator",
-      "diet planner",
+      "kalkulator BMR",
+      "basal metabolic rate",
+      "kalori istirahat",
+      "diet",
     ],
     openGraph: {
       title,
@@ -33,5 +33,5 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <CalorieCalculator />;
+  return <BMRCalculator />;
 }

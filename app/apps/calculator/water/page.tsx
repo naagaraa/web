@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CalorieCalculator from "./CalorieCalculator";
+import WaterCalculator from "./WaterCalculator";
 
 export async function generateMetadata({
   searchParams,
@@ -9,20 +9,22 @@ export async function generateMetadata({
   const locale = searchParams?.locale === "id" ? "id" : "en";
 
   const title =
-    locale === "id" ? "Kalkulator Kalori Harian" : "Daily Calorie Calculator";
+    locale === "id"
+      ? "Kalkulator Air Minum Harian"
+      : "Daily Water Intake Calculator";
   const description =
     locale === "id"
-      ? "Hitung kebutuhan kalori harian Anda secara akurat."
-      : "Calculate your daily calorie needs accurately.";
+      ? "Hitung kebutuhan air minum harian Anda berdasarkan berat badan dan aktivitas."
+      : "Calculate your daily water intake based on your weight and activity level.";
 
   return {
     title,
     description,
     keywords: [
-      "calorie calculator",
-      "kalori harian",
-      "BMR calculator",
-      "diet planner",
+      "water intake calculator",
+      "kebutuhan air harian",
+      "hydration calculator",
+      "kalkulator air minum",
     ],
     openGraph: {
       title,
@@ -33,5 +35,5 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  return <CalorieCalculator />;
+  return <WaterCalculator />;
 }

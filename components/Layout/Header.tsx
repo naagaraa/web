@@ -93,18 +93,92 @@ export function List({
     );
   }
 
+  // // Desktop Mega Menu
+  // if (children && children.length > 0 && !isMobile && megaMenu) {
+  //   return (
+  //     <div className="relative group">
+  //       <button
+  //         className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
+  //         onClick={onToggle}
+  //         type="button"
+  //       >
+  //         {title}
+  //         <svg
+  //           className={`w-4 h-4 ml-1 transition-transform ${
+  //             open ? "rotate-180" : ""
+  //           }`}
+  //           fill="none"
+  //           stroke="currentColor"
+  //           strokeWidth={2}
+  //           viewBox="0 0 24 24"
+  //         >
+  //           <path
+  //             strokeLinecap="round"
+  //             strokeLinejoin="round"
+  //             d="M19 9l-7 7-7-7"
+  //           />
+  //         </svg>
+  //       </button>
+  //       {open && (
+  //         <div className="absolute right-1/2 -translate-x-1/2 mt-2 w-[28rem] bg-white border rounded shadow-lg z-50 animate-fadeIn">
+  //           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6">
+  //             {children.map((child, idx) => (
+  //               <div key={idx}>
+  //                 <Link
+  //                   prefetch={true}
+  //                   className="block font-semibold text-gray-700 mb-2 hover:text-teal-600"
+  //                   href={child.link ?? "#"}
+  //                   onClick={onClickItem}
+  //                 >
+  //                   {child.title}
+  //                 </Link>
+  //                 {child.children && (
+  //                   <ul>
+  //                     {child.children.map((sub, subIdx) => (
+  //                       <li key={subIdx}>
+  //                         {sub.children ? (
+  //                           <List
+  //                             {...sub}
+  //                             isMobile={isMobile}
+  //                             open={!!openIndexes[subIdx]}
+  //                             onToggle={() => handleToggleChild(subIdx)}
+  //                             onClickItem={onClickItem}
+  //                           />
+  //                         ) : (
+  //                           <Link
+  //                             prefetch={true}
+  //                             className="block px-2 py-1 text-gray-500 hover:text-teal-600"
+  //                             href={sub.link ?? "#"}
+  //                             onClick={onClickItem}
+  //                           >
+  //                             {sub.title}
+  //                           </Link>
+  //                         )}
+  //                       </li>
+  //                     ))}
+  //                   </ul>
+  //                 )}
+  //               </div>
+  //             ))}
+  //           </div>
+  //         </div>
+  //       )}
+  //     </div>
+  //   );
+  // }
+
   // Desktop Mega Menu
   if (children && children.length > 0 && !isMobile && megaMenu) {
     return (
       <div className="relative group">
         <button
-          className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
-          onClick={onToggle}
           type="button"
+          onClick={onToggle}
+          className="flex items-center gap-1 text-gray-600 hover:text-gray-800 transition"
         >
           {title}
           <svg
-            className={`w-4 h-4 ml-1 transition-transform ${
+            className={`w-4 h-4 ml-1 transform transition-transform duration-200 ${
               open ? "rotate-180" : ""
             }`}
             fill="none"
@@ -119,50 +193,80 @@ export function List({
             />
           </svg>
         </button>
+
         {open && (
-          <div className="absolute right-1/2 -translate-x-1/2 mt-2 w-[28rem] bg-white border rounded shadow-lg z-50 animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6">
-              {children.map((child, idx) => (
-                <div key={idx}>
-                  <Link
-                    prefetch={true}
-                    className="block font-semibold text-gray-700 mb-2 hover:text-teal-600"
-                    href={child.link ?? "#"}
-                    onClick={onClickItem}
-                  >
-                    {child.title}
-                  </Link>
-                  {child.children && (
-                    <ul>
-                      {child.children.map((sub, subIdx) => (
-                        <li key={subIdx}>
-                          {sub.children ? (
-                            <List
-                              {...sub}
-                              isMobile={isMobile}
-                              open={!!openIndexes[subIdx]}
-                              onToggle={() => handleToggleChild(subIdx)}
-                              onClickItem={onClickItem}
-                            />
-                          ) : (
+          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-[36rem] rounded-lg border border-gray-200 bg-white shadow-xl animate-fadeIn">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6 p-6">
+              {children.map((section, idx) => (
+                <section key={idx}>
+                  <h3 className="mb-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    {section.title}
+                  </h3>
+
+                  {Array.isArray(section.children) &&
+                    section.children.length > 0 && (
+                      <ul className="space-y-2">
+                        {section.children.map((item, subIdx) => (
+                          <li key={subIdx}>
                             <Link
-                              prefetch={true}
-                              className="block px-2 py-1 text-gray-500 hover:text-teal-600"
-                              href={sub.link ?? "#"}
+                              href={item.link ?? "#"}
+                              prefetch
                               onClick={onClickItem}
+                              className="block px-2 py-1 text-sm text-gray-700 rounded hover:text-teal-600 hover:bg-gray-50 transition"
                             >
-                              {sub.title}
+                              {item.title}
                             </Link>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                </section>
               ))}
             </div>
           </div>
         )}
+
+        {/* {open && (
+          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-[32rem] rounded-lg border bg-white shadow-xl animate-fadeIn">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6">
+              {children.map((section, idx) => (
+                <section key={idx}>
+                  <h3 className="mb-2 text-sm font-semibold text-gray-800 uppercase tracking-wide">
+                    {section.title}
+                  </h3>
+
+                  {Array.isArray(section.children) &&
+                    section.children.length > 0 && (
+                      <ul className="space-y-1">
+                        {section.children.map((item, subIdx) => (
+                          <li key={subIdx}>
+                            {item.children ? (
+                              <List
+                                {...item}
+                                isMobile={isMobile}
+                                open={!!openIndexes[subIdx]}
+                                onToggle={() => handleToggleChild(subIdx)}
+                                onClickItem={onClickItem}
+                              />
+                            ) : (
+                              <Link
+                                href={item.link ?? "#"}
+                                prefetch
+                                onClick={onClickItem}
+                                className="block px-2 py-1 text-gray-600 hover:text-teal-600 transition"
+                              >
+                                {item.title}
+                              </Link>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                </section>
+              ))}
+            </div>
+          </div>
+        )} */}
       </div>
     );
   }
@@ -330,24 +434,41 @@ export default function Header() {
       megaMenu: true,
       children: [
         {
-          title: "Productivity",
+          title: "Lihat Semua",
           children: [
-            { title: "Task Manager", link: "#" },
-            { title: "Notes", link: "#" },
+            {
+              title: "Apps",
+              link: "/apps",
+            },
+          ],
+        },
+
+        {
+          title: "Mental Health",
+          children: [
+            { title: "Anxiety", link: "/apps/mental-health/anxiety" },
+            { title: "Depression", link: "/apps/mental-health/depression" },
           ],
         },
         {
-          title: "Utilities",
+          title: "Documents",
           children: [
-            { title: "Calculator", link: "#" },
-            { title: "Weather", link: "#" },
+            { title: "PDF Tools", link: "/apps/pdf" },
+            { title: "Text Tools", link: "/apps/text" },
           ],
         },
         {
-          title: "Socical",
+          title: "Image Tools",
+          children: [{ title: "Editor", link: "/apps/image" }],
+        },
+        {
+          title: "Calculator",
           children: [
-            { title: "Calculator", link: "#" },
-            { title: "Weather", link: "#" },
+            { title: "Blood Glucose", link: "/apps/calculator/blood-glucose" },
+            { title: "BMI", link: "/apps/calculator/bmi" },
+            { title: "BMR", link: "/apps/calculator/bmr" },
+            { title: "Calorie", link: "/apps/calculator/calorie" },
+            { title: "Water", link: "/apps/calculator/water" },
           ],
         },
       ],
@@ -364,7 +485,7 @@ export default function Header() {
     { title: "Blog", link: "https://medium.com/@naagaraa" },
     { title: "About", link: "/about" },
     { title: "Contact", link: "/contact" },
-    { title: "Sponsorship", link: "#" },
+    { title: "Sponsorship", link: "/sponsorship" },
   ];
 
   return (

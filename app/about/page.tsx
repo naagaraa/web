@@ -161,7 +161,7 @@ export default function About() {
       <motion.div>
         <Heading
           name="Eka Jaya Nagara"
-          title="Software Developer"
+          title="Software Developer / IT Support"
           stack={{
             available: true,
             title: "PHP - JS - Laravel - React - Firebase",

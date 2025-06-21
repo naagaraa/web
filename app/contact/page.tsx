@@ -1,24 +1,15 @@
 "use client";
 
-import Heading from "@/components/UI/Heading";
-import WraperContent from "@/components/UI/WrapperContent";
-import Image from "next/image";
 import { useState } from "react";
+import Heading from "@/components/UI/Heading";
 
 export default function ProjectProfesional() {
   return (
     <>
-      <Heading name="Contact" title="Software Developer" />
-      {/* <WraperContent> */}
-      {/* <p>On going</p> */}
+      <Heading name="Contact" title="Software Developer / IT Support" />
       <ContactUs />
-      {/* </WraperContent> */}
     </>
   );
-}
-
-interface ContactFormProps {
-  onSubmit: (formData: any) => void;
 }
 
 function ContactUs() {
@@ -36,187 +27,164 @@ function ContactUs() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form Data:", formData);
-    // Simpan data ke backend atau lakukan aksi lainnya
   };
 
   return (
     <section id="contact" className="py-20 bg-white">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row gap-8">
-        {/* Kolom Kiri */}
-        <div className="md:w-1/2">
-          <h2 className="text-2xl font-bold mb-4">
-            Web Development & IT Support for Your Daily Needs
+      <div className="container mx-auto px-6 grid md:grid-cols-2 gap-12">
+        {/* Left Column */}
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
+            Web Development & IT Support
           </h2>
-          <p className="mb-8">
-            Simple, practical solutions for teams that need reliable systems
-            without the unnecessary complexity.
+          <p className="text-gray-600 mb-8 text-base leading-relaxed">
+            Simple, practical solutions for teams who need reliable systems
+            without unnecessary complexity.
           </p>
 
-          {/* Feature 1 */}
-          <div className="flex items-center mb-4">
-            <div>
-              <h3 className="text-lg font-semibold">Custom Internal Tools</h3>
-              <p>
-                Build systems for things like inventory, reporting, or team
-                workflows—fully tailored to how you work.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="flex items-center mb-4">
-            <div>
-              <h3 className="text-lg font-semibold">Remote IT Support</h3>
-              <p>
-                Help with setup, troubleshooting, backups, or server
-                config—handled remotely and affordably.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="flex items-center">
-            <div>
-              <h3 className="text-lg font-semibold">Affordable Maintenance</h3>
-              <p>
-                Keep your systems running smoothly with minimal cost—regular
-                updates, bug fixes, and monitoring.
-              </p>
-            </div>
+          <div className="space-y-6">
+            <FeatureItem
+              title="Custom Internal Tools"
+              description="Build systems for inventory, reporting, or workflows—fully tailored to your process."
+            />
+            <FeatureItem
+              title="Remote IT Support"
+              description="Setup, troubleshooting, or server config—done remotely and efficiently."
+            />
+            <FeatureItem
+              title="Affordable Maintenance"
+              description="Ensure smooth operation with updates, bug fixes, and regular checks."
+            />
           </div>
         </div>
 
-        {/* Kolom Kanan */}
-        <div className="md:w-1/2">
+        {/* Right Column: Form */}
+        <div className="bg-gray-50 p-8 rounded-2xl shadow-md">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
+            <Input
               placeholder="Your name"
               value={formData.name}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
             />
-
-            <input
+            <Input
               type="email"
               placeholder="Your email"
               value={formData.email}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
             />
-
-            <input
-              type="text"
-              placeholder="Your company name (optional)"
+            <Input
+              placeholder="Company name (optional)"
               value={formData.companyName}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, companyName: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
             />
-
-            <select
+            <Select
               value={formData.industry}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setFormData({ ...formData, industry: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
-            >
-              <option value="">Your industry</option>
-              <option value="Startup">Startup</option>
-              <option value="Small Business">Small Business</option>
-              <option value="Enterprise">Enterprise</option>
-              <option value="NGO / Community">NGO / Community</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <select
+              options={[
+                "Startup",
+                "Small Business",
+                "Enterprise",
+                "NGO / Community",
+                "Other",
+              ]}
+              placeholder="Your industry"
+            />
+            <Select
               value={formData.need}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setFormData({ ...formData, need: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
-            >
-              <option value="">What do you need help with?</option>
-              <option value="Web Development">Web Development</option>
-              <option value="IT Support">IT Support</option>
-              <option value="Both">Both</option>
-              <option value="Other">Other</option>
-            </select>
-
-            <textarea
-              placeholder="Tell me a bit about the project or issue..."
+              options={["Web Development", "IT Support", "Both", "Other"]}
+              placeholder="What do you need help with?"
+            />
+            <TextArea
               value={formData.message}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setFormData({ ...formData, message: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
-              rows={4}
+              placeholder="Tell me a bit about your project..."
             />
-
-            <select
+            <Select
               value={formData.budget}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                 setFormData({ ...formData, budget: e.target.value })
               }
-              className="w-full p-3 border rounded-md focus:outline-none focus:border-blue-500"
-            >
-              <option value="">Estimated budget (optional)</option>
-              <option value="<$500">&lt; $500</option>
-              <option value="$500–$2000">$500–$2,000</option>
-              <option value="$2000+">$2,000+</option>
-            </select>
-
+              options={["< $500", "$500–$2000", "$2000+"]}
+              placeholder="Estimated budget (optional)"
+            />
             <button
               type="submit"
-              className="w-full bg-orange-400 text-white p-3 rounded-md hover:bg-orange-600 transition duration-300"
+              className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition"
             >
               Get in Touch
             </button>
           </form>
         </div>
       </div>
-
-      {/* Trusted by */}
-      {/* <div className="mt-16 text-center">
-        <p className="text-sm font-semibold mb-4">Trusted by</p>
-        <div className="flex justify-center space-x-4">
-          <Image
-            src="https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2024/05/08/2700147190.jpg"
-            alt="Logo 1"
-            // width={50}
-            // height={50}
-          />
-          <Image
-            src="https://via.placeholder.com/50"
-            alt="Logo 2"
-            width={50}
-            height={50}
-          />
-          <Image
-            src="https://via.placeholder.com/50"
-            alt="Logo 3"
-            width={50}
-            height={50}
-          />
-          <Image
-            src="https://via.placeholder.com/50"
-            alt="Logo 4"
-            width={50}
-            height={50}
-          />
-          <Image
-            src="https://via.placeholder.com/50"
-            alt="Logo 5"
-            width={50}
-            height={50}
-          />
-        </div>
-      </div> */}
     </section>
+  );
+}
+
+// === Reusable Components ===
+
+function Input({ type = "text", ...props }) {
+  return (
+    <input
+      type={type}
+      {...props}
+      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
+  );
+}
+
+function Select({ value, onChange, options, placeholder }: any) {
+  return (
+    <select
+      value={value}
+      onChange={onChange}
+      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    >
+      <option value="">{placeholder}</option>
+      {options.map((opt: string, i: number) => (
+        <option key={i} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+function TextArea({ value, onChange, placeholder }: any) {
+  return (
+    <textarea
+      rows={4}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
+  );
+}
+
+function FeatureItem({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+      <h4 className="text-lg font-semibold text-gray-800">{title}</h4>
+      <p className="text-gray-600 text-sm">{description}</p>
+    </div>
   );
 }

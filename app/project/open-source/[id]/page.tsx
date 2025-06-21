@@ -5,11 +5,10 @@ import { notFound } from "next/navigation";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
 import Image from "next/image";
 import HeroImage from "@/assets/hero.png";
-import { FaHeart, FaEye } from "react-icons/fa";
+import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 type Props = {
   params: {
@@ -17,7 +16,7 @@ type Props = {
   };
 };
 
-export default function ProjectOpenSourceDetailPage({ params }: Props) {
+export default function ProjectDetailPage({ params }: Props) {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<any>(null);
 
@@ -35,45 +34,38 @@ export default function ProjectOpenSourceDetailPage({ params }: Props) {
 
   if (loading || !project) {
     return (
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        <Skeleton width={200} height={24} />
-        <Skeleton width="100%" height={240} />
-        <Skeleton count={3} />
-        <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
-          <Skeleton circle height={40} width={40} />
-          <Skeleton height={40} width={120} />
-        </div>
+      <div className="max-w-3xl mx-auto p-6 space-y-6">
+        <Skeleton width={300} height={36} />
+        <Skeleton width="100%" height={320} />
+        <Skeleton count={4} />
       </div>
     );
   }
 
   return (
     <motion.div
-      className="max-w-4xl mx-auto p-6 space-y-6"
+      className="max-w-3xl mx-auto p-6 md:pt-12 md:pb-20 space-y-10 leading-relaxed text-gray-800"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6 }}
     >
       <Link
-        href="/#open-source"
-        className="text-blue-600 hover:underline text-sm"
+        href="/project/open-source"
+        className="block mt-16 text-blue-600 hover:underline text-sm"
       >
-        ← Back to Open Source Projects
+        ← Back to Projects
       </Link>
 
-      <div className="flex flex-col md:flex-row justify-between md:items-center">
-        <h1 className="text-3xl font-bold">{project.title}</h1>
-        <div className="flex gap-4 text-gray-600 mt-2 md:mt-0 text-sm">
-          <span className="flex items-center gap-1">
-            <FaHeart /> 0
-          </span>
-          <span className="flex items-center gap-1">
-            <FaEye /> 0
-          </span>
-        </div>
-      </div>
+      {/* Judul */}
+      <h1 className="text-4xl font-bold text-center">{project.title}</h1>
 
-      <div className="w-full h-64 relative rounded-xl overflow-hidden shadow">
+      {/* Subjudul (jika ada) */}
+      {project.subtitle && (
+        <p className="text-lg text-center text-gray-500">{project.subtitle}</p>
+      )}
+
+      {/* Gambar utama */}
+      <div className="w-full h-72 md:h-96 relative rounded-xl overflow-hidden shadow">
         <Image
           src={project.image}
           alt={project.title}
@@ -82,23 +74,29 @@ export default function ProjectOpenSourceDetailPage({ params }: Props) {
         />
       </div>
 
-      <p className="text-gray-700 text-base">{project.description}</p>
-
-      <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+      {/* Profil Penulis */}
+      <div className="flex items-center gap-3 pt-8 border-y border-gray-200">
         <Image
           src={HeroImage}
           alt="Eka Jaya Nagara"
-          width={40}
-          height={40}
+          width={50}
+          height={50}
           className="rounded-full"
         />
         <div>
-          <p className="font-medium">Eka Jaya Nagara</p>
-          <p className="text-sm text-gray-500">Open Source Developer</p>
+          <p className="font-semibold text-lg">Eka Jaya Nagara</p>
+          <p className="text-sm text-gray-500">Fullstack Developer</p>
         </div>
       </div>
 
-      <p className="text-gray-700 text-base">{project.content}</p>
+      {/* Konten utama */}
+      <div className="prose prose-lg max-w-none prose-headings:mt-8 prose-img:rounded-xl prose-p:leading-7">
+        <p>{project.description}</p>
+        <div
+          className="pt-4"
+          dangerouslySetInnerHTML={{ __html: project.content }}
+        ></div>
+      </div>
     </motion.div>
   );
 }
