@@ -321,7 +321,6 @@ const tools: Tool[] = [
     icon: <Droplet className="w-6 h-6 text-cyan-600" />,
     category: "Calculator",
   },
-  // Mental Health
   {
     id: 10,
     name: "Anxiety",
@@ -338,7 +337,6 @@ const tools: Tool[] = [
     icon: <Smile className="w-6 h-6 text-sky-500" />,
     category: "Mental Health",
   },
-  // Documents
   {
     id: 12,
     name: "PDF Tools",
@@ -355,7 +353,6 @@ const tools: Tool[] = [
     icon: <FileText className="w-6 h-6 text-gray-700" />,
     category: "Documents",
   },
-  // Image Tools
   {
     id: 14,
     name: "Editor",
@@ -364,15 +361,6 @@ const tools: Tool[] = [
     icon: <ImageIcon className="w-6 h-6 text-pink-700" />,
     category: "Image Tools",
   },
-  {
-    id: 15,
-    name: "Burnout Checker",
-    slug: "mental-health/burnout-checker",
-    description: "Tes untuk mengukur tingkat burnout emosional.",
-    icon: <Flame className="w-6 h-6 text-orange-500" />,
-    category: "Mental Health",
-  },
-  // mental health
   {
     id: 15,
     name: "Burnout Checker",
