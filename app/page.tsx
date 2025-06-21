@@ -3,12 +3,23 @@
 import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
 import Image from "next/image";
-
 import { motion } from "framer-motion";
 import { useState } from "react";
 import heroImage from "@/assets/hero.png";
+import Footer from "@/components/UI/footer";
 
-import { Code, Wrench, LifeBuoy, Settings, MonitorCheck } from "lucide-react";
+import {
+  Code,
+  Wrench,
+  LifeBuoy,
+  Settings,
+  MonitorCheck,
+  Flame,
+  ShieldCheck,
+  FileCode,
+  QrCode,
+  Crop,
+} from "lucide-react";
 
 import {
   Droplet,
@@ -32,6 +43,7 @@ export default function Home() {
       <Hero />
       <ProductivityTools />
       <Services />
+      <Footer />
     </main>
   );
 }
@@ -152,69 +164,6 @@ function Hero() {
   );
 }
 
-// const services = [
-//   {
-//     title: "Laravel Web Development",
-//     description:
-//       "Development and maintenance of database-driven web applications using Laravel. Work is fully remote.",
-//     icon: "🚀",
-//   },
-//   {
-//     title: "Bug Fixing & Debugging",
-//     description:
-//       "Fix issues in existing websites or apps—both front-end and back-end. Remote service with quick turnaround.",
-//     icon: "🔧",
-//   },
-//   {
-//     title: "IT Support & Maintenance",
-//     description:
-//       "Remote support for system setup, server configuration, troubleshooting, and regular maintenance.",
-//     icon: "🛠️",
-//   },
-//   {
-//     title: "System Installation & Configuration",
-//     description:
-//       "Remote setup or reinstallation of Linux-based systems for stable and optimized performance.",
-//     icon: "⚙️",
-//   },
-//   {
-//     title: "Remote Technical Support",
-//     description:
-//       "Help resolve software issues, perform checks, or assist users via remote sessions.",
-//     icon: "📡",
-//   },
-// ];
-
-// function Services() {
-//   return (
-//     <section id="services" className="py-20 bg-gray-50">
-//       <div className="container mx-auto px-6">
-//         <SectionHeader
-//           title="Layanan"
-//           description="Jasa yang saya tawarkan sebagai Software Engineer"
-//         />
-
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-12">
-//           {services.map((service, index) => (
-//             <motion.div
-//               key={index}
-//               initial={{ opacity: 0, y: 20 }}
-//               whileInView={{ opacity: 1, y: 0 }}
-//               viewport={{ once: true }}
-//               transition={{ delay: index * 0.2 }}
-//               className="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition-shadow"
-//             >
-//               <div className="text-4xl mb-4">{service.icon}</div>
-//               <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-//               <p className="text-gray-600">{service.description}</p>
-//             </motion.div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
 const services = [
   {
     title: "Laravel Web Development",
@@ -285,36 +234,11 @@ function Services() {
     </section>
   );
 }
-interface SectionHeaderProps {
-  title: string;
-  description: string;
-  link?: string;
-}
-
-const SectionHeader = ({
-  title,
-  description,
-  link = "#",
-}: SectionHeaderProps) => {
-  return (
-    <div className="mb-10 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-      <div>
-        <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
-        <p className="text-gray-600 mt-2">{description}</p>
-      </div>
-      <Link
-        href={link}
-        className="text-blue-600 hover:text-blue-800 font-medium"
-      >
-        Lihat Semua →
-      </Link>
-    </div>
-  );
-};
 
 interface Tool {
   id: number;
   name: string;
+  slug: string;
   description: string;
   icon: React.ReactNode;
   category: string;
@@ -326,6 +250,7 @@ const tools: Tool[] = [
   {
     id: 1,
     name: "Blood Glucose",
+    slug: "calculator/blood-glucose",
     description: "Hitung dan pantau kadar gula darah harian Anda.",
     icon: <Droplet className="w-6 h-6 text-blue-600" />,
     category: "Calculator",
@@ -333,6 +258,7 @@ const tools: Tool[] = [
   {
     id: 2,
     name: "BMI",
+    slug: "calculator/bmi",
     description:
       "Menghitung Body Mass Index berdasarkan tinggi dan berat badan.",
     icon: <Activity className="w-6 h-6 text-green-600" />,
@@ -341,6 +267,7 @@ const tools: Tool[] = [
   {
     id: 3,
     name: "BMR",
+    slug: "calculator/bmr",
     description:
       "Mengukur kebutuhan kalori harian Anda dalam keadaan istirahat.",
     icon: <HeartPulse className="w-6 h-6 text-pink-500" />,
@@ -349,6 +276,7 @@ const tools: Tool[] = [
   {
     id: 4,
     name: "Calorie",
+    slug: "calculator/calorie",
     description: "Menghitung konsumsi dan kebutuhan kalori harian.",
     icon: <Utensils className="w-6 h-6 text-yellow-600" />,
     category: "Calculator",
@@ -356,6 +284,7 @@ const tools: Tool[] = [
   {
     id: 5,
     name: "Macronutrient",
+    slug: "calculator/macronutrient",
     description: "Tentukan distribusi protein, karbohidrat, dan lemak.",
     icon: <PieChart className="w-6 h-6 text-purple-600" />,
     category: "Calculator",
@@ -363,6 +292,7 @@ const tools: Tool[] = [
   {
     id: 6,
     name: "Pregnancy",
+    slug: "calculator/pregnancy",
     description: "Perkiraan tanggal kelahiran dan status kehamilan.",
     icon: <Baby className="w-6 h-6 text-rose-500" />,
     category: "Calculator",
@@ -370,6 +300,7 @@ const tools: Tool[] = [
   {
     id: 7,
     name: "Sleep Time",
+    slug: "calculator/sleep-time",
     description: "Rencanakan waktu tidur yang optimal untuk produktivitas.",
     icon: <BedDouble className="w-6 h-6 text-indigo-500" />,
     category: "Calculator",
@@ -377,6 +308,7 @@ const tools: Tool[] = [
   {
     id: 8,
     name: "Vitamins",
+    slug: "calculator/vitamins",
     description: "Cek kebutuhan vitamin harian berdasarkan usia dan gender.",
     icon: <Calculator className="w-6 h-6 text-orange-500" />,
     category: "Calculator",
@@ -384,6 +316,7 @@ const tools: Tool[] = [
   {
     id: 9,
     name: "Water",
+    slug: "calculator/water",
     description: "Rekomendasi jumlah air minum harian.",
     icon: <Droplet className="w-6 h-6 text-cyan-600" />,
     category: "Calculator",
@@ -392,6 +325,7 @@ const tools: Tool[] = [
   {
     id: 10,
     name: "Anxiety",
+    slug: "mental-health/Anxiety",
     description: "Alat bantu evaluasi dan manajemen kecemasan.",
     icon: <Brain className="w-6 h-6 text-fuchsia-600" />,
     category: "Mental Health",
@@ -399,6 +333,7 @@ const tools: Tool[] = [
   {
     id: 11,
     name: "Depression",
+    slug: "mental-health/depression",
     description: "Skrining awal dan informasi seputar depresi.",
     icon: <Smile className="w-6 h-6 text-sky-500" />,
     category: "Mental Health",
@@ -407,6 +342,7 @@ const tools: Tool[] = [
   {
     id: 12,
     name: "PDF Tools",
+    slug: "pdf tools",
     description: "Gabung, kompres, atau pisahkan file PDF Anda.",
     icon: <FileInput className="w-6 h-6 text-gray-600" />,
     category: "Documents",
@@ -414,6 +350,7 @@ const tools: Tool[] = [
   {
     id: 13,
     name: "Text Tools",
+    slug: "Text Tools",
     description: "Alat bantu analisis, konversi, atau edit teks.",
     icon: <FileText className="w-6 h-6 text-gray-700" />,
     category: "Documents",
@@ -422,8 +359,85 @@ const tools: Tool[] = [
   {
     id: 14,
     name: "Editor",
+    slug: "editor",
     description: "Edit gambar dengan filter dan pengaturan cepat.",
     icon: <ImageIcon className="w-6 h-6 text-pink-700" />,
+    category: "Image Tools",
+  },
+  {
+    id: 15,
+    name: "Burnout Checker",
+    slug: "mental-health/burnout-checker",
+    description: "Tes untuk mengukur tingkat burnout emosional.",
+    icon: <Flame className="w-6 h-6 text-orange-500" />,
+    category: "Mental Health",
+  },
+  // mental health
+  {
+    id: 15,
+    name: "Burnout Checker",
+    slug: "mental-health/burnout-checker",
+    description: "Tes untuk mengukur tingkat burnout emosional.",
+    icon: <Flame className="w-6 h-6 text-orange-500" />,
+    category: "Mental Health",
+  },
+  {
+    id: 16,
+    name: "JWT Decoder",
+    slug: "text/jwt-decoder",
+    description: "Dekode dan periksa struktur token JWT dengan mudah.",
+    icon: <ShieldCheck className="w-6 h-6 text-purple-500" />,
+    category: "Developer Tools",
+  },
+  {
+    id: 17,
+    name: "Base64 Decoder Encoder",
+    slug: "text/base64-decoder-encoder",
+    description:
+      "Encode dan decode teks ke atau dari format Base64 secara instan.",
+    icon: <FileCode className="w-6 h-6 text-indigo-500" />,
+    category: "Developer Tools",
+  },
+  {
+    id: 18,
+    name: "JSON Formatter",
+    slug: "text/json-formatter",
+    description: "Format dan perindah struktur JSON dengan validasi otomatis.",
+    icon: <Code className="w-6 h-6 text-green-500" />,
+    category: "Developer Tools",
+  },
+  {
+    id: 19,
+    name: "QR Code Generator",
+    slug: "text/qrcode",
+    description:
+      "Buat dan unduh QR Code dari teks atau tautan hanya dengan sekali klik.",
+    icon: <QrCode className="w-6 h-6 text-pink-500" />,
+    category: "Utilities",
+  },
+  {
+    id: 20,
+    name: "Image Converter",
+    slug: "image/converter",
+    description:
+      "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
+    icon: <ImageIcon className="w-6 h-6 text-yellow-500" />,
+    category: "Image Tools",
+  },
+  {
+    id: 21,
+    name: "Image Cropper",
+    slug: "image/cropper",
+    description: "Crop gambar dengan aspek rasio tertentu atau secara bebas.",
+    icon: <Crop className="w-6 h-6 text-green-500" />,
+    category: "Image Tools",
+  },
+  {
+    id: 22,
+    name: "Image Watermark Tool",
+    slug: "image/watermark",
+    description: "Tambahkan watermark berupa teks atau logo ke dalam gambar.",
+    icon: <Droplet className="w-6 h-6 text-blue-500" />,
     category: "Image Tools",
   },
 ];
@@ -473,26 +487,27 @@ function ProductivityTools() {
         {/* Tools */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredTools.map((tool) => (
-            <motion.div
-              key={tool.id}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              viewport={{ once: true }}
-              className="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex items-start gap-4">
-                <div className="bg-gray-100 p-2 rounded-lg">{tool.icon}</div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 text-base">
-                    {tool.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {tool.description}
-                  </p>
+            <Link key={tool.id} href={`/apps/${tool.slug}`}>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                viewport={{ once: true }}
+                className="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="bg-gray-100 p-2 rounded-lg">{tool.icon}</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800 text-base">
+                      {tool.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1 break-words line-clamp-2 md:line-clamp-3">
+                      {tool.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

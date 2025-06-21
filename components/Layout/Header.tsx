@@ -446,8 +446,18 @@ export default function Header() {
         {
           title: "Mental Health",
           children: [
-            { title: "Anxiety", link: "/apps/mental-health/anxiety" },
-            { title: "Depression", link: "/apps/mental-health/depression" },
+            {
+              title: "Anxiety",
+              link: "/apps/mental-health/anxiety",
+            },
+            {
+              title: "Depression",
+              link: "/apps/mental-health/depression",
+            },
+            {
+              title: "Burnout Checker",
+              link: "/apps/mental-health/burnout-checker",
+            },
           ],
         },
         {

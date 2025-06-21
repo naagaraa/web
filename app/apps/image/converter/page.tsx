@@ -1,10 +1,9 @@
 import Link from "next/link";
-import ImageWatermarkTool from "./ImageWatermarkTool";
+import ImageConverterTool from "./ImageConverter";
 
 export const metadata = {
-  title: "Image Watermark Tool",
-  description:
-    "Tambahkan watermark teks ke gambar dengan mudah dan unduh hasilnya.",
+  title: "Image Format Converter",
+  description: "Konversi gambar ke PNG, JPG, atau WebP secara online.",
 };
 
 export default function Page() {
@@ -16,7 +15,7 @@ export default function Page() {
       >
         ← Kembali ke Aplikasi
       </Link>
-      <ImageWatermarkTool />
+      <ImageConverterTool />
     </>
   );
 }

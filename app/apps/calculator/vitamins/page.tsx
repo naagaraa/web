@@ -33,7 +33,9 @@ export async function generateMetadata({
 }
 
 export default function Page() {
-  <Suspense fallback={<div>Loading...</div>}>
-    <VitaminCalculator />
-  </Suspense>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VitaminCalculator />
+    </Suspense>
+  );
 }

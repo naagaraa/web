@@ -1,10 +1,9 @@
 import Link from "next/link";
-import ImageWatermarkTool from "./ImageWatermarkTool";
+import JwtDecoder from "./JwtDecoder";
 
 export const metadata = {
-  title: "Image Watermark Tool",
-  description:
-    "Tambahkan watermark teks ke gambar dengan mudah dan unduh hasilnya.",
+  title: "JWT Decoder",
+  description: "Dekode token JWT dan lihat header & payload-nya secara instan.",
 };
 
 export default function Page() {
@@ -16,7 +15,7 @@ export default function Page() {
       >
         ← Kembali ke Aplikasi
       </Link>
-      <ImageWatermarkTool />
+      <JwtDecoder />
     </>
   );
 }

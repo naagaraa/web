@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Heading from "@/components/UI/Heading";
+import Footer from "@/components/UI/footer";
 
 export default function ProjectProfesional() {
   return (
     <>
       <Heading name="Contact" title="Software Developer / IT Support" />
       <ContactUs />
+      <Footer />
     </>
   );
 }

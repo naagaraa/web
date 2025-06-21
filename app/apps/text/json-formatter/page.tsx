@@ -1,9 +1,22 @@
-import React from "react";
+import Link from "next/link";
+import { JsonFormatter } from "./JsonFormatter";
 
-export default function page() {
-  return <div>json formatter</div>;
-}
 export const metadata = {
-  title: "Calorie Calculator",
-  description: "Calculate your daily calorie needs and track your intake.",
+  title: "JSON Formatter",
+  description: "Format dan validasi JSON secara instan.",
 };
+
+export default function Page() {
+  return (
+    <>
+      <Link
+        href="/apps"
+        className="block mt-20 mx-auto text-blue-600 hover:underline text-sm"
+      >
+        ← Kembali ke Aplikasi
+      </Link>
+
+      <JsonFormatter />
+    </>
+  );
+}

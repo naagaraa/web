@@ -20,6 +20,7 @@ import Image from "next/image";
 import WraperContent from "@/components/UI/WrapperContent";
 import Link from "next/link";
 import { sectionHeaderProps } from "@/types/components/types";
+import Footer from "@/components/UI/footer";
 
 function SectionHeader({
   title = "",
@@ -155,7 +156,7 @@ function Coding() {
   );
 }
 
-export default function About() {
+export default function page() {
   return (
     <>
       <motion.div>
@@ -180,6 +181,7 @@ export default function About() {
       <motion.div>
         <Experience />
       </motion.div>
+      <Footer />
     </>
   );
 }
