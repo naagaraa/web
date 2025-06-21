@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { EducationProjectItems } from "@/data/EducationProject";
+import { OpenSourceProject } from "@/data/OpenSourceProject";
 import Image from "next/image";
 import HeroImage from "@/assets/hero.png";
 import { FaHeart, FaEye } from "react-icons/fa";
-import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type Props = {
   params: {
@@ -17,19 +17,19 @@ type Props = {
   };
 };
 
-export default function ProjectDetailPage({ params }: Props) {
+export default function ProjectOpenSourceDetailPage({ params }: Props) {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<any>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const found = EducationProjectItems.find(
+      const found = OpenSourceProject.find(
         (item) => item.id.toString() === params.id
       );
       if (!found) return notFound();
       setProject(found);
       setLoading(false);
-    }, 800); // delay 800ms for UX
+    }, 800);
     return () => clearTimeout(timer);
   }, [params.id]);
 
@@ -54,13 +54,15 @@ export default function ProjectDetailPage({ params }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Link href="/#projects" className="text-blue-600 hover:underline text-sm">
-        ← Back to Projects
+      <Link
+        href="/#open-source"
+        className="text-blue-600 hover:underline text-sm"
+      >
+        ← Back to Open Source Projects
       </Link>
 
       <div className="flex flex-col md:flex-row justify-between md:items-center">
         <h1 className="text-3xl font-bold">{project.title}</h1>
-
         <div className="flex gap-4 text-gray-600 mt-2 md:mt-0 text-sm">
           <span className="flex items-center gap-1">
             <FaHeart /> 0
@@ -92,7 +94,7 @@ export default function ProjectDetailPage({ params }: Props) {
         />
         <div>
           <p className="font-medium">Eka Jaya Nagara</p>
-          <p className="text-sm text-gray-500">Fullstack Developer</p>
+          <p className="text-sm text-gray-500">Open Source Developer</p>
         </div>
       </div>
 

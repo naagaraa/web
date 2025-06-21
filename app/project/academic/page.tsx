@@ -1,44 +1,59 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import Skeleton from "react-loading-skeleton";
 import Heading from "@/components/UI/Heading";
-import { EducationProjectItems } from "@/data/EducationProject";
-import useSlideScreen from "@/composables/hook/useSlideScreen";
-import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
 import Title from "@/components/common/Title";
 import SubTitle from "@/components/common/SubTitle";
-import CardProject from "@/components/UI/card/CardProject";
-import Skeleton from "react-loading-skeleton";
+import WrapperContentSlide from "@/components/UI/WrapperContentSlide";
+import ProjectCard from "@/components/UI/card/ProjectCard";
+import HeroImage from "@/assets/hero.png";
+import { EducationProjectItems } from "@/data/EducationProject";
+
+function ProjectGrid() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {EducationProjectItems.map((item) => (
+        <ProjectCard
+          key={item.id}
+          id={item.id.toString()}
+          title={item.title}
+          description={item.description}
+          // content={item.content}
+          image={item.image}
+          authorName="Eka Jaya Nagara"
+          authorImage={HeroImage}
+          projectdir="project/academic"
+          likes={0}
+          views={0}
+        />
+      ))}
+    </div>
+  );
+}
 
 function Project() {
-  const { slidesPerView } = useSlideScreen(3);
   return (
     <WrapperContentSlide>
       <Title value="Project" />
-      <SubTitle value="This Portofolio Project What I build in Academic Slide for check another" />
-      <Suspense fallback={<Skeleton />}>
-        <Swiper
-          spaceBetween={20}
-          slidesPerView={slidesPerView}
-          navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
-          // onSlideChange={() => console.log("slide change")}
-          // onSwiper={(swiper) => console.log(swiper)}
-        >
-          {EducationProjectItems.map((value, index) => (
-            <SwiperSlide key={index}>
-              <CardProject
-                id={value.id}
-                title={value.title}
-                description={value.description}
-                image={value.image}
-                // other_image={value?.other_image}
+      <SubTitle value="This portfolio project was built during my academic journey. Check out more below!" />
+
+      <Suspense
+        fallback={
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <Skeleton
+                key={idx}
+                height={250}
+                className="rounded-xl"
+                baseColor="#f3f3f3"
+                highlightColor="#ecebeb"
               />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+            ))}
+          </div>
+        }
+      >
+        <ProjectGrid />
       </Suspense>
     </WrapperContentSlide>
   );
@@ -47,7 +62,7 @@ function Project() {
 export default function ProjectAcademic() {
   return (
     <>
-      <Heading name="Project Project" title="all my project in Academic" />
+      <Heading name="Project Showcase" title="All My Academic Projects" />
       <Project />
     </>
   );

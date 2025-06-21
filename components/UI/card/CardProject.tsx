@@ -7,11 +7,11 @@ import { RouteName } from "@/routes/navigation";
 
 type listProps = {
   id: string | number;
-  image?: string | { url: string }; // Specify the correct type here
+  image?: string | { url: string };
   title?: string;
   description?: string;
+  content?: string; // ✅ Tambahkan ini
   link?: string;
-  // other_image?: [] | any;
 };
 
 export default function CardProject({
@@ -19,6 +19,7 @@ export default function CardProject({
   image = "",
   title = "",
   description = "",
+  content = "", // ✅ Tambahkan ini juga
   link = "",
 }: listProps) {
   const { isLoading } = useLoading(true, 500);
@@ -36,13 +37,10 @@ export default function CardProject({
               className="rounded-t-lg"
               src={typeof image === "string" ? image : image?.url}
               alt="images"
-              // Set the width according to your requirements
               width={800}
               height={200}
               sizes="(min-width: 808px) 50vw, 100vw"
-              style={{
-                objectFit: "cover", // cover, contain, none
-              }}
+              style={{ objectFit: "cover" }}
               priority
               unoptimized={true}
             />
@@ -64,6 +62,18 @@ export default function CardProject({
                 <span>{description}</span>
               )}
             </p>
+
+            {/* ✅ Tambahkan bagian ini jika ada content */}
+            {content && (
+              <div className="mb-2 text-justify text-xs text-gray-500 dark:text-gray-300 line-clamp-3">
+                {content.length > 100 ? (
+                  <span>{content.substring(0, 100)} ...</span>
+                ) : (
+                  <span>{content}</span>
+                )}
+              </div>
+            )}
+
             <Link
               href={
                 link.length > 0 ? link : `${RouteName?.project_academic}/${id}`

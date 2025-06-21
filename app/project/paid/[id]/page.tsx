@@ -1,102 +1,98 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
-import dynamic from "next/dynamic";
-
-// Disable SSR for this component
-const Plyr = dynamic(() => import("plyr-react"), { ssr: false });
-
-// import Plyr from "plyr-react";
-import "plyr-react/plyr.css";
+import { useEffect, useState } from "react";
+import { notFound, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
-import useLoading from "@/composables/hook/useLoading";
-import { notFound } from "next/navigation";
-import Title from "@/components/common/Title";
-import SubTitle from "@/components/common/SubTitle";
-import Heading from "@/components/UI/Heading";
+import "react-loading-skeleton/dist/skeleton.css";
+
+import Image from "next/image";
 import Link from "next/link";
 
-import { paidProjectModel } from "@/types/model/paid.project";
 import { PaidProjectItems } from "@/data/PaidProject";
-import Image from "next/image";
-import landingPage from "@/assets/portofolio-11.jpg";
+import { paidProjectModel } from "@/types/model/paid.project";
 
-export default function Page({ params }: { params: { id: any } }) {
-  const [data, setData] = useState<paidProjectModel>();
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default function PaidProjectDetailPage({ params }: Props) {
+  const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState<paidProjectModel | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const itemId = parseInt(params.id);
-    const item = PaidProjectItems.find((value) => value.id === itemId); // Find the item by id
-    console.log("Selected Item:", item);
+    const timer = setTimeout(() => {
+      const itemId = parseInt(params.id);
+      const found = PaidProjectItems.find((item) => item.id === itemId);
+      if (!found) return notFound();
+      setProject(found);
+      setLoading(false);
+    }, 500);
 
-    if (!item) {
-      // If item is not found, trigger a 404
-      notFound();
-    } else {
-      setData(item);
-    }
+    return () => clearTimeout(timer);
   }, [params.id]);
 
-  const { isLoading } = useLoading(true, 500);
+  if (loading || !project) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <Skeleton height={28} width={220} />
+        <Skeleton height={240} />
+        <Skeleton count={3} />
+      </div>
+    );
+  }
 
   return (
-    <>
-      <Heading name={data?.title} />
-      {isLoading ? (
-        <section className="md:mx-auto lg:mx-auto w-full md:w-3/4">
-          <Skeleton count={10} />
-        </section>
-      ) : (
-        <>
-          <section className="md:mx-auto lg:mx-auto w-full md:w-3/4">
-            <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-              <div className="items-start gap-4md:items-center md:justify-between">
-                <div>
-                  <section className="music mt-5">
-                    <Title value={data?.title} />
-                    <SubTitle value={data?.date} />
-                  </section>
-                  {data?.cover !== "" ? (
-                    <section>
-                      <Image
-                        className="rounded-t-lg"
-                        src={data?.cover}
-                        alt="images"
-                        // Set the width according to your requirements
-                        width={800}
-                        height={200}
-                        sizes="(min-width: 808px) 50vw, 100vw"
-                        style={{
-                          objectFit: "cover", // cover, contain, none
-                        }}
-                        priority
-                        unoptimized={true}
-                      />
-                    </section>
-                  ) : null}
+    <motion.div
+      className="max-w-4xl mx-auto px-4 py-10 space-y-6"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <button
+        onClick={() => router.back()}
+        className="text-sm text-blue-600 hover:underline"
+      >
+        ← Back to Paid Projects
+      </button>
 
-                  <section className="mt-5 mb-36">
-                    <p>{data?.content}</p>
-                    {data?.link != "" ? (
-                      <Link
-                        href={data?.link}
-                        className="mt-5 inline-flex btn-sm items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                      >
-                        Check Detail
-                      </Link>
-                    ) : null}
-                    <p className="mt-5">
-                      <span className="font-semibold">Tech Stack is</span>{" "}
-                      {data?.stack}
-                    </p>
-                  </section>
-                </div>
-              </div>
-            </div>
-          </section>
-        </>
+      <h1 className="text-3xl font-bold text-gray-900">{project.title}</h1>
+      <p className="text-sm text-gray-500">Year: {project.date}</p>
+
+      {project.cover && (
+        <div className="w-full h-64 relative rounded-xl overflow-hidden shadow">
+          <Image
+            src={project.cover}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
+        </div>
       )}
-    </>
+
+      <p className="text-base text-gray-700 leading-relaxed">
+        {project.content}
+      </p>
+
+      {project.link && (
+        <Link
+          href={project.link}
+          className="inline-block mt-4 text-white bg-red-600 hover:bg-red-700 font-medium py-2 px-4 rounded-lg text-sm"
+          target="_blank"
+        >
+          Check Live Project
+        </Link>
+      )}
+
+      <div className="pt-4">
+        <span className="font-semibold">Tech Stack:</span>{" "}
+        <span className="text-gray-700">{project.stack}</span>
+      </div>
+    </motion.div>
   );
 }
