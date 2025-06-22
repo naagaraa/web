@@ -11,6 +11,7 @@ export default function Page() {
   return (
     <>
       <Link
+        prefetch
         href="/apps"
         className="block mt-20 mx-auto text-blue-600 hover:underline text-sm text-center"
       >

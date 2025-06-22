@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function WatermarkTool() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -12,9 +13,13 @@ export default function WatermarkTool() {
   const [position, setPosition] = useState({ x: 0.1, y: 0.1 });
   const [scale, setScale] = useState(1);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const dragStart = useRef({ x: 0, y: 0 });
   const [imageDims, setImageDims] = useState({ width: 1, height: 1 });
   const dragOffset = useRef({ x: 0, y: 0 });
+  const watermarkRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [naturalDims, setNaturalDims] = useState({ width: 1, height: 1 }); // asli
+  const [logoDims, setLogoDims] = useState({ width: 100, height: 100 });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,15 +37,14 @@ export default function WatermarkTool() {
     reader.readAsDataURL(file);
   };
 
+  // laptop / desktop
   const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const container = e.currentTarget.offsetParent as HTMLDivElement;
-    const containerRect = container.getBoundingClientRect();
-    const mouseX = e.clientX - containerRect.left;
-    const mouseY = e.clientY - containerRect.top;
+    if (!containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
 
     dragOffset.current = {
-      x: mouseX - position.x * imageDims.width,
-      y: mouseY - position.y * imageDims.height,
+      x: e.clientX - containerRect.left - position.x * imageDims.width,
+      y: e.clientY - containerRect.top - position.y * imageDims.height,
     };
 
     window.addEventListener("mousemove", onMouseMove);
@@ -48,8 +52,8 @@ export default function WatermarkTool() {
   };
 
   const onMouseMove = (e: MouseEvent) => {
-    const container = document.querySelector(".relative")!;
-    const rect = container.getBoundingClientRect();
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
 
     const newX = e.clientX - rect.left - dragOffset.current.x;
     const newY = e.clientY - rect.top - dragOffset.current.y;
@@ -65,8 +69,44 @@ export default function WatermarkTool() {
     window.removeEventListener("mouseup", onMouseUp);
   };
 
+  // mobile
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    dragOffset.current = {
+      x: touch.clientX - containerRect.left - position.x * imageDims.width,
+      y: touch.clientY - containerRect.top - position.y * imageDims.height,
+    };
+
+    window.addEventListener("touchmove", onTouchMove);
+    window.addEventListener("touchend", onTouchEnd);
+  };
+
+  const onTouchMove = (e: TouchEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    const newX = touch.clientX - rect.left - dragOffset.current.x;
+    const newY = touch.clientY - rect.top - dragOffset.current.y;
+
+    setPosition({
+      x: newX / imageDims.width,
+      y: newY / imageDims.height,
+    });
+  };
+  const onTouchEnd = () => {
+    window.removeEventListener("touchmove", onTouchMove);
+    window.removeEventListener("touchend", onTouchEnd);
+  };
+
   const handleDownload = () => {
     if (!imageSrc || !canvasRef.current) return;
+
+    setIsLoading(true);
+    toast.loading("Sedang memproses gambar...");
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d")!;
@@ -74,42 +114,61 @@ export default function WatermarkTool() {
     baseImg.src = imageSrc;
 
     baseImg.onload = () => {
-      canvas.width = baseImg.width;
-      canvas.height = baseImg.height;
+      const MAX_WIDTH = 1080;
+      const scaleRatio =
+        baseImg.width > MAX_WIDTH ? MAX_WIDTH / baseImg.width : 1;
 
-      ctx.drawImage(baseImg, 0, 0);
+      const targetWidth = baseImg.width * scaleRatio;
+      const targetHeight = baseImg.height * scaleRatio;
 
-      const absX = position.x * baseImg.width;
-      const absY = position.y * baseImg.height;
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      ctx.drawImage(baseImg, 0, 0, targetWidth, targetHeight);
+
+      // Hitung rasio asli -> preview
+      const ratioX = targetWidth / imageDims.width;
+      const ratioY = targetHeight / imageDims.height;
+
+      const absX = position.x * imageDims.width * ratioX;
+      const absY = position.y * imageDims.height * ratioY;
+
+      const finishDownload = () => {
+        const link = document.createElement("a");
+        link.download = "watermarked.jpg";
+        link.href = canvas.toDataURL("image/jpeg", 0.8);
+        link.click();
+
+        setIsLoading(false);
+        toast.dismiss();
+        toast.success("Berhasil mendownload gambar!");
+      };
 
       if (useText) {
-        ctx.font = `${30 * scale}px sans-serif`;
+        const fontSize = 30 * scale * ratioX; // pakai ratioX sebagai skala
+        // ctx.font = `${fontSize}px sans-serif`;
+        ctx.font = `bold ${fontSize}px sans-serif`;
         ctx.fillStyle = textColor;
         ctx.fillText(textWatermark, absX, absY);
+        finishDownload();
       } else if (logoSrc) {
         const logoImg = new Image();
         logoImg.src = logoSrc;
-
         logoImg.onload = () => {
-          const logoW = logoImg.width * scale;
-          const logoH = logoImg.height * scale;
+          // const logoW = logoImg.width * scale * ratioX;
+          // const logoH = logoImg.height * scale * ratioY;
+          const logoW = logoDims.width * ratioX;
+          const logoH = logoDims.height * ratioY;
 
           ctx.drawImage(logoImg, absX, absY, logoW, logoH);
-
-          const link = document.createElement("a");
-          link.download = "watermarked.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
+          finishDownload();
         };
-
-        return;
+        logoImg.onerror = () => {
+          setIsLoading(false);
+          toast.dismiss();
+          toast.error("Gagal memuat logo.");
+        };
       }
-
-      // Download jika teks
-      const link = document.createElement("a");
-      link.download = "watermarked.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
     };
   };
 
@@ -167,27 +226,37 @@ export default function WatermarkTool() {
       )}
 
       {imageSrc && (
-        <div className="relative border rounded shadow inline-block">
+        <div
+          ref={containerRef}
+          className="relative border rounded shadow inline-block"
+        >
           <img
             src={imageSrc}
             alt="Main"
             onLoad={(e) => {
               const img = e.currentTarget;
               setImageDims({
-                width: img.offsetWidth,
+                width: img.offsetWidth, // preview
                 height: img.offsetHeight,
+              });
+              setNaturalDims({
+                width: img.naturalWidth, // asli
+                height: img.naturalHeight,
               });
             }}
             className="max-w-full h-auto"
           />
           <div
+            ref={watermarkRef}
             className="absolute"
             onMouseDown={onMouseDown}
+            onTouchStart={onTouchStart}
             style={{
               top: position.y * imageDims.height,
               left: position.x * imageDims.width,
               cursor: "grab",
               userSelect: "none",
+              touchAction: "none",
             }}
           >
             {useText ? (
@@ -205,6 +274,13 @@ export default function WatermarkTool() {
                 <img
                   src={logoSrc}
                   alt="Logo"
+                  onLoad={(e) => {
+                    const img = e.currentTarget;
+                    setLogoDims({
+                      width: img.offsetWidth,
+                      height: img.offsetHeight,
+                    });
+                  }}
                   style={{
                     width: `${100 * scale}px`,
                   }}

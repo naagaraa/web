@@ -8,13 +8,24 @@ export default function ImageCropTool() {
   const [image, setImage] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [aspect, setAspect] = useState<number | null>(4 / 3);
+  const [aspect, setAspect] = useState<number | undefined>(4 / 3);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onCropComplete = useCallback(
     (_croppedArea: any, croppedPixels: any) => {
-      setCroppedAreaPixels(croppedPixels);
+      setCroppedAreaPixels((prev: any) => {
+        if (
+          prev &&
+          prev.x === croppedPixels.x &&
+          prev.y === croppedPixels.y &&
+          prev.width === croppedPixels.width &&
+          prev.height === croppedPixels.height
+        ) {
+          return prev; // Tidak ada perubahan, hindari setState
+        }
+        return croppedPixels;
+      });
     },
     []
   );
@@ -48,17 +59,24 @@ export default function ImageCropTool() {
     const value = e.target.value;
 
     if (value === "free") {
-      setAspect(null); // free
+      setAspect(undefined);
     } else {
-      const [w, h] = value.split("x").map(Number);
-      setAspect(w / h);
+      const parts = value.includes("x") ? value.split("x") : value.split(":");
+      const [w, h] = parts.map(Number);
+
+      if (!isNaN(w) && !isNaN(h) && h !== 0) {
+        setAspect(w / h);
+      } else {
+        console.warn("Invalid aspect ratio value:", value);
+        setAspect(undefined); // fallback
+      }
     }
   };
 
   const handleAspectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value === "free") {
-      setAspect(null);
+      setAspect(undefined);
     } else {
       const [w, h] = value.split(":").map(Number);
       setAspect(w / h);
@@ -81,16 +99,12 @@ export default function ImageCropTool() {
         <>
           <div className="mt-4">
             <label className="font-medium mr-2">Aspect Ratio:</label>
-            <select
-              onChange={handlePresetChange}
-              className="border rounded px-2 py-1"
-              defaultValue="4:3"
-            >
+            <select defaultValue="4x3" onChange={handlePresetChange}>
               <option value="free">Free</option>
-              <option value="1:1">1:1 (Square)</option>
-              <option value="4:3">4:3</option>
-              <option value="3:4">3:4</option>
-              <option value="16:9">16:9</option>
+              <option value="1x1">1:1 (Square)</option>
+              <option value="4x3">4:3</option>
+              <option value="3x4">3:4</option>
+              <option value="16x9">16:9</option>
             </select>
           </div>
 
@@ -99,7 +113,7 @@ export default function ImageCropTool() {
               image={image}
               crop={crop}
               zoom={zoom}
-              aspect={aspect ?? undefined}
+              aspect={aspect !== null ? aspect : undefined}
               restrictPosition={false} // ← Tambahkan ini
               onCropChange={setCrop}
               onZoomChange={setZoom}

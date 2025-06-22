@@ -19,6 +19,9 @@ import {
   FileCode,
   QrCode,
   Crop,
+  Code2,
+  Divide,
+  ListOrdered,
 } from "lucide-react";
 
 import {
@@ -48,75 +51,166 @@ export default function Home() {
   );
 }
 
+// function Hero() {
+//   return (
+//     <section className="py-20 bg-white">
+//       <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
+//         {/* Kolom Kiri (Gambar Ilustrasi) */}
+//         <motion.div
+//           className="md:w-1/2"
+//           initial={{ opacity: 0, x: -40 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.7 }}
+//         >
+//           <Image
+//             src={heroImage}
+//             alt="Ilustrasi Tim Bekerja"
+//             width={250}
+//             height={125}
+//             className="w-3/4 mx-auto object-cover"
+//           />
+//         </motion.div>
+
+//         {/* Kolom Kanan (Judul dan Deskripsi) */}
+//         <motion.div
+//           className="md:w-1/2 text-center md:text-left"
+//           initial={{ opacity: 0, x: 40 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.7, delay: 0.2 }}
+//         >
+//           {/* Tagline */}
+//           <motion.p
+//             className="text-sm font-semibold text-orange-500 mb-4"
+//             initial={{ opacity: 0, y: -20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.5, delay: 0.4 }}
+//           >
+//             Simplify Teamwork, Boost Productivity
+//           </motion.p>
+
+//           {/* Judul Besar */}
+//           <motion.h1
+//             className="text-5xl font-bold leading-tight mb-4"
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.6, delay: 0.6 }}
+//           >
+//             <span>Work</span>
+//             <br />
+//             <span>Smarter,</span>
+//             <br />
+//             <span>Together</span>
+//           </motion.h1>
+
+//           {/* Subjudul Deskripsi */}
+//           <motion.p
+//             className="text-gray-600 mb-8"
+//             initial={{ opacity: 0 }}
+//             animate={{ opacity: 1 }}
+//             transition={{ duration: 0.6, delay: 0.8 }}
+//           >
+//             Transform how your team works. Get everything you need to
+//             collaborate, organize, and manage tasks efficiently, all within one
+//             intuitive productivity suite.
+//           </motion.p>
+
+//           {/* Tombol Aksi */}
+//           <motion.div
+//             className="flex gap-4"
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.6, delay: 1 }}
+//           >
+//             <Link
+//               href="#tools"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 document
+//                   .getElementById("tools")
+//                   ?.scrollIntoView({ behavior: "smooth" });
+//               }}
+//               className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-300 inline-flex items-center gap-2"
+//             >
+//               Get Started for Free
+//               <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 viewBox="0 0 24 24"
+//                 fill="currentColor"
+//                 className="w-4 h-4"
+//               >
+//                 <path
+//                   d="M9.75 4.5l-7.5 7.5 7.5 7.5"
+//                   stroke="currentColor"
+//                   strokeWidth="2"
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                 />
+//               </svg>
+//             </Link>
+
+//             <Link
+//               href="#services"
+//               onClick={(e) => {
+//                 e.preventDefault();
+//                 document
+//                   .getElementById("services")
+//                   ?.scrollIntoView({ behavior: "smooth" });
+//               }}
+//               className="border border-gray-300 hover:border-blue-500 text-gray-700 px-6 py-3 rounded-lg transition duration-300"
+//             >
+//               Learn more
+//             </Link>
+//           </motion.div>
+//         </motion.div>
+//       </div>
+//     </section>
+//   );
+// }
 function Hero() {
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
-        {/* Kolom Kiri (Gambar Ilustrasi) */}
-        <motion.div
-          className="md:w-1/2"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <Image
-            src={heroImage}
-            alt="Ilustrasi Tim Bekerja"
-            width={250}
-            height={125}
-            className="w-3/4 mx-auto object-cover"
-          />
-        </motion.div>
-
-        {/* Kolom Kanan (Judul dan Deskripsi) */}
+    <section className="py-24 bg-white">
+      <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+        {/* Kolom Kiri - Teks */}
         <motion.div
           className="md:w-1/2 text-center md:text-left"
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Tagline */}
           <motion.p
-            className="text-sm font-semibold text-orange-500 mb-4"
-            initial={{ opacity: 0, y: -20 }}
+            className="text-sm font-medium text-blue-600 uppercase tracking-wide mb-3"
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
           >
-            Simplify Teamwork, Boost Productivity
+            Tools & Services to Empower Your Team
           </motion.p>
 
-          {/* Judul Besar */}
           <motion.h1
-            className="text-5xl font-bold leading-tight mb-4"
+            className="text-4xl md:text-5xl font-bold leading-tight text-gray-900 mb-5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
           >
-            <span>Work</span>
-            <br />
-            <span>Smarter,</span>
-            <br />
-            <span>Together</span>
+            Everything You Need to Work Smarter — in One Place
           </motion.h1>
 
-          {/* Subjudul Deskripsi */}
           <motion.p
-            className="text-gray-600 mb-8"
+            className="text-gray-600 text-lg mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
           >
-            Transform how your team works. Get everything you need to
-            collaborate, organize, and manage tasks efficiently, all within one
-            intuitive productivity suite.
+            Access powerful tools to manage your team's workflow, and expert
+            services to help you scale. Whether you're organizing tasks or
+            improving collaboration — we’ve got you covered.
           </motion.p>
 
-          {/* Tombol Aksi */}
           <motion.div
-            className="flex gap-4"
+            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
           >
             <Link
               href="#tools"
@@ -126,23 +220,9 @@ function Hero() {
                   .getElementById("tools")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-300 inline-flex items-center gap-2"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition"
             >
-              Get Started for Free
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  d="M9.75 4.5l-7.5 7.5 7.5 7.5"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              Explore Our Tools
             </Link>
 
             <Link
@@ -153,11 +233,28 @@ function Hero() {
                   .getElementById("services")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="border border-gray-300 hover:border-blue-500 text-gray-700 px-6 py-3 rounded-lg transition duration-300"
+              className="text-blue-600 border border-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition"
             >
-              Learn more
+              Discover Our Services
             </Link>
           </motion.div>
+        </motion.div>
+
+        {/* Kolom Kanan - Gambar */}
+        <motion.div
+          className="md:w-1/2"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Image
+            src={heroImage}
+            alt="Team Collaboration Illustration"
+            width={500}
+            height={300}
+            className="w-full max-w-md mx-auto object-contain"
+            priority
+          />
         </motion.div>
       </div>
     </section>
@@ -324,7 +421,7 @@ const tools: Tool[] = [
   {
     id: 10,
     name: "Anxiety",
-    slug: "mental-health/Anxiety",
+    slug: "mental-health/anxiety",
     description: "Alat bantu evaluasi dan manajemen kecemasan.",
     icon: <Brain className="w-6 h-6 text-fuchsia-600" />,
     category: "Mental Health",
@@ -355,9 +452,10 @@ const tools: Tool[] = [
   },
   {
     id: 14,
-    name: "Editor",
-    slug: "editor",
-    description: "Edit gambar dengan filter dan pengaturan cepat.",
+    name: "Image Compressor",
+    slug: "image/compressor",
+    description:
+      "Kompres gambar untuk ukuran lebih kecil tanpa kehilangan kualitas secara signifikan.",
     icon: <ImageIcon className="w-6 h-6 text-pink-700" />,
     category: "Image Tools",
   },
@@ -428,6 +526,31 @@ const tools: Tool[] = [
     icon: <Droplet className="w-6 h-6 text-blue-500" />,
     category: "Image Tools",
   },
+  {
+    id: 23,
+    name: "Conversion Tools",
+    slug: "calculator/conversion-tools",
+    description: "Konversi IP ke biner, CIDR ke subnet mask, dan sebaliknya.",
+    icon: <Code2 className="w-6 h-6 text-green-500" />,
+    category: "Network Tools",
+  },
+  {
+    id: 24,
+    name: "IP Subnetting Calculator",
+    slug: "calculator/ip-subnetting",
+    description:
+      "Hitung subnet, IP range, broadcast, dan jumlah host dari CIDR.",
+    icon: <Divide className="w-6 h-6 text-purple-500" />,
+    category: "Network Tools",
+  },
+  {
+    id: 25,
+    name: "VLSM Calculator",
+    slug: "calculator/vlsm-calculator",
+    description: "Alat perhitungan subnet dengan panjang variabel (VLSM).",
+    icon: <ListOrdered className="w-6 h-6 text-orange-500" />,
+    category: "Network Tools",
+  },
 ];
 
 const categories = Array.from(new Set(tools.map((tool) => tool.category)));
@@ -449,12 +572,15 @@ function ProductivityTools() {
           <p className="text-gray-500 mt-2 text-sm md:text-base">
             Jelajahi alat digital kami untuk mendukung kesehatan dan efisiensi
             kerja.
-            <Link href="/apps" className="ml-2 text-blue-600 hover:underline">
+            <Link
+              prefetch
+              href="/apps"
+              className="ml-2 text-blue-600 hover:underline"
+            >
               Lihat Semua
             </Link>
           </p>
         </div>
-
         {/* Kategori */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <CategoryButton
@@ -471,7 +597,6 @@ function ProductivityTools() {
             />
           ))}
         </div>
-
         {/* Tools */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredTools.map((tool) => (

@@ -10,6 +10,7 @@ import {
   FileText,
   ImageIcon,
 } from "lucide-react";
+import Link from "next/link";
 
 interface ToolCategory {
   name: string;
@@ -99,19 +100,23 @@ const Footer: React.FC = () => {
           <h4 className="font-semibold text-base mb-4">About</h4>
           <ul className="space-y-3 text-sm text-gray-400">
             <li>
-              <a href="#" className="hover:text-white">
-                Company
-              </a>
+              <Link
+                prefetch
+                href="terms-of-services"
+                className="hover:text-white"
+              >
+                terms of service
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-white">
-                Blog
-              </a>
+              <Link prefetch href="privacy-policy" className="hover:text-white">
+                privacy policy
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-white">
+              <Link prefetch href="contact" className="hover:text-white">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

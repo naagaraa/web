@@ -460,25 +460,58 @@ export default function Header() {
             },
           ],
         },
+
         {
           title: "Documents",
           children: [
             { title: "PDF Tools", link: "/apps/pdf" },
             { title: "Text Tools", link: "/apps/text" },
+            { title: "JWT Decoder", link: "/apps/text/jwt-decoder" },
           ],
         },
+
         {
           title: "Image Tools",
-          children: [{ title: "Editor", link: "/apps/image" }],
+          children: [
+            { title: "Image Compressor", link: "/apps/image/compressor" },
+            { title: "Image Converter", link: "/apps/image/converter" },
+            { title: "Image Cropper", link: "/apps/image/cropper" },
+          ],
         },
+
         {
           title: "Calculator",
           children: [
             { title: "Blood Glucose", link: "/apps/calculator/blood-glucose" },
             { title: "BMI", link: "/apps/calculator/bmi" },
             { title: "BMR", link: "/apps/calculator/bmr" },
-            { title: "Calorie", link: "/apps/calculator/calorie" },
-            { title: "Water", link: "/apps/calculator/water" },
+          ],
+        },
+
+        {
+          title: "Developer Tools",
+          children: [
+            { title: "JWT Decoder", link: "/apps/text/jwt-decoder" },
+            {
+              title: "Base64 Encoder/Decoder",
+              link: "/apps/text/base64-decoder-encoder",
+            },
+            { title: "JSON Formatter", link: "/apps/text/json-formatter" },
+          ],
+        },
+
+        {
+          title: "Network Tools",
+          children: [
+            {
+              title: "Conversion Tools",
+              link: "/apps/calculator/conversion-tools",
+            },
+            { title: "IP Subnetting", link: "/apps/calculator/ip-subnetting" },
+            {
+              title: "VLSM Calculator",
+              link: "/apps/calculator/vlsm-calculator",
+            },
           ],
         },
       ],

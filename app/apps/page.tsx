@@ -29,6 +29,9 @@ import {
   QrCode,
   Crop,
   Image,
+  Code2,
+  Divide,
+  ListOrdered,
 } from "lucide-react";
 
 export default function page() {
@@ -134,7 +137,7 @@ const tools: Tool[] = [
   {
     id: 10,
     name: "Anxiety",
-    slug: "mental-health/Anxiety",
+    slug: "mental-health/anxiety",
     description: "Alat bantu evaluasi dan manajemen kecemasan.",
     icon: <Brain className="w-6 h-6 text-fuchsia-600" />,
     category: "Mental Health",
@@ -165,9 +168,10 @@ const tools: Tool[] = [
   },
   {
     id: 14,
-    name: "Editor",
-    slug: "editor",
-    description: "Edit gambar dengan filter dan pengaturan cepat.",
+    name: "Image Compressor",
+    slug: "image/compressor",
+    description:
+      "Kompres gambar untuk ukuran lebih kecil tanpa kehilangan kualitas secara signifikan.",
     icon: <ImageIcon className="w-6 h-6 text-pink-700" />,
     category: "Image Tools",
   },
@@ -238,6 +242,31 @@ const tools: Tool[] = [
     icon: <Droplet className="w-6 h-6 text-blue-500" />,
     category: "Image Tools",
   },
+  {
+    id: 23,
+    name: "Conversion Tools",
+    slug: "calculator/conversion-tools",
+    description: "Konversi IP ke biner, CIDR ke subnet mask, dan sebaliknya.",
+    icon: <Code2 className="w-6 h-6 text-green-500" />,
+    category: "Network Tools",
+  },
+  {
+    id: 24,
+    name: "IP Subnetting Calculator",
+    slug: "calculator/ip-subnetting",
+    description:
+      "Hitung subnet, IP range, broadcast, dan jumlah host dari CIDR.",
+    icon: <Divide className="w-6 h-6 text-purple-500" />,
+    category: "Network Tools",
+  },
+  {
+    id: 25,
+    name: "VLSM Calculator",
+    slug: "calculator/vlsm-calculator",
+    description: "Alat perhitungan subnet dengan panjang variabel (VLSM).",
+    icon: <ListOrdered className="w-6 h-6 text-orange-500" />,
+    category: "Network Tools",
+  },
 ];
 
 const categories = Array.from(new Set(tools.map((tool) => tool.category)));
@@ -259,7 +288,11 @@ function ProductivityTools() {
           <p className="text-gray-500 mt-2 text-sm md:text-base">
             Jelajahi alat digital kami untuk mendukung kesehatan dan efisiensi
             kerja.
-            <Link href="/apps" className="ml-2 text-blue-600 hover:underline">
+            <Link
+              prefetch
+              href="/apps"
+              className="ml-2 text-blue-600 hover:underline"
+            >
               Lihat Semua
             </Link>
           </p>
