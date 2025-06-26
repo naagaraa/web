@@ -361,15 +361,15 @@ export default function Header() {
         },
       ],
     },
-    {
-      title: "Project",
-      children: [
-        { title: "Academic project", link: "/project/academic" },
-        { title: "Open source project", link: "/project/open-source" },
-        { title: "Paid project", link: "/project/paid" },
-        { title: "Profesional project", link: "/project/profesional" },
-      ],
-    },
+    // {
+    //   title: "Project",
+    //   children: [
+    //     { title: "Academic project", link: "/project/academic" },
+    //     { title: "Open source project", link: "/project/open-source" },
+    //     { title: "Paid project", link: "/project/paid" },
+    //     { title: "Profesional project", link: "/project/profesional" },
+    //   ],
+    // },
 
     { title: "Blog", link: "https://medium.com/@naagaraa" },
     {

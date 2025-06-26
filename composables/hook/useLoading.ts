@@ -7,16 +7,16 @@ import { useState, useEffect } from "react";
  * @returns isLoading state and a function to manually set loading.
  */
 function useLoading(initialLoading: boolean = true, duration?: number) {
-    const [isLoading, setIsLoading] = useState<boolean>(initialLoading);
+  const [isLoading, setIsLoading] = useState<boolean>(initialLoading);
 
-    useEffect(() => {
-        if (duration !== undefined) {
-            const timer = setTimeout(() => setIsLoading(false), duration);
-            return () => clearTimeout(timer); // Cleanup timer
-        }
-    }, [duration]);
+  useEffect(() => {
+    if (duration !== undefined) {
+      const timer = setTimeout(() => setIsLoading(false), duration);
+      return () => clearTimeout(timer); // Cleanup timer
+    }
+  }, [duration]);
 
-    return { isLoading, setIsLoading };
+  return { isLoading, setIsLoading };
 }
 
 export default useLoading;

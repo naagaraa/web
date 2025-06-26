@@ -1,8 +1,8 @@
 // app/image/compressor/page.tsx
-import type { Metadata } from "next";
 import ImageCompressor from "./ImageCompressor";
 import Link from "next/link";
 
+import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Image Compressor | Kompres Gambar Online Cepat",
   description:

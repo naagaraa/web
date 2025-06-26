@@ -7,17 +7,21 @@ import Title from "@/src/components/common/Title";
 import SubTitle from "@/src/components/common/SubTitle";
 import List from "@/src/components/common/List";
 import Section from "@/src/components/ui/Section";
+import NavTabs from "@/src/components/layout/NavTabs";
 
 function Project() {
   return (
-    <Section>
-      <Title value="Paid Project" />
-      <SubTitle
-        value="I'm Accept Every Project From Task, Website, Apps, and Other, if
+    <>
+      <NavTabs />
+      <Section>
+        <Title value="Paid Project" />
+        <SubTitle
+          value="I'm Accept Every Project From Task, Website, Apps, and Other, if
                 i do that. just do it"
-      />
-      <List modelItem="paid_project" dataItems={PaidProjectItems} />
-    </Section>
+        />
+        <List modelItem="paid_project" dataItems={PaidProjectItems} />
+      </Section>
+    </>
   );
 }
 

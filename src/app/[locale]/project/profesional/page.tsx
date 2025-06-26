@@ -11,6 +11,7 @@ import WrapperContentSlide from "@/src/components/ui/WrapperContentSlide";
 import ProjectCard from "@/src/components/ui/card/ProjectCard";
 import HeroImage from "@/assets/hero.png";
 import { ProfessionalProjects } from "@/data/ProfesionalProject";
+import NavTabs from "@/src/components/layout/NavTabs";
 
 function ProjectGrid() {
   const router = useRouter();
@@ -37,22 +38,25 @@ function ProjectGrid() {
 
 function Project() {
   return (
-    <WrapperContentSlide>
-      <Title value="Project" />
-      <SubTitle value="Projects from my professional work experience — from CMS rewrites to internal systems." />
+    <>
+      <NavTabs />
+      <WrapperContentSlide>
+        <Title value="Project" />
+        <SubTitle value="Projects from my professional work experience — from CMS rewrites to internal systems." />
 
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} height={250} className="rounded-xl" />
-            ))}
-          </div>
-        }
-      >
-        <ProjectGrid />
-      </Suspense>
-    </WrapperContentSlide>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} height={250} className="rounded-xl" />
+              ))}
+            </div>
+          }
+        >
+          <ProjectGrid />
+        </Suspense>
+      </WrapperContentSlide>
+    </>
   );
 }
 

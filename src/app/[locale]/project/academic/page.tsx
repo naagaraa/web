@@ -9,6 +9,7 @@ import WrapperContentSlide from "@/src/components/ui/WrapperContentSlide";
 import ProjectCard from "@/src/components/ui/card/ProjectCard";
 import HeroImage from "@/assets/hero.png";
 import { EducationProjectItems } from "@/data/EducationProject";
+import NavTabs from "@/src/components/layout/NavTabs";
 
 function ProjectGrid() {
   return (
@@ -34,28 +35,31 @@ function ProjectGrid() {
 
 function Project() {
   return (
-    <WrapperContentSlide>
-      <Title value="Project" />
-      <SubTitle value="This portfolio project was built during my academic journey. Check out more below!" />
+    <>
+      <NavTabs />
+      <WrapperContentSlide>
+        <Title value="Project" />
+        <SubTitle value="This portfolio project was built during my academic journey. Check out more below!" />
 
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, idx) => (
-              <Skeleton
-                key={idx}
-                height={250}
-                className="rounded-xl"
-                baseColor="#f3f3f3"
-                highlightColor="#ecebeb"
-              />
-            ))}
-          </div>
-        }
-      >
-        <ProjectGrid />
-      </Suspense>
-    </WrapperContentSlide>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <Skeleton
+                  key={idx}
+                  height={250}
+                  className="rounded-xl"
+                  baseColor="#f3f3f3"
+                  highlightColor="#ecebeb"
+                />
+              ))}
+            </div>
+          }
+        >
+          <ProjectGrid />
+        </Suspense>
+      </WrapperContentSlide>
+    </>
   );
 }
 

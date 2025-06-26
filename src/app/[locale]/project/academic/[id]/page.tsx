@@ -9,6 +9,7 @@ import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
+import NavTabs from "@/src/components/layout/NavTabs";
 
 type Props = {
   params: {
@@ -43,60 +44,64 @@ export default function ProjectDetailPage({ params }: Props) {
   }
 
   return (
-    <motion.div
-      className="max-w-3xl mx-auto p-6 md:pt-12 md:pb-20 space-y-10 leading-relaxed text-gray-800"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
-      <Link
-        href="/project/academic"
-        className="block mt-16 text-blue-600 hover:underline text-sm"
+    <>
+      <motion.div
+        className="max-w-3xl mx-auto p-6 md:pt-12 md:pb-20 space-y-10 leading-relaxed text-gray-800"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        ← Back to Projects
-      </Link>
+        <Link
+          href="/project/academic"
+          className="block mt-16 text-blue-600 hover:underline text-sm"
+        >
+          ← Back to Projects
+        </Link>
 
-      {/* Judul */}
-      <h1 className="text-4xl font-bold text-center">{project.title}</h1>
+        {/* Judul */}
+        <h1 className="text-4xl font-bold text-center">{project.title}</h1>
 
-      {/* Subjudul (jika ada) */}
-      {project.subtitle && (
-        <p className="text-lg text-center text-gray-500">{project.subtitle}</p>
-      )}
+        {/* Subjudul (jika ada) */}
+        {project.subtitle && (
+          <p className="text-lg text-center text-gray-500">
+            {project.subtitle}
+          </p>
+        )}
 
-      {/* Gambar utama */}
-      <div className="w-full h-72 md:h-96 relative rounded-xl overflow-hidden shadow">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      {/* Profil Penulis */}
-      <div className="flex items-center gap-3 pt-8 border-y border-gray-200">
-        <Image
-          src={HeroImage}
-          alt="Eka Jaya Nagara"
-          width={50}
-          height={50}
-          className="rounded-full"
-        />
-        <div>
-          <p className="font-semibold text-lg">Eka Jaya Nagara</p>
-          <p className="text-sm text-gray-500">Fullstack Developer</p>
+        {/* Gambar utama */}
+        <div className="w-full h-72 md:h-96 relative rounded-xl overflow-hidden shadow">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover"
+          />
         </div>
-      </div>
 
-      {/* Konten utama */}
-      <div className="prose prose-lg max-w-none prose-headings:mt-8 prose-img:rounded-xl prose-p:leading-7">
-        <p>{project.description}</p>
-        <div
-          className="pt-4"
-          dangerouslySetInnerHTML={{ __html: project.content }}
-        ></div>
-      </div>
-    </motion.div>
+        {/* Profil Penulis */}
+        <div className="flex items-center gap-3 pt-8 border-y border-gray-200">
+          <Image
+            src={HeroImage}
+            alt="Eka Jaya Nagara"
+            width={50}
+            height={50}
+            className="rounded-full"
+          />
+          <div>
+            <p className="font-semibold text-lg">Eka Jaya Nagara</p>
+            <p className="text-sm text-gray-500">Fullstack Developer</p>
+          </div>
+        </div>
+
+        {/* Konten utama */}
+        <div className="prose prose-lg max-w-none prose-headings:mt-8 prose-img:rounded-xl prose-p:leading-7">
+          <p>{project.description}</p>
+          <div
+            className="pt-4"
+            dangerouslySetInnerHTML={{ __html: project.content }}
+          ></div>
+        </div>
+      </motion.div>
+    </>
   );
 }
