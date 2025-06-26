@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import Heading from "@/components/ui/Heading";
+import Heading from "@/src/components/ui/Heading";
 import { PaidProjectItems } from "@/data/PaidProject";
-import Title from "@/components/common/Title";
-import SubTitle from "@/components/common/SubTitle";
-import List from "@/components/common/List";
-import Section from "@/components/ui/Section";
+import Title from "@/src/components/common/Title";
+import SubTitle from "@/src/components/common/SubTitle";
+import List from "@/src/components/common/List";
+import Section from "@/src/components/ui/Section";
 
 function Project() {
   return (

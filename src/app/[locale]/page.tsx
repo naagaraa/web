@@ -6,7 +6,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import heroImage from "@/assets/hero.png";
-import Footer from "@/components/ui/footer";
+import Footer from "@/src/components/ui/footer";
 
 import {
   Code,

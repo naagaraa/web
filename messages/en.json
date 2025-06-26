@@ -1,6 +1,22 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
+  "About": {
+    "Story": {
+      "title": "About Me",
+      "paragraphs": {
+        "1": "I’m an Information Technology graduate with three years of hands-on experience working across web development and IT support. While I wouldn’t call myself an expert, I’ve built a solid foundation in programming — mainly with PHP (Laravel) — and have explored other languages like JavaScript, TypeScript, Python, Java, and Bash to support various projects and tasks.",
+        "2": "My experience goes beyond coding. I’ve worked directly with system infrastructure: from server migration, setting up virtual environments using VirtualBox/VMware, to supporting DevOps workflows like scripting automation and deploying applications on Linux-based servers.",
+        "3": "I might not have a single deep specialization yet — partly because I’ve worn many hats at once — but that’s also what made me adaptable and resourceful. I enjoy figuring things out, fixing real problems, and making tools that actually help people get work done.",
+        "4": "Now, I’m shifting my focus toward engineering roles — especially in DevOps or infrastructure — where I can combine my coding background with my growing interest in system reliability and automation. I’m always learning, often quietly, but consistently moving forward."
+      }
+    },
+    "Certification": {
+      "title": "Certification",
+      "paragraphs": {
+        "1": "Certification what i got it This is very long journey",
+        "2": "Right now, I focus on building practical, instant solutions. If an open-source tool can solve the problem efficiently, I’ll use it — because I believe time should be spent on solving the right problems, not rebuilding what already works.",
+        "3": "That said, the background I’ve shared is real — it’s shaped by hands-on experience, continuous learning, and a mindset of figuring things out step by step. I may not consider myself an expert or highly advanced, but I’m not afraid to learn, experiment, and take responsibility for real-world problems.",
+        "4": "My approach is simple: use what works, build what’s missing, and always keep improving — both in code and communication."
+      }
+    }
   }
 }

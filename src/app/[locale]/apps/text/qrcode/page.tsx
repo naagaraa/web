@@ -1,8 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import QRCodeGenerator from "./QrCodeGenerator";
-import qrcodeexample from "@/assets/qrcode-example.png";
-import Footer from "@/components/ui/footer";
+import Footer from "@/src/components/layout/Footer";
 
 export const metadata = {
   title: "QR Code Generator",

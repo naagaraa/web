@@ -1,9 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { HandCoins, Coffee, HeartHandshake } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 export default function Sponsorship() {
   return (

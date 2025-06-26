@@ -8,12 +8,12 @@ type LazyComponentLoader = () => Promise<{
 const componentsMap: Record<string, LazyComponentLoader> = {
   // lazy loading
   // modelitems => import components
-  education: () => import("@/components/ui/list/ListEducation"),
-  education_project: () => import("@/components/ui/list/ListEducationProject"),
-  certification: () => import("@/components/ui/list/ListCertification"),
-  experience: () => import("@/components/ui/list/ListXperience"),
-  paid_project: () => import("@/components/ui/list/ListPaidProject"),
-  video_youtube: () => import("@/components/ui/list/ListVideoYoutube"),
+  education: () => import("../ui/list/ListEducation"),
+  education_project: () => import("../ui/list/ListEducationProject"),
+  certification: () => import("../ui/list/ListCertification"),
+  experience: () => import("../ui/list/ListXperience"),
+  paid_project: () => import("../ui/list/ListPaidProject"),
+  video_youtube: () => import("../ui/list/ListVideoYoutube"),
 };
 
 export default function List({ modelItem, dataItems }: ListProps) {

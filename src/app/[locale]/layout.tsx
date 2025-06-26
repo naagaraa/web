@@ -3,7 +3,7 @@ import "../favicon.ico";
 import "./globals.css";
 import "swiper/css";
 import "react-loading-skeleton/dist/skeleton.css";
-import Header from "@/components/layout/Header";
+import Header from "@/src/components/layout/Header";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { Hanken_Grotesk } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -37,7 +37,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={hanken.className}>
         <NextIntlClientProvider>
-          <Header />
+          {/* <Header /> */}
           <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
             <main className="justify-center min-h-screen gap-10 mt-24">
               <Toaster position="top-center" />

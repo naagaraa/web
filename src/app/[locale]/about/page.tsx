@@ -2,25 +2,24 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import Heading from "@/components/ui/Heading";
+import Heading from "@/src/components/ui/Heading";
 import { CertificationItems } from "@/data/Certification";
 import { EducationItems } from "@/data/Education";
-import Title from "@/components/common/Title";
-import SubTitle from "@/components/common/SubTitle";
-import Section from "@/components/ui/Section";
-import List from "@/components/common/List";
+import Title from "@/src/components/common/Title";
+import SubTitle from "@/src/components/common/SubTitle";
+import List from "@/src/components/common/List";
 import { ExperienceItems } from "@/data/Experience";
-import Describe from "@/components/common/Describe";
+import Describe from "@/src/components/common/Describe";
 
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import useLoading from "@/composables/hook/useLoading";
 import "plyr-react/plyr.css";
 import Image from "next/image";
-import WraperContent from "@/components/ui/WrapperContent";
+import WraperContent from "@/src/components/ui/WrapperContent";
 import Link from "next/link";
 import { sectionHeaderProps } from "@/types/components/types";
-import Footer from "@/components/ui/footer";
+import Section from "@/src/components/ui/Section";
 
 function SectionHeader({
   title = "",
@@ -156,7 +155,7 @@ function Coding() {
   );
 }
 
-export default function page() {
+export default function About() {
   return (
     <>
       <motion.div>
@@ -181,7 +180,6 @@ export default function page() {
       <motion.div>
         <Experience />
       </motion.div>
-      <Footer />
     </>
   );
 }

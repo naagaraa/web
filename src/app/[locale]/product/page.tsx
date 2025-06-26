@@ -1,7 +1,8 @@
 "use client";
 
-import Heading from "@/components/ui/Heading";
-import WraperContent from "@/components/ui/WrapperContent";
+import Heading from "@/src/components/ui/Heading";
+import WraperContent from "@/src/components/ui/WrapperContent";
+
 export default function ProjectProfesional() {
   return (
     <>

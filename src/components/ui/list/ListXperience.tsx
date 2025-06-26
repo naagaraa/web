@@ -2,7 +2,7 @@ import React from "react";
 import useLoading from "@/composables/hook/useLoading";
 import Skeleton from "react-loading-skeleton";
 import { experienceProps } from "@/types/components/types";
-import SubHeading from "@/components/common/SubHeading";
+import SubHeading from "../../common/SubHeading";
 
 function SubList({
   value,

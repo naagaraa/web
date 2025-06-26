@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BurnoutChecker } from "./BurnoutChecker";
-import Footer from "@/components/ui/footer";
+import Footer from "@/src/components/layout/Footer";
 
 export const metadata = {
   title: "Burnout Checker – Cek Kesehatan Mentalmu",

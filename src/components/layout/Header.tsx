@@ -4,12 +4,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import icon from "@/assets/dev-to.svg";
 import "./header.css"; // Import your custom CSS for animations
-import LanguageSwitcher from "../LanguageSwitcher";
 
 function Logo() {
   return (
     <Link className="block text-teal-600" href="/">
-      <span className="sr-only">Home</span>
       <Image src={icon} height={30} width={30} alt="Dev.to logo" />
     </Link>
   );
@@ -402,6 +400,9 @@ function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
                 }))
               : undefined}
           </List>
+          {/* {value.children && !!openMenus[key] && isMobile && (
+            <ul>{renderList(value.children as MenuProps["list"], key)}</ul>
+          )} */}
         </li>
       );
     });
@@ -417,9 +418,6 @@ function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
         } text-sm`}
       >
         {renderList(list)}
-        <li>
-          <LanguageSwitcher />
-        </li>
       </ul>
     </nav>
   );
@@ -430,9 +428,8 @@ export default function Header() {
 
   const menuItems = [
     { title: "Home", link: "/" },
-    { title: "Blog", link: "https://medium.com/@naagaraa" },
     {
-      title: "Apps and Tools",
+      title: "Apps",
       megaMenu: true,
       children: [
         {
@@ -448,77 +445,33 @@ export default function Header() {
         {
           title: "Mental Health",
           children: [
-            {
-              title: "Anxiety",
-              link: "/apps/mental-health/anxiety",
-            },
-            {
-              title: "Depression",
-              link: "/apps/mental-health/depression",
-            },
-            {
-              title: "Burnout Checker",
-              link: "/apps/mental-health/burnout-checker",
-            },
+            { title: "Anxiety", link: "/apps/mental-health/anxiety" },
+            { title: "Depression", link: "/apps/mental-health/depression" },
           ],
         },
-
         {
           title: "Documents",
           children: [
             { title: "PDF Tools", link: "/apps/pdf" },
             { title: "Text Tools", link: "/apps/text" },
-            { title: "JWT Decoder", link: "/apps/text/jwt-decoder" },
           ],
         },
-
         {
           title: "Image Tools",
-          children: [
-            { title: "Image Compressor", link: "/apps/image/compressor" },
-            { title: "Image Converter", link: "/apps/image/converter" },
-            { title: "Image Cropper", link: "/apps/image/cropper" },
-          ],
+          children: [{ title: "Editor", link: "/apps/image" }],
         },
-
         {
           title: "Calculator",
           children: [
             { title: "Blood Glucose", link: "/apps/calculator/blood-glucose" },
             { title: "BMI", link: "/apps/calculator/bmi" },
             { title: "BMR", link: "/apps/calculator/bmr" },
-          ],
-        },
-
-        {
-          title: "Developer Tools",
-          children: [
-            { title: "JWT Decoder", link: "/apps/text/jwt-decoder" },
-            {
-              title: "Base64 Encoder/Decoder",
-              link: "/apps/text/base64-decoder-encoder",
-            },
-            { title: "JSON Formatter", link: "/apps/text/json-formatter" },
-          ],
-        },
-
-        {
-          title: "Network Tools",
-          children: [
-            {
-              title: "Conversion Tools",
-              link: "/apps/calculator/conversion-tools",
-            },
-            { title: "IP Subnetting", link: "/apps/calculator/ip-subnetting" },
-            {
-              title: "VLSM Calculator",
-              link: "/apps/calculator/vlsm-calculator",
-            },
+            { title: "Calorie", link: "/apps/calculator/calorie" },
+            { title: "Water", link: "/apps/calculator/water" },
           ],
         },
       ],
     },
-
     {
       title: "Project",
       children: [
@@ -528,15 +481,10 @@ export default function Header() {
         { title: "Profesional project", link: "/project/profesional" },
       ],
     },
-    {
-      title: "About",
-      children: [
-        { title: "Developer", link: "/about" },
-        { title: "Growth Together", link: "#" },
-        { title: "Sponsorship", link: "sponsorship" },
-      ],
-    },
+    { title: "Blog", link: "https://medium.com/@naagaraa" },
+    { title: "About", link: "/about" },
     { title: "Contact", link: "/contact" },
+    { title: "Sponsorship", link: "/sponsorship" },
   ];
 
   return (

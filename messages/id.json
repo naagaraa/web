@@ -1,6 +1,22 @@
 {
-  "HomePage": {
-    "title": "Halo dunia",
-    "about": "Go to the about page"
+  "About": {
+    "Story": {
+      "title": "Tentang Saya",
+      "paragraphs": {
+        "1": "Saya adalah lulusan Teknologi Informasi dengan pengalaman  selama tiga tahun di bidang pengembangan web dan dukungan TI. Meskipun saya belum bisa menyebut diri saya ahli, saya telah membangun fondasi yang kuat dalam pemrograman — terutama dengan PHP (Laravel) — dan juga mengeksplorasi bahasa lain seperti JavaScript, TypeScript, Python, Java, dan Bash untuk mendukung berbagai proyek dan tugas.",
+        "2": "Pengalaman saya tidak hanya seputar coding. Saya telah bekerja  dengan infrastruktur sistem: mulai dari migrasi server, pengaturan lingkungan virtual menggunakan VirtualBox/VMware, hingga mendukung alur kerja DevOps seperti otomasi skrip dan deployment aplikasi di server berbasis Linux.",
+        "3": "Saya mungkin belum memiliki satu spesialisasi yang benar-benar mendalam — sebagian karena saya pernah memegang banyak peran sekaligus — tapi justru itulah yang membuat saya menjadi pribadi yang adaptif dan penuh akal. Saya senang memecahkan masalah, memperbaiki hal-hal nyata, dan membuat alat yang benar-benar membantu orang menyelesaikan pekerjaan.",
+        "4": "Sekarang, saya sedang mengarahkan fokus saya ke peran engineering — terutama di bidang DevOps atau infrastruktur — di mana saya bisa menggabungkan latar belakang pemrograman saya dengan ketertarikan saya yang semakin besar pada keandalan sistem dan otomasi. Saya terus belajar, mungkin diam-diam, tapi terus berkembang."
+      }
+    },
+    "Certification": {
+      "title": "Sertifikat",
+      "paragraphs": {
+        "1": "Certification what i got it This is very long journey",
+        "2": "Right now, I focus on building practical, instant solutions. If an open-source tool can solve the problem efficiently, I’ll use it — because I believe time should be spent on solving the right problems, not rebuilding what already works.",
+        "3": "That said, the background I’ve shared is real — it’s shaped by hands-on experience, continuous learning, and a mindset of figuring things out step by step. I may not consider myself an expert or highly advanced, but I’m not afraid to learn, experiment, and take responsibility for real-world problems.",
+        "4": "My approach is simple: use what works, build what’s missing, and always keep improving — both in code and communication."
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@
 "use client";
 
 import "react-loading-skeleton/dist/skeleton.css";
-import Footer from "@/components/ui/footer";
+import Footer from "@/src/components/layout/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";

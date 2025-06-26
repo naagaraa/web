@@ -2,11 +2,11 @@
 
 import React, { Suspense } from "react";
 import Skeleton from "react-loading-skeleton";
-import Heading from "@/components/ui/Heading";
-import Title from "@/components/common/Title";
-import SubTitle from "@/components/common/SubTitle";
-import WrapperContentSlide from "@/components/ui/WrapperContentSlide";
-import ProjectCard from "@/components/ui/card/ProjectCard";
+import Heading from "@/src/components/ui/Heading";
+import Title from "@/src/components/common/Title";
+import SubTitle from "@/src/components/common/SubTitle";
+import WrapperContentSlide from "@/src/components/ui/WrapperContentSlide";
+import ProjectCard from "@/src/components/ui/card/ProjectCard";
 import HeroImage from "@/assets/hero.png";
 import { EducationProjectItems } from "@/data/EducationProject";
 

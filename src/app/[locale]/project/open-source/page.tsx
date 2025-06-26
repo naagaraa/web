@@ -2,13 +2,13 @@
 
 import React, { Suspense } from "react";
 import { motion } from "framer-motion";
-import Heading from "@/components/ui/Heading";
-import WrapperContentSlide from "@/components/ui/WrapperContentSlide";
-import Title from "@/components/common/Title";
-import SubTitle from "@/components/common/SubTitle";
+import Heading from "@/src/components/ui/Heading";
+import WrapperContentSlide from "@/src/components/ui/WrapperContentSlide";
+import Title from "@/src/components/common/Title";
+import SubTitle from "@/src/components/common/SubTitle";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
 import Skeleton from "react-loading-skeleton";
-import ProjectCard from "@/components/ui/card/ProjectCard";
+import ProjectCard from "@/src/components/ui/card/ProjectCard";
 import HeroImage from "@/assets/hero.png";
 
 function ProjectGrid() {

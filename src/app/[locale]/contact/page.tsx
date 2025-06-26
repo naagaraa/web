@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Heading from "@/components/ui/Heading";
-import Footer from "@/components/ui/footer";
+import Heading from "@/src/components/ui/Heading";
+import Footer from "@/src/components/layout/Footer";
 
 export default function ProjectProfesional() {
   return (

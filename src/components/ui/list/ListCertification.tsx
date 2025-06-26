@@ -2,7 +2,7 @@ import React from "react";
 import useLoading from "@/composables/hook/useLoading";
 import Skeleton from "react-loading-skeleton";
 import { certificationProps } from "@/types/components/types";
-import SubHeading from "@/components/common/SubHeading";
+import SubHeading from "../../common/SubHeading";
 
 export default function ListCertification({ dataItems }: certificationProps) {
   const { isLoading } = useLoading(true, 500);
