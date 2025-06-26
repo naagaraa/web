@@ -20,6 +20,8 @@ import WraperContent from "@/src/components/ui/WrapperContent";
 import Link from "next/link";
 import { sectionHeaderProps } from "@/types/components/types";
 import Section from "@/src/components/ui/Section";
+import { useTranslations } from "next-intl";
+import Footer from "@/src/components/ui/footer";
 
 function SectionHeader({
   title = "",
@@ -58,28 +60,27 @@ function SectionHeader({
 }
 
 function Story() {
+  const t = useTranslations("About.Story");
   return (
     <Section>
-      <Title value="About Me" />
-      <Describe value="I’m an Information Technology graduate with three years of hands-on experience working across web development and IT support. While I wouldn’t call myself an expert, I’ve built a solid foundation in programming — mainly with PHP (Laravel) — and have explored other languages like JavaScript, TypeScript, Python, Java, and Bash to support various projects and tasks." />
-
-      <Describe value="My experience goes beyond coding. I’ve worked directly with system infrastructure: from server migration, setting up virtual environments using VirtualBox/VMware, to supporting DevOps workflows like scripting automation and deploying applications on Linux-based servers." />
-      <Describe value="I might not have a single deep specialization yet — partly because I’ve worn many hats at once — but that’s also what made me adaptable and resourceful. I enjoy figuring things out, fixing real problems, and making tools that actually help people get work done." />
-
-      <Describe value="Now, I’m shifting my focus toward engineering roles — especially in DevOps or infrastructure — where I can combine my coding background with my growing interest in system reliability and automation. I’m always learning, often quietly, but consistently moving forward." />
+      <Title value={t("title")} />
+      <Describe value={t("paragraphs.1")} />
+      <Describe value={t("paragraphs.2")} />
+      <Describe value={t("paragraphs.3")} />
+      <Describe value={t("paragraphs.4")} />
     </Section>
   );
 }
 
 function Certification() {
+  const t = useTranslations("About.Certification");
   return (
     <Section>
-      <Title value="Certification" />
-      <SubTitle value="Certification what i got it This is very long journey" />
-      <List modelItem="certification" dataItems={CertificationItems} />
-      <Describe value="  Right now, I focus on building practical, instant solutions. If an open-source tool can solve the problem efficiently, I’ll use it — because I believe time should be spent on solving the right problems, not rebuilding what already works." />
-      <Describe value="That said, the background I’ve shared is real — it’s shaped by hands-on experience, continuous learning, and a mindset of figuring things out step by step. I may not consider myself an expert or highly advanced, but I’m not afraid to learn, experiment, and take responsibility for real-world problems." />
-      <Describe value="My approach is simple: use what works, build what’s missing, and always keep improving — both in code and communication." />
+      <Title value={t("title")} />
+      <SubTitle value={t("paragraphs.1")} />
+      <Describe value={t("paragraphs.2")} />
+      <Describe value={t("paragraphs.3")} />
+      <Describe value={t("paragraphs.4")} />
     </Section>
   );
 }
@@ -95,16 +96,14 @@ function Education() {
 }
 
 function Experience() {
+  const t = useTranslations("About.Experience");
   return (
     <Section>
-      <Title value="Experience" />
-      <Describe value="i’m a developer who learns by doing and listening. Even in short-term roles, I’ve taken on tasks beyond expectations — from building systems to helping set up internal tooling and DevOps workflows. I work best with clarity, and thrive in solving real problems, quietly but effectively." />
-      <Describe
-        value="Although my journey in tech started recently, I’ve gained a wide range of experience in a short time. I’m someone who learns by listening, observing, and doing — even though I’m not the type to talk much, I take action where it counts.
-        I’ve handled tasks that often go beyond the scope of an intern: from developing systems, fixing bugs, and building automation scripts, to helping with DevOps setup and IT support infrastructure. These experiences shaped me into a flexible developer — capable of adapting, supporting teams, and contributing ideas to solve both technical and operational challenges.
-
-        As an introvert, I work best with clear instructions and focused tasks. I may not specialize deeply in one area (yet), but my exposure to various responsibilities has made me resourceful and well-rounded. I enjoy working behind the scenes — solving problems, improving systems, and constantly learning something new."
-      />
+      <Title value={t("title")} />
+      <SubTitle value={t("paragraphs.1")} />
+      <Describe value={t("paragraphs.2")} />
+      <Describe value={t("paragraphs.3")} />
+      <Describe value={t("paragraphs.4")} />
       <List modelItem="experience" dataItems={ExperienceItems} />
     </Section>
   );
@@ -161,7 +160,7 @@ export default function About() {
       <motion.div>
         <Heading
           name="Eka Jaya Nagara"
-          title="Software Developer / IT Support"
+          title="Software Developer & IT Support"
           stack={{
             available: true,
             title: "PHP - JS - Laravel - React - Firebase",
@@ -180,6 +179,7 @@ export default function About() {
       <motion.div>
         <Experience />
       </motion.div>
+      <Footer />
     </>
   );
 }

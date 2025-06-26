@@ -12,10 +12,19 @@
     "Certification": {
       "title": "Sertifikat",
       "paragraphs": {
-        "1": "Certification what i got it This is very long journey",
-        "2": "Right now, I focus on building practical, instant solutions. If an open-source tool can solve the problem efficiently, I’ll use it — because I believe time should be spent on solving the right problems, not rebuilding what already works.",
-        "3": "That said, the background I’ve shared is real — it’s shaped by hands-on experience, continuous learning, and a mindset of figuring things out step by step. I may not consider myself an expert or highly advanced, but I’m not afraid to learn, experiment, and take responsibility for real-world problems.",
-        "4": "My approach is simple: use what works, build what’s missing, and always keep improving — both in code and communication."
+        "1": "Sertifikasi yang saya peroleh adalah sebuah perjalanan yang sangat panjang",
+        "2": "Saat ini, saya fokus membangun solusi yang praktis dan instan. Jika ada alat open-source yang dapat menyelesaikan masalah secara efisien, saya akan menggunakannya — karena saya percaya waktu harus dihabiskan untuk menyelesaikan masalah yang tepat, bukan membangun ulang apa yang sudah berfungsi.",
+        "3": "Latar belakang yang saya bagikan ini nyata — dibentuk oleh pengalaman langsung, pembelajaran berkelanjutan, dan pola pikir untuk mencari solusi langkah demi langkah. Saya mungkin tidak menganggap diri saya seorang ahli atau sangat mahir, tetapi saya tidak takut untuk belajar, bereksperimen, dan bertanggung jawab atas masalah di dunia nyata.",
+        "4": "gunakan apa yang berfungsi, bangun apa yang tidak ada, dan selalu terus tingkatkan diri — baik dalam kode maupun komunikasi."
+      }
+    },
+    "Experience": {
+      "title": "Pengalaman",
+      "paragraphs": {
+        "1": "Saya adalah seorang pengembang yang belajar melalui praktik dan mendengarkan. Bahkan dalam peran jangka pendek, saya telah mengambil tugas di luar ekspektasi — mulai dari membangun sistem hingga membantu menyiapkan alat internal dan alur kerja DevOps. Saya bekerja paling baik dengan arahan yang jelas, dan berkembang saat menyelesaikan masalah nyata, secara tenang namun efektif.",
+        "2": "Meskipun perjalanan saya di dunia teknologi tergolong baru, saya telah memperoleh berbagai pengalaman dalam waktu singkat. Saya belajar dengan cara mendengarkan, mengamati, dan langsung mencoba — meskipun saya bukan tipe yang banyak bicara, saya mengambil tindakan yang benar-benar berdampak.",
+        "3": "Saya telah menangani tugas-tugas yang sering kali melampaui cakupan seorang intern: mulai dari mengembangkan sistem, memperbaiki bug, membuat skrip otomatisasi, hingga membantu pengaturan DevOps dan infrastruktur dukungan TI. Pengalaman-pengalaman ini membentuk saya menjadi pengembang yang fleksibel — mampu beradaptasi, mendukung tim, dan memberikan ide untuk mengatasi tantangan teknis maupun operasional.",
+        "4": "Sebagai seorang introvert, saya bekerja paling baik dengan instruksi yang jelas dan tugas yang terfokus. Saya mungkin belum memiliki spesialisasi mendalam dalam satu bidang (untuk saat ini), tetapi paparan saya terhadap berbagai tanggung jawab telah membuat saya menjadi pribadi yang serba bisa dan tanggap. Saya menikmati bekerja di balik layar — menyelesaikan masalah, meningkatkan sistem, dan terus belajar hal-hal baru."
       }
     }
   }

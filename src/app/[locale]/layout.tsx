@@ -37,7 +37,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={hanken.className}>
         <NextIntlClientProvider>
-          {/* <Header /> */}
+          <Header />
           <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
             <main className="justify-center min-h-screen gap-10 mt-24">
               <Toaster position="top-center" />

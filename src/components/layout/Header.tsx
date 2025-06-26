@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import icon from "@/assets/dev-to.svg";
 import "./header.css"; // Import your custom CSS for animations
+import LanguageSwitcher from "../LanguageSwitcher";
 
 function Logo() {
   return (
     <Link className="block text-teal-600" href="/">
+      <span className="sr-only">Home</span>
       <Image src={icon} height={30} width={30} alt="Dev.to logo" />
     </Link>
   );
@@ -92,80 +94,6 @@ export function List({
     );
   }
 
-  // // Desktop Mega Menu
-  // if (children && children.length > 0 && !isMobile && megaMenu) {
-  //   return (
-  //     <div className="relative group">
-  //       <button
-  //         className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
-  //         onClick={onToggle}
-  //         type="button"
-  //       >
-  //         {title}
-  //         <svg
-  //           className={`w-4 h-4 ml-1 transition-transform ${
-  //             open ? "rotate-180" : ""
-  //           }`}
-  //           fill="none"
-  //           stroke="currentColor"
-  //           strokeWidth={2}
-  //           viewBox="0 0 24 24"
-  //         >
-  //           <path
-  //             strokeLinecap="round"
-  //             strokeLinejoin="round"
-  //             d="M19 9l-7 7-7-7"
-  //           />
-  //         </svg>
-  //       </button>
-  //       {open && (
-  //         <div className="absolute right-1/2 -translate-x-1/2 mt-2 w-[28rem] bg-white border rounded shadow-lg z-50 animate-fadeIn">
-  //           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6">
-  //             {children.map((child, idx) => (
-  //               <div key={idx}>
-  //                 <Link
-  //                   prefetch={true}
-  //                   className="block font-semibold text-gray-700 mb-2 hover:text-teal-600"
-  //                   href={child.link ?? "#"}
-  //                   onClick={onClickItem}
-  //                 >
-  //                   {child.title}
-  //                 </Link>
-  //                 {child.children && (
-  //                   <ul>
-  //                     {child.children.map((sub, subIdx) => (
-  //                       <li key={subIdx}>
-  //                         {sub.children ? (
-  //                           <List
-  //                             {...sub}
-  //                             isMobile={isMobile}
-  //                             open={!!openIndexes[subIdx]}
-  //                             onToggle={() => handleToggleChild(subIdx)}
-  //                             onClickItem={onClickItem}
-  //                           />
-  //                         ) : (
-  //                           <Link
-  //                             prefetch={true}
-  //                             className="block px-2 py-1 text-gray-500 hover:text-teal-600"
-  //                             href={sub.link ?? "#"}
-  //                             onClick={onClickItem}
-  //                           >
-  //                             {sub.title}
-  //                           </Link>
-  //                         )}
-  //                       </li>
-  //                     ))}
-  //                   </ul>
-  //                 )}
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </div>
-  //       )}
-  //     </div>
-  //   );
-  // }
-
   // Desktop Mega Menu
   if (children && children.length > 0 && !isMobile && megaMenu) {
     return (
@@ -224,48 +152,6 @@ export function List({
             </div>
           </div>
         )}
-
-        {/* {open && (
-          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-[32rem] rounded-lg border bg-white shadow-xl animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6">
-              {children.map((section, idx) => (
-                <section key={idx}>
-                  <h3 className="mb-2 text-sm font-semibold text-gray-800 uppercase tracking-wide">
-                    {section.title}
-                  </h3>
-
-                  {Array.isArray(section.children) &&
-                    section.children.length > 0 && (
-                      <ul className="space-y-1">
-                        {section.children.map((item, subIdx) => (
-                          <li key={subIdx}>
-                            {item.children ? (
-                              <List
-                                {...item}
-                                isMobile={isMobile}
-                                open={!!openIndexes[subIdx]}
-                                onToggle={() => handleToggleChild(subIdx)}
-                                onClickItem={onClickItem}
-                              />
-                            ) : (
-                              <Link
-                                href={item.link ?? "#"}
-                                prefetch
-                                onClick={onClickItem}
-                                className="block px-2 py-1 text-gray-600 hover:text-teal-600 transition"
-                              >
-                                {item.title}
-                              </Link>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                </section>
-              ))}
-            </div>
-          </div>
-        )} */}
       </div>
     );
   }
@@ -418,6 +304,9 @@ function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
         } text-sm`}
       >
         {renderList(list)}
+        <li>
+          <LanguageSwitcher />
+        </li>
       </ul>
     </nav>
   );
@@ -481,10 +370,16 @@ export default function Header() {
         { title: "Profesional project", link: "/project/profesional" },
       ],
     },
+
     { title: "Blog", link: "https://medium.com/@naagaraa" },
-    { title: "About", link: "/about" },
+    {
+      title: "About",
+      children: [
+        { title: "Developer", link: "/about" },
+        { title: "Sponsorship", link: "/sponsorship" },
+      ],
+    },
     { title: "Contact", link: "/contact" },
-    { title: "Sponsorship", link: "/sponsorship" },
   ];
 
   return (

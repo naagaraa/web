@@ -17,6 +17,15 @@
         "3": "That said, the background I’ve shared is real — it’s shaped by hands-on experience, continuous learning, and a mindset of figuring things out step by step. I may not consider myself an expert or highly advanced, but I’m not afraid to learn, experiment, and take responsibility for real-world problems.",
         "4": "My approach is simple: use what works, build what’s missing, and always keep improving — both in code and communication."
       }
+    },
+    "Experience": {
+      "title": "Experience",
+      "paragraphs": {
+        "1": "I’m a developer who learns by doing and listening. Even in short-term roles, I’ve taken on tasks beyond expectations — from building systems to helping set up internal tooling and DevOps workflows. I work best with clarity, and thrive in solving real problems, quietly but effectively.",
+        "2": "Although my journey in tech started recently, I’ve gained a wide range of experience in a short time. I’m someone who learns by listening, observing, and doing — even though I’m not the type to talk much, I take action where it counts.",
+        "3": "I’ve handled tasks that often go beyond the scope of an intern: from developing systems, fixing bugs, and building automation scripts, to helping with DevOps setup and IT support infrastructure. These experiences shaped me into a flexible developer — capable of adapting, supporting teams, and contributing ideas to solve both technical and operational challenges.",
+        "4": "As an introvert, I work best with clear instructions and focused tasks. I may not specialize deeply in one area (yet), but my exposure to various responsibilities has made me resourceful and well-rounded. I enjoy working behind the scenes — solving problems, improving systems, and constantly learning something new."
+      }
     }
   }
 }
