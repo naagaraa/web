@@ -1,13 +1,11 @@
 // next.config.mjs atau next.config.ts
 import createNextIntlPlugin from "next-intl/plugin";
-import intlConfig from "./next-intl.config.js"; // pastikan file ini juga pakai ES module export
+import intlConfig from "./next-intl.config.mjs";
+//pakai ES module export
 
 const withNextIntl = createNextIntlPlugin(intlConfig);
 
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
   images: {
     remotePatterns: [
       {

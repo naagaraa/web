@@ -39,7 +39,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <Header />
           <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
-            <main className="justify-center min-h-screen gap-10">
+            <main className="justify-center min-h-screen gap-10 mt-24">
               <Toaster position="top-center" />
               {children}
             </main>
