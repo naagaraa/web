@@ -6,7 +6,10 @@ import intlConfig from "./next-intl.config.mjs";
 const withNextIntl = createNextIntlPlugin(intlConfig);
 
 const nextConfig = {
+  compress: true,
+  swcMinify: true,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

@@ -1,52 +1,53 @@
-/* eslint-disable jsx-a11y/alt-text */
-"use client";
-
-import "react-loading-skeleton/dist/skeleton.css";
-import Footer from "@/src/components/layout/Footer";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import Link from "next/link";
-import slugify from "slugify";
-
 import {
-  Droplet,
-  FileText,
-  Brain,
-  Smile,
-  FileInput,
-  Image as ImageIcon,
-  HeartPulse,
-  BedDouble,
-  Calculator,
-  Baby,
-  Utensils,
-  PieChart,
   Activity,
-  Flame,
-  ShieldCheck,
-  FileCode,
+  Baby,
+  BedDouble,
+  Brain,
+  Calculator,
   Code,
-  QrCode,
-  Crop,
-  Image,
   Code2,
+  Crop,
   Divide,
+  Droplet,
+  FileCode,
+  FileInput,
+  FileText,
+  Flame,
+  HeartPulse,
+  ImageIcon,
   ListOrdered,
+  PieChart,
+  QrCode,
+  ShieldCheck,
+  Smile,
+  Utensils,
 } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { motion } from "framer-motion";
 
-export default function page() {
+function CategoryButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
-    <>
-      <main className="bg-white">
-        <ProductivityTools />
-        <Footer />
-      </main>
-    </>
+    <button
+      onClick={onClick}
+      className={`px-4 py-2 text-sm rounded-full transition font-medium ${
+        active
+          ? "bg-blue-600 text-white shadow"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      }`}
+    >
+      {label}
+    </button>
   );
 }
-
-const toKebabCase = (text: string) =>
-  slugify(text, { lower: true, strict: true });
 
 interface Tool {
   id: number;
@@ -223,7 +224,7 @@ const tools: Tool[] = [
     slug: "image/converter",
     description:
       "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
-    icon: <Image className="w-6 h-6 text-yellow-500" />,
+    icon: <ImageIcon className="w-6 h-6 text-yellow-500" />,
     category: "Image Tools",
   },
   {
@@ -271,7 +272,7 @@ const tools: Tool[] = [
 
 const categories = Array.from(new Set(tools.map((tool) => tool.category)));
 
-function ProductivityTools() {
+export default function ProductivityTools() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredTools = selectedCategory
@@ -279,8 +280,8 @@ function ProductivityTools() {
     : tools;
 
   return (
-    <section className="bg-white py-20">
-      <div className="container mx-auto px-6">
+    <section id="tools" className="bg-white">
+      <div className="container mx-auto px-6 mb-10">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold text-gray-900">
             Alat Produktivitas
@@ -297,7 +298,6 @@ function ProductivityTools() {
             </Link>
           </p>
         </div>
-
         {/* Kategori */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <CategoryButton
@@ -314,7 +314,6 @@ function ProductivityTools() {
             />
           ))}
         </div>
-
         {/* Tools */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredTools.map((tool) => (
@@ -343,28 +342,5 @@ function ProductivityTools() {
         </div>
       </div>
     </section>
-  );
-}
-
-function CategoryButton({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 text-sm rounded-full transition font-medium ${
-        active
-          ? "bg-blue-600 text-white shadow"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      }`}
-    >
-      {label}
-    </button>
   );
 }

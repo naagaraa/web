@@ -68,7 +68,6 @@ export default function Sponsorship() {
           </p>
         </div>
       </section>
-      <Footer />
     </>
   );
 }

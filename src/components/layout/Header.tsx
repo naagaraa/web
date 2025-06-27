@@ -5,6 +5,7 @@ import Image from "next/image";
 import icon from "@/assets/dev-to.svg";
 import "./header.css"; // Import your custom CSS for animations
 import LanguageSwitcher from "../LanguageSwitcher";
+import { menuItems } from "@/data/MenuHeaderItems";
 
 function Logo() {
   return (
@@ -314,73 +315,6 @@ function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-
-  const menuItems = [
-    { title: "Home", link: "/" },
-    {
-      title: "Apps",
-      megaMenu: true,
-      children: [
-        {
-          title: "Lihat Semua",
-          children: [
-            {
-              title: "Apps",
-              link: "/apps",
-            },
-          ],
-        },
-
-        {
-          title: "Mental Health",
-          children: [
-            { title: "Anxiety", link: "/apps/mental-health/anxiety" },
-            { title: "Depression", link: "/apps/mental-health/depression" },
-          ],
-        },
-        {
-          title: "Documents",
-          children: [
-            { title: "PDF Tools", link: "/apps/pdf" },
-            { title: "Text Tools", link: "/apps/text" },
-          ],
-        },
-        {
-          title: "Image Tools",
-          children: [{ title: "Editor", link: "/apps/image" }],
-        },
-        {
-          title: "Calculator",
-          children: [
-            { title: "Blood Glucose", link: "/apps/calculator/blood-glucose" },
-            { title: "BMI", link: "/apps/calculator/bmi" },
-            { title: "BMR", link: "/apps/calculator/bmr" },
-            { title: "Calorie", link: "/apps/calculator/calorie" },
-            { title: "Water", link: "/apps/calculator/water" },
-          ],
-        },
-      ],
-    },
-    // {
-    //   title: "Project",
-    //   children: [
-    //     { title: "Academic project", link: "/project/academic" },
-    //     { title: "Open source project", link: "/project/open-source" },
-    //     { title: "Paid project", link: "/project/paid" },
-    //     { title: "Profesional project", link: "/project/profesional" },
-    //   ],
-    // },
-
-    { title: "Blog", link: "https://medium.com/@naagaraa" },
-    {
-      title: "About",
-      children: [
-        { title: "Developer", link: "/about" },
-        { title: "Sponsorship", link: "/sponsorship" },
-      ],
-    },
-    { title: "Contact", link: "/contact" },
-  ];
 
   return (
     <>

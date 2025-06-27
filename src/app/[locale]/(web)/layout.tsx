@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import "../favicon.ico";
-import "./globals.css";
+import "../../favicon.ico";
+import "../../globals.css";
 import "swiper/css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Header from "@/src/components/layout/Header";
@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
+import Footer from "@/src/components/ui/footer";
 
 export const metadata: Metadata = {
   title: "Eka Jaya Nagara - Software Developer",
@@ -44,6 +45,7 @@ export default async function RootLayout({
               {children}
             </main>
           </SkeletonTheme>
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>

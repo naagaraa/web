@@ -22,8 +22,8 @@ export default function LanguageSwitcher() {
         value={currentLocale}
         className="appearance-none bg-white border border-gray-300 text-sm px-4 py-2 pr-8 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-black"
       >
-        <option value="id">🇮🇩</option>
-        <option value="en">🇺🇸</option>
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="en">🇺🇸 English</option>
       </select>
       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
         ▼

@@ -1,28 +1,12 @@
+/* eslint-disable jsx-a11y/alt-text */
 "use client";
 
 import "react-loading-skeleton/dist/skeleton.css";
-import Link from "next/link";
-import Image from "next/image";
+import Footer from "@/src/components/layout/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import heroImage from "@/assets/hero.png";
-import Footer from "@/src/components/ui/footer";
-
-import {
-  Code,
-  Wrench,
-  LifeBuoy,
-  Settings,
-  MonitorCheck,
-  Flame,
-  ShieldCheck,
-  FileCode,
-  QrCode,
-  Crop,
-  Code2,
-  Divide,
-  ListOrdered,
-} from "lucide-react";
+import Link from "next/link";
+import slugify from "slugify";
 
 import {
   Droplet,
@@ -38,186 +22,30 @@ import {
   Utensils,
   PieChart,
   Activity,
+  Flame,
+  ShieldCheck,
+  FileCode,
+  Code,
+  QrCode,
+  Crop,
+  Image,
+  Code2,
+  Divide,
+  ListOrdered,
 } from "lucide-react";
-import ProjectLifecycleSection from "./ProjectLifecycleSection";
 
-export default function Home() {
+export default function page() {
   return (
-    <main className="bg-white">
-      <Hero />
-      <ProductivityTools />
-      <Services />
-      <ProjectLifecycleSection />
-      <Footer />
-    </main>
+    <>
+      <main className="bg-white">
+        <ProductivityTools />
+      </main>
+    </>
   );
 }
 
-function Hero() {
-  return (
-    <section className="py-24 bg-white">
-      <div className="container mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
-        {/* Kolom Kiri - Teks */}
-        <motion.div
-          className="md:w-1/2 text-center md:text-left"
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.p
-            className="text-sm font-medium text-blue-600 uppercase tracking-wide mb-3"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.4 }}
-          >
-            Tools & Services to Empower Your Team
-          </motion.p>
-
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold leading-tight text-gray-900 mb-5"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-          >
-            Everything You Need to Work Smarter — in One Place
-          </motion.h1>
-
-          <motion.p
-            className="text-gray-600 text-lg mb-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-          >
-            Access powerful tools to manage your team's workflow, and expert
-            services to help you scale. Whether you're organizing tasks or
-            improving collaboration — we’ve got you covered.
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-          >
-            <Link
-              href="#tools"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("tools")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition"
-            >
-              Explore Our Tools
-            </Link>
-
-            <Link
-              href="#services"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("services")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="text-blue-600 border border-blue-600 hover:bg-blue-50 px-6 py-3 rounded-lg font-medium transition"
-            >
-              Discover Our Services
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        {/* Kolom Kanan - Gambar */}
-        <motion.div
-          className="md:w-1/2"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <Image
-            src={heroImage}
-            alt="Team Collaboration Illustration"
-            width={500}
-            height={300}
-            className="w-full max-w-md mx-auto object-contain"
-            priority
-          />
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-const services = [
-  {
-    title: "Laravel Web Development",
-    description:
-      "Development and maintenance of database-driven web applications using Laravel. Work is fully remote.",
-    icon: <Code className="w-6 h-6 text-blue-600" />,
-  },
-  {
-    title: "Bug Fixing & Debugging",
-    description:
-      "Fix issues in existing websites or apps—both front-end and back-end. Remote service with quick turnaround.",
-    icon: <Wrench className="w-6 h-6 text-red-500" />,
-  },
-  {
-    title: "IT Support & Maintenance",
-    description:
-      "Remote support for system setup, server configuration, troubleshooting, and regular maintenance.",
-    icon: <LifeBuoy className="w-6 h-6 text-green-600" />,
-  },
-  {
-    title: "System Installation & Configuration",
-    description:
-      "Remote setup or reinstallation of Linux-based systems for stable and optimized performance.",
-    icon: <Settings className="w-6 h-6 text-yellow-500" />,
-  },
-  {
-    title: "Remote Technical Support",
-    description:
-      "Help resolve software issues, perform checks, or assist users via remote sessions.",
-    icon: <MonitorCheck className="w-6 h-6 text-purple-600" />,
-  },
-];
-
-function Services() {
-  return (
-    <section id="services" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900">Layanan</h2>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">
-            Jasa yang saya tawarkan sebagai Software Engineer
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition"
-            >
-              <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-lg mb-4">
-                {service.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                {service.title}
-              </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {service.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+const toKebabCase = (text: string) =>
+  slugify(text, { lower: true, strict: true });
 
 interface Tool {
   id: number;
@@ -394,7 +222,7 @@ const tools: Tool[] = [
     slug: "image/converter",
     description:
       "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
-    icon: <ImageIcon className="w-6 h-6 text-yellow-500" />,
+    icon: <Image className="w-6 h-6 text-yellow-500" />,
     category: "Image Tools",
   },
   {
@@ -450,7 +278,7 @@ function ProductivityTools() {
     : tools;
 
   return (
-    <section id="tools" className="bg-white py-20">
+    <section className="bg-white py-20">
       <div className="container mx-auto px-6">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold text-gray-900">
@@ -461,13 +289,14 @@ function ProductivityTools() {
             kerja.
             <Link
               prefetch
-              href="/apps"
+              href="/"
               className="ml-2 text-blue-600 hover:underline"
             >
-              Lihat Semua
+              Kembali Ke Home
             </Link>
           </p>
         </div>
+
         {/* Kategori */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           <CategoryButton
@@ -484,6 +313,7 @@ function ProductivityTools() {
             />
           ))}
         </div>
+
         {/* Tools */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredTools.map((tool) => (
