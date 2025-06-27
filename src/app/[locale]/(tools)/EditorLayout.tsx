@@ -84,7 +84,6 @@ export default function EditorLayout({
   // state aktif
   const [active, setActive] = useState<string | null>(null);
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
-  const [showUserModal, setShowUserModal] = useState(false);
 
   // handler klik
   const handleCategoryClick = (id: string) => {
@@ -341,7 +340,7 @@ export default function EditorLayout({
 
           {/* Tools content - horizontal scrollable on mobile */}
           {active && (
-            <div className="p-3 overflow-x-auto flex md:hidden gap-3 scroll-smooth">
+            <div className="p-3 overflow-x-auto flex md:hidden gap-3 scrollbar-none [-webkit-overflow-scrolling:touch] scrollbar-hide">
               {renderToolsMobile()}
             </div>
           )}

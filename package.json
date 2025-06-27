@@ -32,7 +32,8 @@
     "recharts": "^2.15.4",
     "sharp": "^0.33.5",
     "slugify": "^1.6.6",
-    "swiper": "^11.2.8"
+    "swiper": "^11.2.8",
+    "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {
     "@types/ip": "^1.1.3",
