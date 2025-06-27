@@ -13,8 +13,17 @@ import { routing } from "@/src/i18n/routing";
 import Footer from "@/src/components/ui/footer";
 
 export const metadata: Metadata = {
-  title: "Eka Jaya Nagara - Software Developer",
-  description: "Freelance and Software Developer based in Bekasi",
+  title: "My PWA App",
+  description: "Next.js 14 PWA using App Router",
+  icons: {
+    icon: "/icons/icon-192x192.png",
+    apple: "/icons/icon-192x192.png",
+  },
+  manifest: "/manifest.json",
+};
+
+export const viewport = {
+  themeColor: "#0f172a", // ✅ Taruh di sini!
 };
 
 const hanken = Hanken_Grotesk({
