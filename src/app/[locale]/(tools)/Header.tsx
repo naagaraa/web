@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown, User } from "lucide-react";
 import Image from "next/image";
 import logo from "@/assets/dev-to.svg";
+import Link from "next/link";
 
 export default function Header() {
   const [openUser, setOpenUser] = useState(false);
@@ -13,14 +14,14 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 w-full flex items-center justify-between px-4 py-3 bg-white shadow-md md:px-6">
       {/* Logo / Brand */}
-      <div className="flex items-center gap-2">
+      <Link href="/" className="flex items-center gap-2">
         <Image src={logo} alt="Logo" width={24} height={24} />
-        <span className="font-semibold text-lg">DesignLab</span>
-      </div>
+        <span className="font-semibold text-lg"></span>
+      </Link>
 
       {/* Navigation */}
       <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700 font-medium relative">
-        <button
+        {/* <button
           onClick={() => {
             setOpenProducts(!openProducts);
             setOpenSolutions(false);
@@ -40,14 +41,16 @@ export default function Header() {
         >
           Solutions
           <ChevronDown className="w-4 h-4" />
-        </button>
+        </button> */}
 
-        <button className="hover:text-blue-600 transition">Pricing</button>
+        <Link href={"/pricing"} className="hover:text-blue-600 transition">
+          Pricing
+        </Link>
         <button className="hover:text-blue-600 transition">Docs</button>
         <button className="hover:text-blue-600 transition">Blog</button>
 
         {/* Products Dropdown */}
-        {openProducts && (
+        {/* {openProducts && (
           <div className="absolute top-14 left-0 bg-white border rounded-lg shadow-lg p-4 w-64 z-50">
             <p className="text-xs text-gray-500 mb-2">Our Products</p>
             <div className="space-y-2 text-sm">
@@ -59,10 +62,10 @@ export default function Header() {
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Solutions Dropdown */}
-        {openSolutions && (
+        {/* {openSolutions && (
           <div className="absolute top-14 left-32 bg-white border rounded-lg shadow-lg p-4 w-64 z-50">
             <p className="text-xs text-gray-500 mb-2">Use Cases</p>
             <div className="space-y-2 text-sm">
@@ -80,7 +83,7 @@ export default function Header() {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </nav>
 
       {/* Right section */}
