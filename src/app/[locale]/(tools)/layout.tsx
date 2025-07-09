@@ -1,9 +1,9 @@
-import EditorLayout from "./EditorLayout";
+import EditorLayout from "./editor/EditorLayout";
 import "../../globals.css";
 
 export const metadata = {
-  title: "My PWA App",
-  description: "Next.js 14 PWA using App Router",
+  title: "Free Tools",
+  description: "Free Tools for Developers",
   icons: {
     icon: "/icons/icon-192x192.png",
     apple: "/icons/icon-192x192.png",
@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0f172a", // ✅ Taruh di sini!
+  themeColor: "#0f172a",
 };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
