@@ -1,12 +1,12 @@
-// app/base64-tool/page.tsx
 import Link from "next/link";
 import Image from "next/image";
-import Base64Tool from "./Base64Tool";
+import SitemapTool from "./SitemapTool";
 import ScrollToTopButton from "../../../editor/ScrollToTopButton";
 
 export const metadata = {
-  title: "Base64 Encoder & Decoder",
-  description: "Encode dan decode teks ke/dari Base64 secara instan.",
+  title: "Sitemap.xml Generator",
+  description:
+    "Buat sitemap.xml untuk membantu mesin pencari mengindeks halaman situsmu dengan benar.",
 };
 
 export default function Page() {
@@ -23,15 +23,15 @@ export default function Page() {
         </Link>
 
         <div className="space-y-6">
-          <Base64Tool />
+          <SitemapTool />
         </div>
       </div>
 
-      {/* Kanan: Gambar Ilustrasi */}
+      {/* Kanan: Gambar */}
       <div className="hidden md:block relative w-full md:w-1/2 h-screen">
         <Image
-          src="https://images.unsplash.com/photo-1712333758344-6f508f678588?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Base64 Illustration"
+          src="https://images.unsplash.com/photo-1712333758344-6f508f678588"
+          alt="Sitemap Generator"
           fill
           className="object-cover"
           priority

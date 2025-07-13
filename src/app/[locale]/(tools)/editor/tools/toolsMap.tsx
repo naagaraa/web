@@ -26,6 +26,15 @@ import {
   Apple,
   File,
   Settings,
+  Tags,
+  Bot,
+  ListTree,
+  SearchCheck,
+  UtilityPole,
+  Puzzle,
+  AlarmClock,
+  Hourglass,
+  TimerReset,
 } from "lucide-react";
 
 export type ToolItem = {
@@ -203,34 +212,90 @@ export const categories: Category[] = [
     tools: [
       {
         name: "JWT Decoder",
-        slug: "apps/developer-tools/jwt-decoder",
+        slug: "apps/text/jwt-decoder",
         description: "Dekode dan periksa struktur token JWT dengan mudah.",
         icon: <ShieldCheck size={20} className="w-6 h-6 text-purple-500" />,
       },
       {
         name: "Base64 Decoder Encoder",
-        slug: "apps/developer-tools/base64-decoder-encoder",
+        slug: "apps/text/base64-decoder-encoder",
         description: "Encode dan decode teks ke atau dari Base64.",
         icon: <FileCode size={20} className="w-6 h-6 text-indigo-500" />,
       },
       {
         name: "JSON Formatter",
-        slug: "apps/developer-tools/json-formatter",
+        slug: "apps/text/json-formatter",
         description: "Format dan validasi struktur JSON.",
         icon: <Code size={20} className="w-6 h-6 text-green-500" />,
+      },
+      {
+        name: "Hash Generator",
+        slug: "apps/dev/hash-generator",
+        description: "Generate berbagai jenis hash (MD5, SHA, BLAKE2, dll).",
+        icon: <Code size={20} className="w-6 h-6 text-blue-500" />,
+      },
+      {
+        name: "Regex Tester",
+        slug: "apps/dev/regex",
+        description: "Uji pola regex terhadap teks secara instan.",
+        icon: <Code size={20} className="w-6 h-6 text-purple-500" />,
       },
     ],
   },
   {
+    id: "SEO",
+    label: "SEO",
+    icon: <SearchCheck size={20} className="w-6 h-6 text-gray-500" />,
+    tools: [
+      {
+        name: "Meta Tag Generator",
+        slug: "apps/seo-tools/meta-tag-generator",
+        description: "Buat dan pratinjau meta tag SEO dan Open Graph.",
+        icon: <Tags size={20} className="w-6 h-6 text-pink-500" />, // ganti dari QrCode → Tags
+      },
+      {
+        name: "Robots.txt Generator",
+        slug: "apps/seo-tools/robots-txt-generator",
+        description: "Buat file robots.txt untuk mengatur akses crawler.",
+        icon: <Bot size={20} className="w-6 h-6 text-pink-500" />, // ganti dari QrCode → Bot
+      },
+      {
+        name: "sitemap.xml Generator",
+        slug: "apps/seo-tools/sitemap-generator",
+        description: "Siapkan sitemap.xml untuk SEO yang lebih baik.",
+        icon: <ListTree size={20} className="w-6 h-6 text-pink-500" />, // ganti dari QrCode → Sitemap
+      },
+    ],
+  },
+
+  {
     id: "utilities",
     label: "Utilities",
-    icon: <Settings size={20} className="w-6 h-6 text-gray-500" />,
+    icon: <Puzzle size={20} className="w-6 h-6 text-gray-500" />,
     tools: [
       {
         name: "QR Code Generator",
         slug: "apps/text/qrcode",
         description: "Buat QR Code dari teks atau tautan.",
         icon: <QrCode size={20} className="w-6 h-6 text-pink-500" />,
+      },
+      {
+        name: "Alarm Clock",
+        slug: "apps/daily/alarm-online",
+        description: "Alam clock untuk mengatur pengingat waktu.",
+        icon: <AlarmClock size={20} className="w-6 h-6 text-pink-500" />,
+      },
+      {
+        name: "Countdown Timer",
+        slug: "apps/daily/countdown-timer",
+        description: "Countdown timer untuk mengatur waktu.",
+        icon: <Hourglass size={20} className="w-6 h-6 text-pink-500" />,
+      },
+      {
+        name: "Pomodoro Timer",
+        slug: "apps/daily/pomodoro-timer",
+        description: "Pomodoro timer untuk meningkatkan produktivitas.",
+        icon: <TimerReset size={20} className="w-6 h-6 text-pink-500" />,
       },
     ],
   },
