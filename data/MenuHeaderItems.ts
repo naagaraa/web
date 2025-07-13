@@ -2,7 +2,7 @@ export const menuItems = [
   { title: "Home", link: "/" },
   {
     title: "Apps",
-    megaMenu: true,
+    megaMenu: false,
     children: [
       {
         title: "Lihat Semua",
@@ -12,37 +12,43 @@ export const menuItems = [
             link: "/apps",
           },
         ],
+        link: "/apps",
+      },
+      {
+        title: "Alarm Online",
+        link: "/apps/daily/alarm-online",
+      },
+      {
+        title: "Podomoro Timer",
+        link: "/apps/daily/pomodoro-timer",
+      },
+      {
+        title: "Image Compressor",
+        link: "/apps/image/compressor",
+      },
+      {
+        title: "BMI Calculator",
+        link: "/apps/calculator/bmi",
+      },
+      {
+        title: "Comming Soon",
+        link: "/coming-soon",
       },
 
-      {
-        title: "Mental Health",
-        children: [
-          { title: "Anxiety", link: "/apps/mental-health/anxiety" },
-          { title: "Depression", link: "/apps/mental-health/depression" },
-        ],
-      },
-      {
-        title: "Documents",
-        children: [
-          { title: "PDF Tools", link: "/apps/pdf" },
-          { title: "Text Tools", link: "/apps/text" },
-        ],
-      },
-      {
-        title: "Image Tools",
-        children: [
-          { title: "Compressor", link: "/apps/image/compressor" },
-          { title: "Watermark", link: "/apps/image/watermark" },
-        ],
-      },
-      {
-        title: "Calculator",
-        children: [
-          { title: "Blood Glucose", link: "/apps/calculator/blood-glucose" },
-          { title: "BMI", link: "/apps/calculator/bmi" },
-          { title: "Calorie", link: "/apps/calculator/calorie" },
-        ],
-      },
+      // {
+      //   title: "Mental Health",
+      //   children: [
+      //     { title: "Anxiety", link: "/apps/mental-health/anxiety" },
+      //     { title: "Depression", link: "/apps/mental-health/depression" },
+      //   ],
+      // },
+      // {
+      //   title: "Image Tools",
+      //   children: [
+      //     { title: "Compressor", link: "/apps/image/compressor" },
+      //     { title: "Watermark", link: "/apps/image/watermark" },
+      //   ],
+      // },
     ],
   },
   {
@@ -53,5 +59,6 @@ export const menuItems = [
     ],
   },
   { title: "Blog", link: "https://medium.com/@naagaraa" },
+  { title: "Pricing", link: "/pricing" },
   { title: "Contact", link: "/contact" },
 ];

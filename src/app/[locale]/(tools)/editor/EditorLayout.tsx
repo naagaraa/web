@@ -9,6 +9,7 @@ import { categories } from "./tools/toolsMap";
 import { RenderTools } from "./tools/renderTools";
 import { RenderToolsMobile } from "./tools/renderToolsMobile";
 import PageTransition from "./PageTransition";
+import Footer from "@/src/components/ui/footer";
 
 export default function EditorLayout({
   children,
@@ -27,7 +28,7 @@ export default function EditorLayout({
       <main className="h-screen overflow-hidden">
         <Header />
 
-        <div className="flex flex-col h-full pt-[64px] md:flex-row">
+        <div className="flex flex-col h-full pt-[0px] md:flex-row">
           <Sidebar active={active} handleClick={handleCategoryClick} />
 
           {active && (
@@ -36,7 +37,7 @@ export default function EditorLayout({
             </div>
           )}
 
-          <main className="flex-1 bg-white overflow-auto pl-4">
+          <main className="flex-1 bg-white overflow-auto pl-4 md:mb-20">
             <PageTransition>{children}</PageTransition>
           </main>
         </div>
