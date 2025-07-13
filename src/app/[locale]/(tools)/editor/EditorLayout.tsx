@@ -36,7 +36,7 @@ export default function EditorLayout({
             </div>
           )}
 
-          <main className="flex-1 bg-white overflow-auto p-4">
+          <main className="flex-1 bg-white overflow-auto pl-4">
             <PageTransition>{children}</PageTransition>
           </main>
         </div>

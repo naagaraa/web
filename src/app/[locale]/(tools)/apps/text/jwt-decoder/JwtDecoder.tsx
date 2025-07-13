@@ -109,18 +109,18 @@ export default function JwtDecoder() {
   return (
     <main className="max-w-3xl mx-auto mt-24 space-y-6 p-4">
       <h1 className="text-2xl font-bold text-center">JWT Decoder</h1>
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-start text-gray-600">
         Paste token JWT Anda untuk melihat detail header dan payload.
       </p>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-start text-gray-600">
         Tempel token JWT Anda untuk melihat detail bagian{" "}
         <code className="bg-gray-100 px-1 rounded">header</code> dan{" "}
         <code className="bg-gray-100 px-1 rounded">payload</code>. Token JWT
         terdiri dari 3 bagian yang dipisahkan oleh titik:{" "}
         <code>header.payload.signature</code>.
       </p>
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-sm text-start text-gray-600">
         Contoh token JWT:
         <br />
         <code className="text-xs break-all bg-gray-100 rounded px-2 py-1 inline-block mt-2">
