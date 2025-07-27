@@ -44,9 +44,6 @@ export default function page() {
   );
 }
 
-const toKebabCase = (text: string) =>
-  slugify(text, { lower: true, strict: true });
-
 interface Tool {
   id: number;
   name: string;
