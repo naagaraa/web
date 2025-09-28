@@ -1,6 +1,5 @@
 import { HeadingProps } from "@/types/components/types";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
 import { motion } from "framer-motion";
 
 export default function Heading({ name, title, stack }: HeadingProps) {
@@ -16,7 +15,7 @@ export default function Heading({ name, title, stack }: HeadingProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            {isLoading ? <Skeleton height={40} width={300} /> : name}
+            {isLoading ? "Loading..." : name}
           </motion.h1>
 
           <motion.p
@@ -25,7 +24,7 @@ export default function Heading({ name, title, stack }: HeadingProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {isLoading ? <Skeleton height={24} width={350} /> : title}
+            {isLoading ? "Loading..." : title}
           </motion.p>
 
           {stack?.title && (
@@ -35,7 +34,7 @@ export default function Heading({ name, title, stack }: HeadingProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              {isLoading ? <Skeleton height={20} width={200} /> : stack.title}
+              {isLoading ? "Loading..." : stack.title}
             </motion.p>
           )}
         </div>

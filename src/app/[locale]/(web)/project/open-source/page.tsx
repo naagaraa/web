@@ -7,7 +7,6 @@ import WrapperContentSlide from "@/src/components/ui/WrapperContentSlide";
 import Title from "@/src/components/common/Title";
 import SubTitle from "@/src/components/common/SubTitle";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
-import Skeleton from "react-loading-skeleton";
 import ProjectCard from "@/src/components/ui/card/ProjectCard";
 import HeroImage from "@/assets/hero.png";
 import NavTabs from "@/src/components/layout/NavTabs";
@@ -51,13 +50,10 @@ function Project() {
           fallback={
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, idx) => (
-                <Skeleton
+                <div
                   key={idx}
-                  height={250}
-                  className="rounded-xl"
-                  baseColor="#f3f3f3"
-                  highlightColor="#ecebeb"
-                />
+                  className="h-64 bg-gray-300 rounded-xl animate-pulse"
+                ></div>
               ))}
             </div>
           }

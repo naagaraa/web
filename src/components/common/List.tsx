@@ -1,6 +1,5 @@
 import React, { lazy, Suspense } from "react";
 import { ListProps } from "@/types/components/types";
-import Skeleton from "react-loading-skeleton";
 
 type LazyComponentLoader = () => Promise<{
   default: React.FC<{ dataItems: any }>;
@@ -24,7 +23,7 @@ export default function List({ modelItem, dataItems }: ListProps) {
 
   const Component = lazy(LazyComponent);
   return (
-    <Suspense fallback={<Skeleton />}>
+    <Suspense fallback={<div>Loading...</div>}>
       <Component dataItems={dataItems} />
     </Suspense>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
+
 import useLoading from "@/composables/hook/useLoading";
 import { PaidProjectProps } from "@/types/components/types";
 import { RouteName } from "@/routes/navigation";
@@ -11,7 +11,7 @@ export default function ListPaidProject({ dataItems }: PaidProjectProps) {
   if (isLoading) {
     return (
       <div className="mt-5">
-        <Skeleton count={dataItems?.length || 3} height={20} className="mb-2" />
+        <div>Loading...</div>
       </div>
     );
   }

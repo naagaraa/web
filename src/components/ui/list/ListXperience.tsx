@@ -1,6 +1,6 @@
 import React from "react";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
+
 import { experienceProps } from "@/types/components/types";
 import SubHeading from "../../common/SubHeading";
 
@@ -29,7 +29,7 @@ export default function ListExperiencce({ dataItems }: experienceProps) {
     <div>
       <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
         {isLoading ? (
-          <Skeleton count={dataItems?.length || 3} />
+          <div>Loading...</div>
         ) : (
           dataItems?.map((value, index) => {
             const baseKey = `${value.title}-${value.company}-${value.date}-${index}`;

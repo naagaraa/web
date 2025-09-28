@@ -2,8 +2,6 @@
 
 import React, { Suspense } from "react";
 import { useRouter } from "next/navigation";
-import Skeleton from "react-loading-skeleton";
-
 import Heading from "@/src/components/ui/Heading";
 import Title from "@/src/components/common/Title";
 import SubTitle from "@/src/components/common/SubTitle";
@@ -48,7 +46,10 @@ function Project() {
           fallback={
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} height={250} className="rounded-xl" />
+                <div
+                  key={i}
+                  className="h-64 bg-gray-300 rounded-xl animate-pulse"
+                ></div>
               ))}
             </div>
           }

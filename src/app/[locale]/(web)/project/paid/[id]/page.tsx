@@ -3,8 +3,6 @@
 import { useEffect, useState, use } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -39,9 +37,9 @@ export default function PaidProjectDetailPage(props: Props) {
   if (loading || !project) {
     return (
       <div className="max-w-4xl mx-auto p-6 space-y-6">
-        <Skeleton height={28} width={220} />
-        <Skeleton height={240} />
-        <Skeleton count={3} />
+        <div className="h-8 bg-gray-300 rounded w-1/3 mx-auto animate-pulse"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
+        <div className="w-full h-72 md:h-96 bg-gray-300 rounded-xl mx-auto animate-pulse"></div>
       </div>
     );
   }

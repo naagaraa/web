@@ -3,14 +3,13 @@ import Image from "next/image";
 
 import { titleProps } from "@/types/components/types";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
 
 function Title({ value }: titleProps) {
   const { isLoading } = useLoading(true, 500);
   return (
     <div>
       <h1 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
-        {isLoading ? <Skeleton /> : value}
+        {isLoading ? <div>Loading...</div> : value}
       </h1>
     </div>
   );
@@ -21,7 +20,7 @@ function Describe({ value }: titleProps) {
   return (
     <div>
       <p className="mt-4 text-gray-700 text-justify">
-        {isLoading ? <Skeleton /> : value}
+        {isLoading ? <div>Loading...</div> : value}
       </p>
     </div>
   );
@@ -38,7 +37,7 @@ export default function PortoFolioLeft({
       <div className="mt-20 grid grid-cols-1 gap-4 md:grid-cols-2 md:items-center md:gap-8">
         <div>
           {isLoading ? (
-            <Skeleton height={200} />
+            <div>Loading...</div>
           ) : (
             <Image
               className="rounded"

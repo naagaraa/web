@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Skeleton from "react-loading-skeleton";
 import useLoading from "@/composables/hook/useLoading";
 import Describe from "@/src/components/common/Describe";
 import WrapperContent from "@/src/components/ui/WrapperContent";
@@ -11,9 +10,9 @@ export default function CodingSection() {
   if (isLoading) {
     return (
       <WrapperContent>
-        <Skeleton count={6} height={20} className="mb-2" />
-        <Skeleton height={200} className="my-4" />
-        <Skeleton count={2} height={20} />
+        <div className="h-8 bg-gray-300 rounded w-1/3 mx-auto animate-pulse"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
+        <div className="w-full h-72 md:h-96 bg-gray-300 rounded-xl mx-auto animate-pulse"></div>
       </WrapperContent>
     );
   }

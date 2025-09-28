@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
 import { RouteName } from "@/routes/navigation";
 
 type listProps = {
@@ -26,7 +25,7 @@ export default function CardProject({
   return (
     <>
       {isLoading ? (
-        <Skeleton />
+        <div>Loading...</div>
       ) : (
         <div
           key={id}

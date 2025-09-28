@@ -1,6 +1,6 @@
 import React from "react";
 import useLoading from "@/composables/hook/useLoading";
-import Skeleton from "react-loading-skeleton";
+
 import { certificationProps } from "@/types/components/types";
 import SubHeading from "../../common/SubHeading";
 
@@ -10,7 +10,7 @@ export default function ListCertification({ dataItems }: certificationProps) {
     <div>
       <ul className="mt-5 space-y-1 text-gray-700 list-disc list-inside dark:text-gray-700">
         {isLoading ? (
-          <Skeleton count={dataItems?.length} />
+          <div>Loading...</div>
         ) : (
           dataItems?.map((value, parentIndex) => {
             const parentKey = `${value.title}-${value.academy}-${value.date}-${parentIndex}`;
