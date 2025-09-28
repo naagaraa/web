@@ -255,9 +255,9 @@ const tools: Tool[] = [
 ];
 
 // Kelompokkan tools berdasarkan kategori
-const groupToolsByCategory = (tools: typeof tools) => {
-  const grouped: Record<string, typeof tools> = {};
-  tools.forEach((tool: { category: string | number }) => {
+const groupToolsByCategory = (tools: Tool[]) => {
+  const grouped: Record<string, Tool[]> = {};
+  tools.forEach((tool) => {
     if (!grouped[tool.category]) {
       grouped[tool.category] = [];
     }

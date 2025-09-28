@@ -3,86 +3,54 @@
 
 import { useState } from "react";
 
-export default function BloodGlucoseCalc() {
-  const [gender, setGender] = useState<"male" | "female">("male");
-  const [height, setHeight] = useState(180); // cm
-  const [weight, setWeight] = useState(75);
-  const [age, setAge] = useState(24);
-  const [risk, setRisk] = useState<string | null>(null);
+export default function BMICalculator() {
+  const [height, setHeight] = useState(170); // cm
+  const [weight, setWeight] = useState(70); // kg
   const [bmi, setBmi] = useState<number | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
 
-  const getBMICategory = (bmi: number) => {
-    if (bmi < 18.5) return "Kurus";
-    if (bmi < 25) return "Normal";
-    if (bmi < 30) return "Gemuk";
-    return "Obesitas";
+  const getBMICategory = (bmi: number): string => {
+    if (bmi < 18.5) return "Kurus (Underweight)";
+    if (bmi < 25) return "Normal (Healthy Weight)";
+    if (bmi < 30) return "Gemuk (Overweight)";
+    return "Obesitas (Obese)";
   };
 
-  const calculateRisk = (e?: React.FormEvent) => {
+  const calculateBMI = (e?: React.FormEvent) => {
     e?.preventDefault();
+
+    if (height <= 0 || weight <= 0) {
+      setBmi(null);
+      setCategory(null);
+      return;
+    }
 
     const heightInMeters = height / 100;
     const calculatedBMI = weight / (heightInMeters * heightInMeters);
-    setBmi(Math.round(calculatedBMI * 10) / 10);
+    const roundedBMI = Math.round(calculatedBMI * 10) / 10;
 
-    let score = 0;
-    if (age > 45) score += 2;
-    else if (age >= 35) score += 1;
-
-    if (weight > 80) score += 2;
-    else if (weight >= 70) score += 1;
-
-    if (score <= 2) setRisk("Rendah");
-    else if (score <= 4) setRisk("Sedang");
-    else setRisk("Tinggi");
+    setBmi(roundedBMI);
+    setCategory(getBMICategory(roundedBMI));
   };
 
   const resetForm = () => {
-    setGender("male");
-    setHeight(180);
-    setWeight(75);
-    setAge(24);
-    setRisk(null);
+    setHeight(170);
+    setWeight(70);
     setBmi(null);
+    setCategory(null);
   };
 
   return (
     <main className="max-w-7xl mx-auto mt-12 px-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Left Column: Calculator */}
       <section className="space-y-6">
-        {/* Gender */}
-        <div className="border border-gray-200 shadow-sm grid grid-cols-2">
-          <button
-            type="button"
-            className={`py-3 text-center font-medium transition ${
-              gender === "male"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-            }`}
-            onClick={() => setGender("male")}
-          >
-            ♂ Pria
-          </button>
-          <button
-            type="button"
-            className={`py-3 text-center font-medium transition ${
-              gender === "female"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-            }`}
-            onClick={() => setGender("female")}
-          >
-            ♀ Wanita
-          </button>
-        </div>
-
         {/* Height */}
         <div className="border border-gray-200 shadow-sm p-4 space-y-2">
-          <label className="font-medium text-gray-700">Tinggi (cm)</label>
+          <label className="font-medium text-gray-700">Tinggi Badan (cm)</label>
           <input
             type="range"
-            min={150}
-            max={210}
+            min={100}
+            max={250}
             step={1}
             value={height}
             onChange={(e) => setHeight(parseInt(e.target.value))}
@@ -90,69 +58,53 @@ export default function BloodGlucoseCalc() {
           />
           <input
             type="number"
-            min={150}
-            max={210}
+            min={100}
+            max={250}
             value={height}
-            onChange={(e) => setHeight(parseInt(e.target.value))}
+            onChange={(e) => setHeight(parseInt(e.target.value) || 170)}
             className="w-full border border-gray-200 p-2 text-center"
           />
         </div>
 
-        {/* Weight & Age */}
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            {
-              label: "Berat (kg)",
-              value: weight,
-              setter: setWeight,
-              min: 30,
-              max: 200,
-            },
-            { label: "Usia", value: age, setter: setAge, min: 1, max: 120 },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="border border-gray-200 shadow-sm p-4 space-y-2"
+        {/* Weight */}
+        <div className="border border-gray-200 shadow-sm p-4 space-y-2">
+          <label className="block text-gray-700 font-medium">
+            Berat Badan (kg)
+          </label>
+          <div className="flex justify-between items-center gap-2">
+            <button
+              type="button"
+              className="w-8 h-8 bg-gray-100 border hover:bg-gray-200"
+              onClick={() => setWeight(Math.max(20, weight - 1))}
             >
-              <label className="block text-gray-700 font-medium">
-                {item.label}
-              </label>
-              <div className="flex justify-between items-center gap-2">
-                <button
-                  type="button"
-                  className="w-8 h-8 bg-gray-100 border hover:bg-gray-200"
-                  onClick={() => item.setter(item.value - 1)}
-                >
-                  -
-                </button>
-                <input
-                  type="number"
-                  min={item.min}
-                  max={item.max}
-                  value={item.value}
-                  onChange={(e) => item.setter(parseInt(e.target.value))}
-                  className="w-full border border-gray-200 p-1 text-center"
-                />
-                <button
-                  type="button"
-                  className="w-8 h-8 bg-gray-100 border hover:bg-gray-200"
-                  onClick={() => item.setter(item.value + 1)}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          ))}
+              -
+            </button>
+            <input
+              type="number"
+              min={20}
+              max={300}
+              value={weight}
+              onChange={(e) => setWeight(parseInt(e.target.value) || 70)}
+              className="w-full border border-gray-200 p-1 text-center"
+            />
+            <button
+              type="button"
+              className="w-8 h-8 bg-gray-100 border hover:bg-gray-200"
+              onClick={() => setWeight(weight + 1)}
+            >
+              +
+            </button>
+          </div>
         </div>
 
         {/* Buttons */}
         <div className="flex gap-4">
           <button
             type="button"
-            onClick={calculateRisk}
+            onClick={calculateBMI}
             className="flex-1 bg-blue-600 text-white py-3 font-semibold hover:bg-blue-700 transition shadow-sm"
           >
-            Hitung Risiko
+            Hitung BMI
           </button>
           <button
             type="button"
@@ -164,19 +116,22 @@ export default function BloodGlucoseCalc() {
         </div>
 
         {/* Result */}
-        {risk && bmi && (
-          <div className="border border-gray-200 shadow-sm p-6 mt-4 bg-green-50 text-green-800">
-            <h3 className="font-bold text-lg mb-2">Hasil Risiko</h3>
-            <p className="text-xl font-semibold">{risk}</p>
+        {bmi !== null && category && (
+          <div className="border border-gray-200 shadow-sm p-6 mt-4 bg-blue-50 text-blue-800">
+            <h3 className="font-bold text-lg mb-2">Hasil BMI Anda</h3>
+            <p className="text-2xl font-bold">{bmi}</p>
             <p className="mt-2">
-              BMI: <strong>{bmi}</strong> ({getBMICategory(bmi)})
+              Kategori: <strong>{category}</strong>
             </p>
             <button
               type="button"
-              onClick={() => setRisk(null)}
+              onClick={() => {
+                setBmi(null);
+                setCategory(null);
+              }}
               className="mt-4 bg-blue-600 text-white py-2 px-4 font-medium hover:bg-blue-700 transition shadow-sm"
             >
-              Hitung Lagi
+              Hitung Ulang
             </button>
           </div>
         )}
@@ -184,34 +139,51 @@ export default function BloodGlucoseCalc() {
 
       {/* Right Column: Info / Doodle */}
       <section className="hidden lg:flex flex-col border border-gray-200 shadow-sm p-6 bg-gray-50 space-y-4">
-        <h2 className="text-xl font-bold text-gray-800">Tentang BMI</h2>
+        <h2 className="text-xl font-bold text-gray-800">
+          Tentang BMI (Body Mass Index)
+        </h2>
         <p className="text-gray-700">
-          BMI (Body Mass Index) digunakan untuk mengukur apakah berat badan Anda
-          proporsional dengan tinggi badan.
+          BMI adalah ukuran sederhana yang diperkenalkan oleh{" "}
+          <strong>Adolphe Quetelet</strong>, seorang statistikawan Belgia, pada
+          tahun 1830-an. Karena itu, BMI juga dikenal sebagai{" "}
+          <em>Quetelet Index</em>.
+        </p>
+        <p className="text-gray-700">
+          Pada abad ke-20, <strong>Organisasi Kesehatan Dunia (WHO)</strong>{" "}
+          mengadopsi BMI sebagai standar internasional untuk mengklasifikasikan
+          status gizi orang dewasa.
+        </p>
+        <p className="text-gray-700">
+          Rumus BMI:
+          <br />
+          <code className="font-mono bg-gray-100 px-2 py-1 rounded">
+            BMI = berat (kg) / [tinggi (m)]²
+          </code>
         </p>
         <ul className="list-disc list-inside text-gray-700 space-y-1">
           <li>
-            <strong>Kurus:</strong> BMI &lt; 18.5
+            <strong>Kurus (Underweight):</strong> BMI {"<"} 18.5
           </li>
           <li>
-            <strong>Normal:</strong> BMI 18.5 - 24.9
+            <strong>Normal (Healthy Weight):</strong> BMI 18.5 – 24.9
           </li>
           <li>
-            <strong>Gemuk:</strong> BMI 25 - 29.9
+            <strong>Gemuk (Overweight):</strong> BMI 25 – 29.9
           </li>
           <li>
-            <strong>Obesitas:</strong> BMI ≥ 30
+            <strong>Obesitas (Obese):</strong> BMI ≥ 30
           </li>
         </ul>
-        <p className="text-gray-700">
-          Gunakan kalkulator di kiri untuk menghitung BMI dan risiko Anda
-          berdasarkan usia, berat, dan tinggi badan.
+        <p className="text-gray-700 text-sm italic">
+          Catatan: BMI tidak membedakan antara massa otot, lemak, atau
+          distribusi lemak tubuh. Oleh karena itu, hasilnya mungkin kurang
+          akurat untuk atlet, lansia, atau wanita hamil.
         </p>
         <div className="flex justify-center mt-4">
           <img
             src="https://img.freepik.com/vektor-premium/indeks-massa-tubuh-konsep-penurunan-berat-badan-skala-bmi-sebelum-dan-sesudah-diet-dan-kebugaran-gaya-hidup-sehat-ilustrasi-vektor_476325-1424.jpg"
-            alt="BMI Illustration"
-            className="w-3/4 h-auto"
+            alt="Ilustrasi BMI"
+            className="w-3/4 h-auto object-contain"
           />
         </div>
       </section>
