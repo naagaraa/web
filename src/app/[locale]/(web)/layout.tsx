@@ -1,13 +1,15 @@
+// src/app/[locale]/(web)/layout.tsx
 import type { Metadata } from "next";
 import "../../favicon.ico";
 import "../../globals.css";
 import Header from "@/src/components/layout/Header";
 import { Hanken_Grotesk } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import Footer from "@/src/components/ui/footer";
 import { notFound } from "next/navigation";
 import { routing } from "@/src/i18n/routing";
-import Footer from "@/src/components/ui/footer";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "My PWA App",
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0f172a", // ✅ Taruh di sini!
+  themeColor: "#0f172a",
 };
 
 const hanken = Hanken_Grotesk({
@@ -36,14 +38,19 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
+
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
     notFound();
   }
+
+  // ✅ Load messages for the current locale
+  const messages = await getMessages();
 
   return (
     <html lang={locale}>
       <body className={hanken.className}>
-        <NextIntlClientProvider>
+        {/* ✅ Wrap everything that might use next-intl hooks in Client Components */}
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <Header />
           <main className="justify-center min-h-screen gap-10">
             <Toaster position="top-center" />

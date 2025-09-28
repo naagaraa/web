@@ -1,0 +1,16 @@
+{
+  "title": "Diabetes Risk Calculator",
+  "description": "Estimate your risk of type 2 diabetes based on your age, weight, activity, and family history.",
+  "age": "Age",
+  "weight": "Weight (kg)",
+  "familyHistory": "Family history of diabetes",
+  "physicalActivity": "Physically active (3+ times/week)",
+  "yes": "Yes",
+  "no": "No",
+  "calculate": "Calculate",
+  "result": "Your estimated diabetes risk is:",
+  "low": "Low",
+  "moderate": "Moderate",
+  "high": "High",
+  "language": "Language"
+}

@@ -1,3 +1,14 @@
+import React from "react";
+
+interface Props {
+  id: string;
+  icon: React.ReactNode;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  isMobile?: boolean;
+}
+
 const CategoryButton = ({
   id,
   icon,
@@ -7,10 +18,10 @@ const CategoryButton = ({
   isMobile = false,
 }: Props) => {
   const baseStyle =
-    "flex items-center justify-center p-2 rounded transition-all";
+    "flex items-center justify-center p-2 rounded transition-all duration-200";
   const activeStyle = active
-    ? "bg-blue-100 text-blue-600 scale-105"
-    : "hover:bg-gray-100 text-gray-600";
+    ? "bg-indigo-100 text-indigo-600 scale-105 shadow-sm"
+    : "hover:bg-indigo-50 text-gray-600";
 
   return (
     <button
@@ -19,21 +30,12 @@ const CategoryButton = ({
         isMobile ? "flex-col gap-1 w-16 h-16 text-center" : ""
       }`}
     >
-      <div className="w-5 h-5 flex items-center justify-center">{icon}</div>
+      <div className="w-6 h-6 flex items-center justify-center">{icon}</div>
       {isMobile && (
-        <span className="text-[10px] leading-tight min-h-6 truncate">
-          {label}
-        </span>
+        <span className="text-xs leading-tight truncate mt-1">{label}</span>
       )}
     </button>
   );
 };
-interface Props {
-  id: string;
-  icon: React.ReactNode;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  isMobile?: boolean;
-}
+
 export default CategoryButton;

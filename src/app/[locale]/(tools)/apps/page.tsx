@@ -33,16 +33,6 @@ import {
   ListOrdered,
 } from "lucide-react";
 
-export default function page() {
-  return (
-    <>
-      <main className="bg-white">
-        <ProductivityTools />
-      </main>
-    </>
-  );
-}
-
 interface Tool {
   id: number;
   name: string;
@@ -264,102 +254,93 @@ const tools: Tool[] = [
   },
 ];
 
-const categories = Array.from(new Set(tools.map((tool) => tool.category)));
+// Kelompokkan tools berdasarkan kategori
+const groupToolsByCategory = (tools: typeof tools) => {
+  const grouped: Record<string, typeof tools> = {};
+  tools.forEach((tool: { category: string | number }) => {
+    if (!grouped[tool.category]) {
+      grouped[tool.category] = [];
+    }
+    grouped[tool.category].push(tool);
+  });
+  return grouped;
+};
 
-function ProductivityTools() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+const groupedTools = groupToolsByCategory(tools);
+const categories = Object.keys(groupedTools);
 
-  const filteredTools = selectedCategory
-    ? tools.filter((tool) => tool.category === selectedCategory)
-    : tools;
-
+// --- Komponen Tool Card ---
+function ToolCard({ tool }: { tool: (typeof tools)[0] }) {
   return (
-    <section className="bg-white py-20">
-      <div className="container mx-auto px-6">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Alat Produktivitas
-          </h2>
-          <p className="text-gray-500 mt-2 text-sm md:text-base">
-            Jelajahi alat digital kami untuk mendukung kesehatan dan efisiensi
-            kerja.
-            <Link
-              prefetch
-              href="/"
-              className="ml-2 text-blue-600 hover:underline"
-            >
-              Kembali Ke Home
-            </Link>
-          </p>
+    <Link href={`/apps/${tool.slug}`} className="shrink-0 w-48">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 bg-gray-100 p-2.5 rounded-lg text-gray-700">
+            {tool.icon}
+          </div>
+          <div className="min-w-0 flex-grow">
+            <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+              {tool.name}
+            </h3>
+            <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+              {tool.description}
+            </p>
+          </div>
         </div>
+      </div>
+    </Link>
+  );
+}
 
-        {/* Kategori */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <CategoryButton
-            label="Semua"
-            active={!selectedCategory}
-            onClick={() => setSelectedCategory(null)}
-          />
-          {categories.map((cat) => (
-            <CategoryButton
-              key={cat}
-              label={cat}
-              active={selectedCategory === cat}
-              onClick={() => setSelectedCategory(cat)}
-            />
-          ))}
-        </div>
-
-        {/* Tools */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredTools.map((tool) => (
-            <Link key={tool.id} href={`/apps/${tool.slug}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                viewport={{ once: true }}
-                className="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="bg-gray-100 p-2 rounded-lg">{tool.icon}</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-base">
-                      {tool.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1 break-words line-clamp-2 md:line-clamp-3">
-                      {tool.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
+// --- Komponen Horizontal Scroll Section ---
+function CategorySection({
+  title,
+  tools,
+}: {
+  title: string;
+  tools: (typeof groupedTools)[string];
+}) {
+  return (
+    <section className="mb-10">
+      <h2 className="text-xl font-bold text-gray-900 mb-4 px-4">{title}</h2>
+      <div className="flex overflow-x-auto hide-scrollbar px-4 gap-4 pb-2">
+        {tools.map((tool: Tool) => (
+          <ToolCard key={tool.id} tool={tool} />
+        ))}
       </div>
     </section>
   );
 }
 
-function CategoryButton({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
+// --- Halaman Utama ---
+export default function page() {
   return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 text-sm rounded-full transition font-medium ${
-        active
-          ? "bg-blue-600 text-white shadow"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      }`}
-    >
-      {label}
-    </button>
+    <main className="bg-gray-50 min-h-screen pb-16">
+      <div className="pt-6 pb-4 text-start">
+        <h1 className="text-2xl font-bold text-gray-900 px-4">
+          Alat Produktivitas
+        </h1>
+        <p className="text-gray-600 text-sm mt-1 px-4">
+          Jelajahi alat digital untuk kesehatan & efisiensi kerja.
+          <Link
+            href="/"
+            className="ml-1 text-blue-600 font-medium hover:underline"
+          >
+            Kembali ke Home
+          </Link>
+        </p>
+      </div>
+
+      <div className="space-y-8">
+        {/* Tampilkan semua kategori */}
+        {categories.map((category) => (
+          <CategorySection
+            key={category}
+            title={category}
+            tools={groupedTools[category]}
+          />
+        ))}
+      </div>
+    </main>
   );
 }

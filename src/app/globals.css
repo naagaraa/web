@@ -9,3 +9,17 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome/Safari/Webkit */
 }
+
+
+
+/* Hanya sembunyikan scrollbar di mobile & tablet (≤768px) */
+@media (max-width: 768px) {
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+  }
+}
