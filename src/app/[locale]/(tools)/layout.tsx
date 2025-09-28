@@ -10,19 +10,25 @@ import Header from "./Header";
 import Sidebar from "./editor/Sidebar";
 import CategoryButton from "./editor/CategoryButton";
 import PageTransition from "./PageTransition";
+import { useRouter } from "next/navigation";
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  const router = useRouter();
   const [active, setActive] = useState<string | null>(null);
-  const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [bottomNavHeight, setBottomNavHeight] = useState(0);
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
 
-  const handleCategoryClick = (id: string) => {
-    setActive((prev) => (prev === id ? null : id));
+  const handleCategoryClick = (catId: string, slug?: string) => {
+    if (slug) {
+      // Jika kategori memiliki slug (misal Home), langsung redirect
+      router.push(`/${slug}`);
+    } else {
+      setActive((prev) => (prev === catId ? null : catId));
+    }
   };
 
   useEffect(() => {
@@ -48,6 +54,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <div className="flex flex-col h-full md:flex-row">
             <Sidebar active={active} handleClick={handleCategoryClick} />
 
+            {/* Desktop Tools Sidebar */}
             {active && (
               <div className="hidden md:block w-[240px] bg-gray-100 border-r border-gray-200 p-4 transition-all duration-200 ease-in-out">
                 <RenderTools category={active} />
@@ -77,14 +84,15 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     icon={cat.icon}
                     label={cat.label}
                     active={active === cat.id}
-                    onClick={() => handleCategoryClick(cat.id)}
+                    onClick={() => handleCategoryClick(cat.id, cat.slug)}
                     isMobile
                   />
                 </div>
               ))}
             </div>
 
-            {active && (
+            {/* Mobile Tools */}
+            {active && categories.find((c) => c.id === active)?.tools && (
               <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
                 <RenderToolsMobile category={active} />
               </div>

@@ -1,130 +1,131 @@
 "use client";
 
-import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-const translations = {
-  en: {
-    title: "Water Intake Calculator",
-    description: "Calculate how much water you should drink daily.",
-    weight: "Weight (kg)",
-    activity: "Activity Level",
-    low: "Low (little to no exercise)",
-    moderate: "Moderate (some exercise)",
-    high: "High (intense workouts or heat)",
-    calculate: "Calculate Water Needs",
-    result: "Recommended water intake:",
-    liter: "liters/day",
-    language: "Language",
-  },
-  id: {
-    title: "Kalkulator Air Minum",
-    description: "Hitung jumlah air minum harian yang Anda butuhkan.",
-    weight: "Berat Badan (kg)",
-    activity: "Tingkat Aktivitas",
-    low: "Rendah (jarang berolahraga)",
-    moderate: "Sedang (olahraga ringan)",
-    high: "Tinggi (olahraga berat atau cuaca panas)",
-    calculate: "Hitung Kebutuhan Air",
-    result: "Kebutuhan air minum harian:",
-    liter: "liter/hari",
-    language: "Bahasa",
-  },
-};
+const activityLevels = [
+  { id: "sedentary", label: "Jarang bergerak", factor: 1 },
+  { id: "light", label: "Aktivitas ringan (1-3x/minggu)", factor: 1.1 },
+  { id: "moderate", label: "Aktivitas sedang (3-5x/minggu)", factor: 1.2 },
+  { id: "active", label: "Aktivitas tinggi (6-7x/minggu)", factor: 1.3 },
+];
 
-type ActivityLevel = "low" | "moderate" | "high";
-
-export default function WaterCalculator() {
-  const searchParams = useSearchParams();
-  const initialLocale = searchParams.get("locale") === "id" ? "id" : "en";
-  const [locale, setLocale] = useState<"en" | "id">(initialLocale);
-  const t = translations[locale];
-
+export default function WaterIntakeCalculator() {
   const [weight, setWeight] = useState(70);
-  const [activity, setActivity] = useState<ActivityLevel>("moderate");
-  const [waterNeed, setWaterNeed] = useState<number | null>(null);
+  const [activity, setActivity] = useState("moderate");
+  const [goal, setGoal] = useState<"normal" | "intense">("normal");
+  const [result, setResult] = useState<number | null>(null);
 
-  const calculateWater = (e: React.FormEvent) => {
-    e.preventDefault();
+  const calculate = () => {
+    const baseIntake = weight * 35; // 35 ml per kg berat badan
+    const selectedActivity = activityLevels.find((a) => a.id === activity);
+    let total = baseIntake * (selectedActivity?.factor || 1);
+    if (goal === "intense") total *= 1.2; // tambahan untuk olahraga intens
 
-    let multiplier = 0.033;
-    if (activity === "moderate") multiplier = 0.04;
-    else if (activity === "high") multiplier = 0.05;
-
-    const result = weight * multiplier;
-    setWaterNeed(Math.round(result * 100) / 100); // round to 2 decimal places
+    setResult(Math.round(total) / 1000); // konversi ml -> liter
   };
 
   return (
-    <main className="max-w-xl mx-auto p-4 space-y-4 mt-24">
-      <header className="flex flex-col gap-2 mb-6">
-        <h1 className="text-2xl font-bold text-center sm:text-left">
-          {t.title}
-        </h1>
-        <p className="text-gray-600 text-sm text-center sm:text-left">
-          {t.description}
-        </p>
-      </header>
-
-      <div className="flex justify-end items-center mb-4">
-        <label htmlFor="locale-select" className="text-sm font-medium mr-2">
-          {t.language}
-        </label>
-        <select
-          id="locale-select"
-          value={locale}
-          onChange={(e) => setLocale(e.target.value as "en" | "id")}
-          className="border rounded p-1 text-sm"
-        >
-          <option value="en">EN</option>
-          <option value="id">ID</option>
-        </select>
-      </div>
-
-      <form onSubmit={calculateWater} className="grid gap-4">
-        <div className="flex flex-col">
-          <label htmlFor="weight" className="mb-1 text-sm font-medium">
-            {t.weight}
-          </label>
+    <main className="max-w-7xl mx-auto mt-12 px-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Left Column: Form */}
+      <section className="space-y-6">
+        <div className="border border-gray-200 shadow-sm p-4 space-y-2">
+          <label className="block font-medium">Berat Badan (kg)</label>
           <input
-            id="weight"
             type="number"
+            min={20}
+            max={300}
             value={weight}
             onChange={(e) => setWeight(Number(e.target.value))}
-            required
-            className="w-full border rounded p-2"
+            className="w-full border p-2"
           />
         </div>
 
-        <div className="flex flex-col">
-          <label htmlFor="activity" className="mb-1 text-sm font-medium">
-            {t.activity}
-          </label>
+        <div className="border border-gray-200 shadow-sm p-4 space-y-2">
+          <label className="block font-medium">Tingkat Aktivitas Fisik</label>
           <select
-            id="activity"
             value={activity}
-            onChange={(e) => setActivity(e.target.value as ActivityLevel)}
-            className="w-full border rounded p-2"
+            onChange={(e) => setActivity(e.target.value)}
+            className="w-full border p-2"
           >
-            <option value="low">{t.low}</option>
-            <option value="moderate">{t.moderate}</option>
-            <option value="high">{t.high}</option>
+            {activityLevels.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition-colors w-full"
-        >
-          {t.calculate}
-        </button>
-      </form>
-
-      {waterNeed && (
-        <div className="p-4 bg-blue-100 text-blue-800 rounded text-center">
-          {t.result} <strong>{waterNeed}</strong> {t.liter}
+        <div className="border border-gray-200 shadow-sm p-4 space-y-2">
+          <label className="block font-medium">Tujuan</label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setGoal("normal")}
+              className={`py-2 font-medium rounded ${
+                goal === "normal"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Normal
+            </button>
+            <button
+              type="button"
+              onClick={() => setGoal("intense")}
+              className={`py-2 font-medium rounded ${
+                goal === "intense"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Olahraga Intens
+            </button>
+          </div>
         </div>
-      )}
+
+        <button
+          type="button"
+          onClick={calculate}
+          className="w-full bg-blue-600 text-white py-3 font-semibold hover:bg-blue-700"
+        >
+          Hitung Kebutuhan Air
+        </button>
+
+        {result !== null && (
+          <div className="border border-gray-200 shadow-sm p-6 mt-4 bg-blue-50 text-blue-800 space-y-3">
+            <h3 className="font-bold text-lg">Hasil Perhitungan</h3>
+            <p>
+              💧 Kebutuhan air harian Anda sekitar{" "}
+              <strong>{result} liter</strong>.
+            </p>
+            <p>
+              Rekomendasi: Minum secara bertahap sepanjang hari, misal 8 gelas
+              (~250ml per gelas).
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* Right Column: Info */}
+      <section className="hidden lg:flex flex-col border border-gray-200 shadow-sm p-6 bg-gray-50 space-y-4">
+        <h2 className="text-xl font-bold text-gray-800">
+          Tentang Kebutuhan Air Harian
+        </h2>
+        <p>
+          Tubuh manusia memerlukan cukup cairan untuk menjaga fungsi organ,
+          metabolisme, dan suhu tubuh.
+        </p>
+        <p>Aturan umum:</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>35 ml air per kg berat badan.</li>
+          <li>Tambahan jika olahraga atau aktivitas berat.</li>
+          <li>Minum secara berkala, bukan sekaligus banyak.</li>
+        </ul>
+        <p className="text-sm italic text-gray-600">
+          ⚠️ Catatan: Kalkulator ini bersifat edukasi. Kondisi khusus (hamil,
+          penyakit ginjal, jantung) mungkin memerlukan konsultasi dokter.
+        </p>
+      </section>
     </main>
   );
 }

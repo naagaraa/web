@@ -72,14 +72,6 @@ const tools: Tool[] = [
     category: "Calculator",
   },
   {
-    id: 4,
-    name: "Calorie",
-    slug: "calculator/calorie",
-    description: "Menghitung konsumsi dan kebutuhan kalori harian.",
-    icon: <Utensils className="w-6 h-6 text-yellow-600" />,
-    category: "Calculator",
-  },
-  {
     id: 5,
     name: "Macronutrient",
     slug: "calculator/macronutrient",

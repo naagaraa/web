@@ -1,25 +1,40 @@
-// app/page.tsx
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import { Suspense } from "react";
 import VLSMCalculator from "./VLSMCalculator";
-import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Network Tools | IP & Subnet Calculator, VLSM, DNS, WHOIS",
-  description:
-    "Kumpulan alat jaringan seperti IP calculator, VLSM, DNS Lookup, WHOIS dan lainnya.",
-};
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const locale = searchParams?.locale === "id" ? "id" : "en";
 
-export default function VLSMPage() {
+  const title =
+    locale === "id"
+      ? "Kalkulator Vitamin & Suplemen"
+      : "Vitamin & Supplement Calculator";
+  const description =
+    locale === "id"
+      ? "Perkirakan kebutuhan harian vitamin dan mineral Anda berdasarkan usia, jenis kelamin, dan kondisi kesehatan."
+      : "Estimate your daily vitamin and mineral needs based on age, gender, and health conditions.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      "vitamin calculator",
+      "kebutuhan vitamin",
+      "suplemen harian",
+      "diet vegan",
+      "vitamin ibu hamil",
+    ],
+    openGraph: { title, description, type: "website" },
+  };
+}
+
+export default function Page() {
   return (
-    <>
-      <Link
-        prefetch
-        href="/apps"
-        className="block mt-20 mx-auto text-blue-600 hover:underline text-sm text-center"
-      >
-        ← Kembali ke Aplikasi
-      </Link>
+    <Suspense fallback={<div>Loading...</div>}>
       <VLSMCalculator />
-    </>
+    </Suspense>
   );
 }

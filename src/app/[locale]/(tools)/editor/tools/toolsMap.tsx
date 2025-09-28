@@ -29,6 +29,7 @@ import {
   AlarmClock,
   Hourglass,
   TimerReset,
+  House,
 } from "lucide-react";
 
 export type ToolItem = {
@@ -42,12 +43,19 @@ export type Category = {
   id: string;
   label: string;
   icon: React.ReactNode;
-  tools: ToolItem[];
+  slug?: string;
+  tools?: ToolItem[];
 };
 
 const ICON_COLOR = "text-indigo-500"; // Modern single color
 
 export const categories: Category[] = [
+  {
+    id: "Home",
+    label: "Home",
+    icon: <House className={`w-5 h-5 ${ICON_COLOR}`} />,
+    slug: "apps",
+  },
   {
     id: "calculator",
     label: "Calculator",
@@ -60,24 +68,18 @@ export const categories: Category[] = [
         icon: <Droplet className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
-        name: "BMI",
+        name: "Body Mass Index",
         slug: "apps/calculator/bmi",
         description:
           "Menghitung Body Mass Index berdasarkan tinggi dan berat badan.",
         icon: <Activity className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
-        name: "BMR",
+        name: "Basal Metabolic Rate",
         slug: "apps/calculator/bmr",
         description:
           "Mengukur kebutuhan kalori harian Anda dalam keadaan istirahat.",
         icon: <HeartPulse className={`w-5 h-5 ${ICON_COLOR}`} />,
-      },
-      {
-        name: "Calorie",
-        slug: "apps/calculator/calorie",
-        description: "Menghitung konsumsi dan kebutuhan kalori harian.",
-        icon: <Utensils className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
         name: "Macronutrient",
@@ -96,6 +98,13 @@ export const categories: Category[] = [
         slug: "apps/calculator/sleep-time",
         description: "Rencanakan waktu tidur yang optimal untuk produktivitas.",
         icon: <BedDouble className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "Water Intake",
+        slug: "apps/calculator/water",
+        description:
+          "Hitung kebutuhan asupan air harian berdasarkan berat badan.",
+        icon: <Droplet className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
         name: "Vitamins",

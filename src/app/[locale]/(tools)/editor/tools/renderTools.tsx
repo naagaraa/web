@@ -4,14 +4,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { categories } from "./toolsMap";
 
-export function RenderTools({ category }: { category: string }) {
+interface RenderToolsProps {
+  category: string;
+}
+
+export function RenderTools({ category }: RenderToolsProps) {
   const pathname = usePathname();
-  const tools = categories.find((cat) => cat.id === category)?.tools;
+
+  const cat = categories.find((c) => c.id === category);
+  const tools = cat?.tools;
 
   if (!tools || tools.length === 0) {
     return (
       <p className="text-sm text-gray-500 px-3 py-2">
-        Tidak ada tools tersedia.
+        {cat?.slug
+          ? "Kategori ini bisa langsung diakses."
+          : "Tidak ada tools tersedia."}
       </p>
     );
   }
@@ -33,7 +41,7 @@ export function RenderTools({ category }: { category: string }) {
                   : "hover:bg-gray-100 text-gray-700"
               }`}
             >
-              <span className="w-5 h-5">{tool.icon}</span>
+              <span className="w-5 h-5 flex-shrink-0">{tool.icon}</span>
               <span>{tool.name}</span>
             </Link>
           </li>
