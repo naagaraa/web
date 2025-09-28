@@ -2,11 +2,9 @@ import { Metadata } from "next";
 import BMICalculator from "./BMICalculator";
 import { Suspense } from "react";
 
-export async function generateMetadata(
-  props: {
-    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
   const searchParams = await props.searchParams;
   const locale = searchParams?.locale === "id" ? "id" : "en";
 

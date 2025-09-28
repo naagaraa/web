@@ -1,25 +1,41 @@
-// app/page.tsx
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import ConversionTools from "./ConversionTools";
-import Link from "next/link";
+import { Suspense } from "react";
 
-export const metadata: Metadata = {
-  title: "Network Tools | IP & Subnet Calculator, VLSM, DNS, WHOIS",
-  description:
-    "Kumpulan alat jaringan seperti IP calculator, VLSM, DNS Lookup, WHOIS dan lainnya.",
-};
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const locale = searchParams?.locale === "id" ? "id" : "en";
 
-export default function page() {
+  const title = locale === "id" ? "Kalkulator BMR" : "BMR Calculator";
+  const description =
+    locale === "id"
+      ? "Hitung BMR (Basal Metabolic Rate) Anda untuk mengetahui kebutuhan kalori saat istirahat total."
+      : "Calculate your BMR (Basal Metabolic Rate) to know how many calories your body needs at rest.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      "BMR calculator",
+      "kalkulator BMR",
+      "basal metabolic rate",
+      "kalori istirahat",
+      "diet",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+  };
+}
+
+export default function Page() {
   return (
-    <>
-      <Link
-        prefetch
-        href="/apps"
-        className="block mt-20 mx-auto text-blue-600 hover:underline text-sm text-center"
-      >
-        ← Kembali ke Aplikasi
-      </Link>
+    <Suspense fallback={<div>Loading...</div>}>
       <ConversionTools />
-    </>
+    </Suspense>
   );
 }
