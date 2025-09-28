@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
@@ -13,12 +13,13 @@ import { PaidProjectItems } from "@/data/PaidProject";
 import { paidProjectModel } from "@/types/model/paid.project";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default function PaidProjectDetailPage({ params }: Props) {
+export default function PaidProjectDetailPage(props: Props) {
+  const params = use(props.params);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<paidProjectModel | null>(null);
   const router = useRouter();

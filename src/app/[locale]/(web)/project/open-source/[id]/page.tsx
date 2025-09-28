@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { notFound } from "next/navigation";
 import { OpenSourceProject } from "@/data/OpenSourceProject";
 import Image from "next/image";
@@ -11,12 +11,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { motion } from "framer-motion";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default function ProjectDetailPage({ params }: Props) {
+export default function ProjectDetailPage(props: Props) {
+  const params = use(props.params);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<any>(null);
 

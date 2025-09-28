@@ -21,7 +21,7 @@ const CategoryButton = ({
     >
       <div className="w-5 h-5 flex items-center justify-center">{icon}</div>
       {isMobile && (
-        <span className="text-[10px] leading-tight min-h-[1.5rem] truncate">
+        <span className="text-[10px] leading-tight min-h-6 truncate">
           {label}
         </span>
       )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { notFound } from "next/navigation";
 import { EducationProjectItems } from "@/data/EducationProject";
 import Image from "next/image";
@@ -12,12 +12,13 @@ import { motion } from "framer-motion";
 import NavTabs from "@/src/components/layout/NavTabs";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default function ProjectDetailPage({ params }: Props) {
+export default function ProjectDetailPage(props: Props) {
+  const params = use(props.params);
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<any>(null);
 

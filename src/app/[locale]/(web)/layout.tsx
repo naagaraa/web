@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import "../../favicon.ico";
 import "../../globals.css";
-import "swiper/css";
-import "react-loading-skeleton/dist/skeleton.css";
 import Header from "@/src/components/layout/Header";
-import { SkeletonTheme } from "react-loading-skeleton";
 import { Hanken_Grotesk } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
@@ -48,12 +45,10 @@ export default async function RootLayout({
       <body className={hanken.className}>
         <NextIntlClientProvider>
           <Header />
-          <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
-            <main className="justify-center min-h-screen gap-10">
-              <Toaster position="top-center" />
-              {children}
-            </main>
-          </SkeletonTheme>
+          <main className="justify-center min-h-screen gap-10">
+            <Toaster position="top-center" />
+            {children}
+          </main>
           <Footer />
         </NextIntlClientProvider>
       </body>

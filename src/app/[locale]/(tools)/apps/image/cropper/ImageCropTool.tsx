@@ -108,7 +108,7 @@ export default function ImageCropTool() {
             </select>
           </div>
 
-          <div className="relative w-full aspect-[4/3] bg-gray-200 mt-4 rounded overflow-hidden">
+          <div className="relative w-full aspect-4/3 bg-gray-200 mt-4 rounded overflow-hidden">
             <Cropper
               image={image}
               crop={crop}

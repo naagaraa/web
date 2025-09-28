@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client";
 
-import "react-loading-skeleton/dist/skeleton.css";
 import Footer from "@/src/components/layout/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";

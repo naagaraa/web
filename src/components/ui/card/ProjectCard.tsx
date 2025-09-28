@@ -30,7 +30,7 @@ const ProjectCard: React.FC<Props> = ({
   return (
     <div className="group relative rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl bg-white">
       <Link href={`/${projectdir}/${id}`}>
-        <div className="w-full aspect-[4/3] relative cursor-pointer">
+        <div className="w-full aspect-4/3 relative cursor-pointer">
           <Image
             src={image}
             alt={title}

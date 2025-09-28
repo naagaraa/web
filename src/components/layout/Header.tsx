@@ -123,7 +123,7 @@ export function List({
         </button>
 
         {open && (
-          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-[36rem] rounded-lg border border-gray-200 bg-white shadow-xl animate-fadeIn">
+          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-xl rounded-lg border border-gray-200 bg-white shadow-xl animate-fadeIn">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6 p-6">
               {children.map((section, idx) => (
                 <section key={idx}>
@@ -319,7 +319,7 @@ export default function Header() {
   return (
     <>
       <header className="bg-white fixed z-20 top-0 start-0 border-b border-gray-200 w-full">
-        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-(--breakpoint-xl) px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="md:flex md:items-center md:gap-12">
               <Logo />

@@ -1,24 +1,12 @@
 // next.config.mjs
-
 import createNextIntlPlugin from "next-intl/plugin";
 import intlConfig from "./next-intl.config.mjs";
-import nextPWA from "next-pwa";
 
-// Plugin: Internationalization
 const withNextIntl = createNextIntlPlugin(intlConfig);
 
-// Plugin: Progressive Web App
-const withPWA = nextPWA({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development", // Disable in dev
-});
-
-// Your base config
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   compress: true,
-  swcMinify: true,
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -49,7 +37,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: true,
 };
 
-// ✅ Compose the plugins in the correct order
-export default withPWA(withNextIntl(nextConfig));
+export default withNextIntl(nextConfig);

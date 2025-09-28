@@ -7,7 +7,7 @@ export default function Heading({ name, title, stack }: HeadingProps) {
   const { isLoading } = useLoading(true, 500);
 
   return (
-    <section className="bg-gradient-to-b from-white to-gray-50">
+    <section className="bg-linear-to-b from-white to-gray-50">
       <div className="mx-auto max-w-7xl px-6 py-24 md:py-32">
         <div className="max-w-3xl mx-auto text-center">
           <motion.h1

@@ -2,11 +2,12 @@ import { Metadata } from "next";
 import VitaminCalculator from "./VitaminCalculator";
 import { Suspense } from "react";
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   const locale = searchParams?.locale === "id" ? "id" : "en";
 
   const title =
