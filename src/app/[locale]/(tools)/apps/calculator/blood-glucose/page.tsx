@@ -2,6 +2,8 @@
 import { Metadata } from "next";
 import BloodGlucoseCalc from "./BloodGlucoseCalc";
 import { Suspense } from "react";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
 // Metadata in Bahasa Indonesia only
 export const metadata: Metadata = {
@@ -19,7 +21,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Memuat...</div>}>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
       <BloodGlucoseCalc />
     </Suspense>
   );

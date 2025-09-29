@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 import SleepTimeCalc from "./SleepTimeCalc";
 import { Suspense } from "react";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
-export async function generateMetadata(
-  props: {
-    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
   const searchParams = await props.searchParams;
   const locale = searchParams?.locale === "id" ? "id" : "en";
 
@@ -33,7 +33,8 @@ export async function generateMetadata(
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
       <SleepTimeCalc />
     </Suspense>
   );

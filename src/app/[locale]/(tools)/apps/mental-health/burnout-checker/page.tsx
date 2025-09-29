@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 import DepressionQuizTwoColumn from "./components/BurnoutQuizTwoColumn";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -12,7 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Memuat...</div>}>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
       <DepressionQuizTwoColumn />
     </Suspense>
   );

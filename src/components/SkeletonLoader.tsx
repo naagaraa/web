@@ -12,16 +12,23 @@ const SkeletonLoader = ({ className }: SkeletonProps) => {
     <div
       className={`relative overflow-hidden bg-gray-200 rounded-xl ${className}`}
     >
-      {/* Shimmer effect */}
+      {/* Shimmer gradient */}
       <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "100%" }}
+        initial={{ x: "-50%" }}
+        animate={{ x: "150%" }}
         transition={{
           repeat: Infinity,
-          duration: 1.5,
+          duration: 6, // lebih panjang (6 detik)
           ease: "linear",
         }}
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-300/50 to-transparent"
+        className="
+          absolute inset-0
+          bg-gradient-to-r 
+          from-transparent 
+          via-gray-200/40 
+          to-transparent
+          w-1/2
+        "
       />
     </div>
   );

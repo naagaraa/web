@@ -2,12 +2,12 @@
 
 /* Hide scrollbar on mobile but still scrollable */
 .scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Webkit */
+  display: none; 
 }
 
 
@@ -15,11 +15,11 @@
 /* Hanya sembunyikan scrollbar di mobile & tablet (≤768px) */
 @media (max-width: 768px) {
   .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE/Edge */
-    scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;    
   }
 
   .hide-scrollbar::-webkit-scrollbar {
-    display: none;             /* Chrome, Safari, Opera */
-  }
+    display: none;       
+  }      
 }

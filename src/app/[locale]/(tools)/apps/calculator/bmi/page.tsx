@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import BMICalculator from "./BMICalculator";
 import { Suspense } from "react";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
 export async function generateMetadata(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -33,7 +35,8 @@ export async function generateMetadata(props: {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
       <BMICalculator />
     </Suspense>
   );

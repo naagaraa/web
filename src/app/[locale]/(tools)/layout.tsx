@@ -46,60 +46,56 @@ export default function AppLayout({ children }: AppLayoutProps) {
   }, []);
 
   return (
-    <html lang="en">
-      <body>
-        <main className="h-screen overflow-hidden bg-gray-50">
-          <Header />
+    <main className="h-screen overflow-hidden bg-gray-50">
+      <Header />
 
-          <div className="flex flex-col h-full md:flex-row">
-            <Sidebar active={active} handleClick={handleCategoryClick} />
+      <div className="flex flex-col h-full md:flex-row">
+        <Sidebar active={active} handleClick={handleCategoryClick} />
 
-            {/* Desktop Tools Sidebar */}
-            {active && (
-              <div className="hidden md:block w-[240px] bg-gray-100 border-r border-gray-200 p-4 transition-all duration-200 ease-in-out">
-                <RenderTools category={active} />
-              </div>
-            )}
-
-            <main
-              className="flex-1 bg-white overflow-auto p-4"
-              style={{ paddingBottom: bottomNavHeight }}
-            >
-              <div className="min-h-full">
-                <PageTransition>{children}</PageTransition>
-              </div>
-            </main>
+        {/* Desktop Tools Sidebar */}
+        {active && (
+          <div className="hidden md:block w-[240px] bg-gray-100 border-r border-gray-200 p-4 transition-all duration-200 ease-in-out">
+            <RenderTools category={active} />
           </div>
+        )}
 
-          {/* Mobile Bottom Bar */}
-          <div
-            ref={bottomNavRef}
-            className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50"
-          >
-            <div className="flex overflow-x-auto gap-2 px-3 py-2 border-b border-gray-200 scroll-smooth snap-x snap-mandatory scrollbar-hide">
-              {categories.map((cat) => (
-                <div key={cat.id} className="snap-start">
-                  <CategoryButton
-                    id={cat.id}
-                    icon={cat.icon}
-                    label={cat.label}
-                    active={active === cat.id}
-                    onClick={() => handleCategoryClick(cat.id, cat.slug)}
-                    isMobile
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Mobile Tools */}
-            {active && categories.find((c) => c.id === active)?.tools && (
-              <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
-                <RenderToolsMobile category={active} />
-              </div>
-            )}
+        <main
+          className="flex-1 bg-white overflow-auto p-4"
+          style={{ paddingBottom: bottomNavHeight }}
+        >
+          <div className="min-h-full">
+            <PageTransition>{children}</PageTransition>
           </div>
         </main>
-      </body>
-    </html>
+      </div>
+
+      {/* Mobile Bottom Bar */}
+      <div
+        ref={bottomNavRef}
+        className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50"
+      >
+        <div className="flex overflow-x-auto gap-2 px-3 py-2 border-b border-gray-200 scroll-smooth snap-x snap-mandatory scrollbar-hide">
+          {categories.map((cat) => (
+            <div key={cat.id} className="snap-start">
+              <CategoryButton
+                id={cat.id}
+                icon={cat.icon}
+                label={cat.label}
+                active={active === cat.id}
+                onClick={() => handleCategoryClick(cat.id, cat.slug)}
+                isMobile
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Tools */}
+        {active && categories.find((c) => c.id === active)?.tools && (
+          <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
+            <RenderToolsMobile category={active} />
+          </div>
+        )}
+      </div>
+    </main>
   );
 }

@@ -3,7 +3,6 @@ import {
   Droplet,
   Activity,
   HeartPulse,
-  Utensils,
   PieChart,
   Baby,
   BedDouble,
