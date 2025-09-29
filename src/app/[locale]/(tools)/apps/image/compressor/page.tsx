@@ -1,26 +1,43 @@
-// app/image/compressor/page.tsx
-import ImageCompressor from "./ImageCompressor";
-import Link from "next/link";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
+import CompressImages from "./ImageCompressor";
 
-import type { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Image Compressor | Kompres Gambar Online Cepat",
-  description:
-    "Kompres gambar JPEG secara online tanpa kehilangan kualitas. Atur kualitas gambar dan unduh hasil kompresi.",
-};
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const locale = searchParams?.locale === "id" ? "id" : "en";
+
+  const title = locale === "id" ? "Kalkulator BMI" : "BMI Calculator";
+  const description =
+    locale === "id"
+      ? "Hitung indeks massa tubuh (BMI) Anda dan ketahui apakah berat badan Anda ideal."
+      : "Calculate your Body Mass Index (BMI) and check if your weight is ideal.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      "BMI calculator",
+      "kalkulator BMI",
+      "ideal weight",
+      "body mass index",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+  };
+}
 
 export default function Page() {
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-24 space-y-6">
-      <Link
-        href="/apps"
-        className="text-blue-600 hover:underline block text-sm"
-        prefetch
-      >
-        ← Kembali ke Tools
-      </Link>
-
-      <ImageCompressor />
-    </div>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
+      <CompressImages />
+    </Suspense>
   );
 }

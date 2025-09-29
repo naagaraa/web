@@ -25,7 +25,7 @@ const categories = Object.keys(groupedTools);
 // --- Komponen Tool Card ---
 function ToolCard({ tool }: { tool: (typeof tools)[0] }) {
   return (
-    <Link href={`/apps/${tool.slug}`} className="shrink-0 w-48">
+    <Link href={`/apps/${tool.slug}`} className="shrink-0 w-80">
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 bg-gray-100 p-2.5 rounded-lg text-gray-700">
@@ -62,7 +62,7 @@ function CategorySection({
         slidesPerView={"auto"}
         className="px-4"
         // Jika mau pagination:
-        // pagination={{ clickable: true }}
+        pagination={{ clickable: true }}
         // modules={[Pagination]}
       >
         {tools.map((tool: ToolInterface) => (

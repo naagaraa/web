@@ -1,22 +1,43 @@
-import Link from "next/link";
-import ImageConverterTool from "./ImageConverter";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import BackButton from "@/src/components/BackButton";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
+import ImageConverter from "./ImageConverter";
 
-export const metadata = {
-  title: "Image Format Converter",
-  description: "Konversi gambar ke PNG, JPG, atau WebP secara online.",
-};
+export async function generateMetadata(props: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const locale = searchParams?.locale === "id" ? "id" : "en";
+
+  const title = locale === "id" ? "Kalkulator BMI" : "BMI Calculator";
+  const description =
+    locale === "id"
+      ? "Hitung indeks massa tubuh (BMI) Anda dan ketahui apakah berat badan Anda ideal."
+      : "Calculate your Body Mass Index (BMI) and check if your weight is ideal.";
+
+  return {
+    title,
+    description,
+    keywords: [
+      "BMI calculator",
+      "kalkulator BMI",
+      "ideal weight",
+      "body mass index",
+    ],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
+  };
+}
 
 export default function Page() {
   return (
-    <>
-      <Link
-        prefetch
-        href="/apps"
-        className="block mt-20 mx-auto text-blue-600 hover:underline text-sm text-center"
-      >
-        ← Kembali ke Aplikasi
-      </Link>
-      <ImageConverterTool />
-    </>
+    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
+      <BackButton />
+      <ImageConverter />
+    </Suspense>
   );
 }

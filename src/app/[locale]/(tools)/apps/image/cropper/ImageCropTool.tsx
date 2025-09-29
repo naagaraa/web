@@ -1,186 +1,249 @@
 "use client";
 
-import React, { useState, useCallback, useRef } from "react";
-import Cropper from "react-easy-crop";
+import React, { useState, useRef, useEffect } from "react";
+import ReactCrop, {
+  Crop,
+  PixelCrop,
+  centerCrop,
+  makeAspectCrop,
+} from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import toast from "react-hot-toast";
 
 export default function ImageCropTool() {
-  const [image, setImage] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [aspect, setAspect] = useState<number | undefined>(4 / 3);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [isCropping, setIsCropping] = useState(false);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
+  const [aspectPreset, setAspectPreset] = useState<string>("free");
 
-  const onCropComplete = useCallback(
-    (_croppedArea: any, croppedPixels: any) => {
-      setCroppedAreaPixels((prev: any) => {
-        if (
-          prev &&
-          prev.x === croppedPixels.x &&
-          prev.y === croppedPixels.y &&
-          prev.width === croppedPixels.width &&
-          prev.height === croppedPixels.height
-        ) {
-          return prev; // Tidak ada perubahan, hindari setState
-        }
-        return croppedPixels;
-      });
-    },
-    []
-  );
+  const imgRef = useRef<HTMLImageElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const resetAll = () => {
+    setImageSrc(null);
+    setIsCropping(false);
+    setCrop(undefined);
+    setCompletedCrop(null);
+    setAspectPreset("free");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      setImage(reader.result as string);
-      toast.success("Gambar berhasil diunggah");
+      setImageSrc(reader.result as string);
+      setIsCropping(true);
     };
     reader.readAsDataURL(file);
   };
 
-  const handleDownload = async () => {
-    if (!image || !croppedAreaPixels) return;
-    try {
-      const blob = await getCroppedImg(image, croppedAreaPixels);
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "cropped-image.png";
-      link.click();
-      toast.success("Gambar berhasil diunduh!");
-    } catch (err) {
-      toast.error("Gagal memproses gambar");
+  useEffect(() => {
+    if (isCropping && imageSrc && imgRef.current) {
+      const { width, height } = imgRef.current;
+      setCrop(
+        centerCrop(
+          { unit: "%", width: 70, height: 70, x: 15, y: 15 },
+          width,
+          height
+        )
+      );
     }
-  };
+  }, [isCropping, imageSrc]);
 
   const handlePresetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-
-    if (value === "free") {
-      setAspect(undefined);
-    } else {
-      const parts = value.includes("x") ? value.split("x") : value.split(":");
-      const [w, h] = parts.map(Number);
-
-      if (!isNaN(w) && !isNaN(h) && h !== 0) {
-        setAspect(w / h);
+    setAspectPreset(value);
+    if (imgRef.current && imageSrc) {
+      const { width, height } = imgRef.current;
+      if (value === "free") {
+        setCrop(
+          centerCrop(
+            { unit: "%", width: 70, height: 70, x: 15, y: 15 },
+            width,
+            height
+          )
+        );
       } else {
-        console.warn("Invalid aspect ratio value:", value);
-        setAspect(undefined); // fallback
+        const [w, h] = value.split(/[:x]/).map(Number);
+        const aspect = w / h;
+
+        // ✅ Buat crop dengan rasio tetap
+        const initialCrop = makeAspectCrop(
+          {
+            unit: "%",
+            width: 80, // lebar awal dalam persen
+          },
+          aspect,
+          width,
+          height
+        );
+
+        // ✅ Pusatkan crop di tengah gambar
+        const centeredCrop = centerCrop(initialCrop, width, height);
+        setCrop(centeredCrop);
       }
     }
   };
 
-  const handleAspectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value === "free") {
-      setAspect(undefined);
-    } else {
-      const [w, h] = value.split(":").map(Number);
-      setAspect(w / h);
+  const handleDownload = async () => {
+    if (!completedCrop || !imgRef.current || !imageSrc) {
+      toast.error("Pilih area crop terlebih dahulu");
+      return;
+    }
+
+    try {
+      const image = imgRef.current;
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = completedCrop.width;
+      canvas.height = completedCrop.height;
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) throw new Error("Gagal buat canvas");
+
+      ctx.drawImage(
+        image,
+        completedCrop.x * scaleX,
+        completedCrop.y * scaleY,
+        completedCrop.width * scaleX,
+        completedCrop.height * scaleY,
+        0,
+        0,
+        completedCrop.width,
+        completedCrop.height
+      );
+
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png", 1)
+      );
+
+      if (!blob) throw new Error("Gagal membuat gambar");
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "cropped-image.png";
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success("Gambar berhasil diunduh!");
+      resetAll();
+    } catch (err) {
+      console.error(err);
+      toast.error("Gagal memproses gambar");
     }
   };
 
   return (
-    <main className="max-w-3xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">Crop Gambar</h1>
-
-      <input
-        type="file"
-        accept="image/*"
-        ref={inputRef}
-        onChange={handleUpload}
-        className="block"
-      />
-
-      {image && (
-        <>
-          <div className="mt-4">
-            <label className="font-medium mr-2">Aspect Ratio:</label>
-            <select defaultValue="4x3" onChange={handlePresetChange}>
-              <option value="free">Free</option>
-              <option value="1x1">1:1 (Square)</option>
-              <option value="4x3">4:3</option>
-              <option value="3x4">3:4</option>
-              <option value="16x9">16:9</option>
-            </select>
+    <main className="min-h-screen bg-gray-50">
+      {/* Halaman Upload */}
+      {!isCropping && (
+        <div className="max-w-md mx-auto px-4 py-16 flex flex-col items-center">
+          <div className="text-center mb-10">
+            <h1 className="text-2xl font-bold text-gray-900">Crop Gambar</h1>
+            <p className="mt-2 text-gray-600">
+              Unggah gambar, pilih area, lalu unduh hasilnya.
+            </p>
           </div>
 
-          <div className="relative w-full aspect-4/3 bg-gray-200 mt-4 rounded overflow-hidden">
-            <Cropper
-              image={image}
-              crop={crop}
-              zoom={zoom}
-              aspect={aspect !== null ? aspect : undefined}
-              restrictPosition={false} // ← Tambahkan ini
-              onCropChange={setCrop}
-              onZoomChange={setZoom}
-              onCropComplete={onCropComplete}
-            />
-          </div>
-
-          <div className="space-y-4 mt-4">
-            <div>
-              <label className="block font-medium mb-1">Zoom:</label>
-              <input
-                type="range"
-                min={1}
-                max={3}
-                step={0.1}
-                value={zoom}
-                onChange={(e) => setZoom(parseFloat(e.target.value))}
-                className="w-full"
-              />
-            </div>
-            <button
-              onClick={handleDownload}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          <label className="w-full max-w-xs flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+            <svg
+              className="w-8 h-8 mb-2 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              Download Crop Result
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
+            </svg>
+            Pilih Gambar
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
+      )}
+
+      {/* Modal Cropping Fullscreen */}
+      {isCropping && imageSrc && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-black/20">
+          <div className="absolute inset-0 backdrop-blur-sm bg-black/10" />
+          <div className="relative w-full h-screen flex flex-col bg-white">
+            {/* Header */}
+            <div className="p-4 pb-2 flex justify-between items-center border-b border-gray-200">
+              <button
+                onClick={resetAll}
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
+                Batal
+              </button>
+              <span className="text-sm font-medium text-gray-800">
+                Crop Gambar
+              </span>
+              <button
+                onClick={handleDownload}
+                disabled={!completedCrop}
+                className={`text-sm font-medium ${
+                  !completedCrop ? "text-gray-400" : "text-blue-600"
+                }`}
+              >
+                Simpan
+              </button>
+            </div>
+
+            {/* Rasio */}
+            <div className="px-4 py-2 border-b border-gray-100">
+              <select
+                value={aspectPreset}
+                onChange={handlePresetChange}
+                className="w-full text-sm border border-gray-300 rounded px-2 py-1"
+              >
+                <option value="free">Bebas</option>
+                <option value="1x1">1:1 (Kotak)</option>
+                <option value="4x3">4:3</option>
+                <option value="3x4">3:4</option>
+                <option value="16x9">16:9</option>
+              </select>
+            </div>
+
+            {/* Area Crop — Tanpa Scroll */}
+            <div className="flex-1 flex items-center justify-center p-2 bg-gray-50">
+              <div className="w-full h-full max-w-3xl">
+                <ReactCrop
+                  crop={crop}
+                  onChange={(_, percentCrop) => setCrop(percentCrop)}
+                  onComplete={(c) => setCompletedCrop(c)}
+                  minWidth={20}
+                  minHeight={20}
+                  keepSelection
+                  ruleOfThirds
+                >
+                  {/* ✅ Nonaktifkan eslint hanya untuk baris ini */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    ref={imgRef}
+                    src={imageSrc}
+                    alt="Crop preview"
+                    className="w-full h-full object-contain"
+                  />
+                </ReactCrop>
+              </div>
+            </div>
           </div>
-        </>
+        </div>
       )}
     </main>
   );
-}
-
-// Helper crop image
-async function getCroppedImg(imageSrc: string, pixelCrop: any): Promise<Blob> {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
-  const ctx = canvas.getContext("2d")!;
-
-  ctx.drawImage(
-    image,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
-    0,
-    0,
-    pixelCrop.width,
-    pixelCrop.height
-  );
-
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => {
-      if (blob) resolve(blob);
-      else reject(new Error("Canvas kosong"));
-    }, "image/png");
-  });
-}
-
-function createImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.src = url;
-    image.crossOrigin = "anonymous";
-    image.onload = () => resolve(image);
-    image.onerror = (error) => reject(error);
-  });
 }

@@ -170,7 +170,7 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 14,
-    name: "Image Compressor",
+    name: " Compressor",
     slug: "image/compressor",
     description:
       "Kompres gambar untuk ukuran lebih kecil tanpa kehilangan kualitas signifikan.",
@@ -221,7 +221,7 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 20,
-    name: "Image Converter",
+    name: " Converter",
     slug: "image/converter",
     description:
       "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
@@ -230,7 +230,7 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 21,
-    name: "Image Cropper",
+    name: " Cropper",
     slug: "image/cropper",
     description: "Crop gambar dengan aspek rasio tertentu atau bebas.",
     icon: <Crop className="w-6 h-6 text-green-500" />,
@@ -238,7 +238,7 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 22,
-    name: "Image Watermark Tool",
+    name: " Watermark Tool",
     slug: "image/watermark",
     description: "Tambahkan watermark berupa teks atau logo ke dalam gambar.",
     icon: <Droplet className="w-6 h-6 text-blue-500" />,
