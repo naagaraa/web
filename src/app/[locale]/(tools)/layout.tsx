@@ -35,15 +35,6 @@ export function AppLayoutContent({ children }: AppLayoutProps) {
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
   const { hidden } = useBottomNav();
 
-  // daftar akhir URL yang harus hide nav (tanpa prefix bahasa)
-  // const hiddenRoutes = ["/apps/image/cropper", "/auth/login", "/auth/register"];
-
-  // // cek jika pathname berakhiran route tertentu
-  // const hideBottomNav =
-  //   hidden || hiddenRoutes.some((route) => pathname.endsWith(route));
-
-  console.log({ hidden });
-
   const handleCategoryClick = (catId: string, slug?: string) => {
     if (slug) {
       // Jika kategori memiliki slug (misal Home), langsung redirect

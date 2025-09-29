@@ -1,44 +1,33 @@
-// src/app/[locale]/(web)/layout.tsx
 import Header from "@/src/components/layout/Header";
-import { Toaster } from "react-hot-toast";
 import Footer from "@/src/components/ui/footer";
-import { notFound } from "next/navigation";
-import { routing } from "@/src/i18n/routing";
+import { Toaster } from "react-hot-toast";
+import { Hanken_Grotesk } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Hanken_Grotesk } from "next/font/google";
+import type { ReactNode } from "react";
 
-const hanken = Hanken_Grotesk({
-  weight: "400",
-  subsets: ["latin"],
-});
+const hanken = Hanken_Grotesk({ weight: "400", subsets: ["latin"] });
+
+interface LocaleLayoutProps {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}
 
 export default async function LocaleLayout({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  const { locale } = params;
-
-  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
-    notFound();
-  }
-
-  // ✅ Load messages for the current locale
+}: LocaleLayoutProps) {
+  const { locale } = await params;
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages} locale={locale}>
-      <div className={hanken.className}>
-        <Header />
-        <main className="justify-center min-h-screen gap-10">
-          <Toaster position="top-center" />
-          {children}
-        </main>
-        <Footer />
-      </div>
+    <NextIntlClientProvider messages={messages}>
+      <Header />
+      <main className="justify-center min-h-screen gap-10">
+        <Toaster position="top-center" />
+        {children}
+      </main>
+      <Footer />
     </NextIntlClientProvider>
   );
 }
