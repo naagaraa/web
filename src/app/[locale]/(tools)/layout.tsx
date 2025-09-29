@@ -83,31 +83,6 @@ export function AppLayoutContent({ children }: AppLayoutProps) {
       </div>
 
       {/* Mobile Bottom Bar */}
-      {/* <div
-        ref={bottomNavRef}
-        className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50"
-      >
-        <div className="flex overflow-x-auto gap-2 px-3 py-2 border-b border-gray-200 scroll-smooth snap-x snap-mandatory scrollbar-hide">
-          {categories.map((cat) => (
-            <div key={cat.id} className="snap-start">
-              <CategoryButton
-                id={cat.id}
-                icon={cat.icon}
-                label={cat.label}
-                active={active === cat.id}
-                onClick={() => handleCategoryClick(cat.id, cat.slug)}
-                isMobile
-              />
-            </div>
-          ))}
-        </div>
-
-        {active && categories.find((c) => c.id === active)?.tools && (
-          <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
-            <RenderToolsMobile category={active} />
-          </div>
-        )}
-      </div> */}
       {!hidden && (
         <div
           ref={bottomNavRef}

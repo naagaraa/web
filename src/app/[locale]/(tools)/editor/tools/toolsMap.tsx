@@ -29,6 +29,9 @@ import {
   Hourglass,
   TimerReset,
   House,
+  Type,
+  RotateCcw,
+  Palette,
 } from "lucide-react";
 
 export type ToolItem = {
@@ -202,10 +205,23 @@ export const categories: Category[] = [
         icon: <Crop className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
-        name: "Image Watermark Tool",
+        name: "Watermark Gambar",
         slug: "apps/image/watermark",
-        description: "Tambahkan watermark teks atau logo ke gambar.",
-        icon: <Droplet className={`w-5 h-5 ${ICON_COLOR}`} />,
+        description: "Tambahkan teks atau logo sebagai watermark ke gambar.",
+        icon: <Type className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "Putar Gambar",
+        slug: "apps/image/rotate",
+        description: "Putar gambar 90°, 180°, atau sesuaikan sudutnya.",
+        icon: <RotateCcw className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "Filter Gambar",
+        slug: "apps/image/filter",
+        description:
+          "Terapkan efek visual seperti hitam-putih, sepia, atau inversi.",
+        icon: <Palette className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
     ],
   },

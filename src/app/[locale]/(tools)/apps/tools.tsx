@@ -22,6 +22,9 @@ import {
   Code2,
   Divide,
   ListOrdered,
+  RotateCcw,
+  Palette,
+  Type,
 } from "lucide-react";
 
 import { ReactNode } from "react";
@@ -221,7 +224,7 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 20,
-    name: " Converter",
+    name: "Konverter Gambar",
     slug: "image/converter",
     description:
       "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
@@ -230,18 +233,37 @@ export const tools: ToolInterface[] = [
   },
   {
     id: 21,
-    name: " Cropper",
+    name: "Crop Gambar",
     slug: "image/cropper",
-    description: "Crop gambar dengan aspek rasio tertentu atau bebas.",
+    description:
+      "Potong gambar dengan rasio aspek tetap atau bebas sesuai kebutuhan.",
     icon: <Crop className="w-6 h-6 text-green-500" />,
     category: "Image Tools",
   },
   {
     id: 22,
-    name: " Watermark Tool",
+    name: "Watermark Gambar",
     slug: "image/watermark",
-    description: "Tambahkan watermark berupa teks atau logo ke dalam gambar.",
-    icon: <Droplet className="w-6 h-6 text-blue-500" />,
+    description: "Tambahkan teks atau logo sebagai watermark ke dalam gambar.",
+    icon: <Type className="w-6 h-6 text-blue-500" />, // ✅ lebih tepat daripada Droplet
+    category: "Image Tools",
+  },
+  {
+    id: 23, // ✅ unik
+    name: "Filter Gambar",
+    slug: "image/filter",
+    description:
+      "Terapkan efek visual seperti hitam-putih, sepia, inversi, atau kecerahan.",
+    icon: <Palette className="w-6 h-6 text-purple-500" />, // ✅ mewakili warna & filter
+    category: "Image Tools",
+  },
+  {
+    id: 24, // ✅ unik
+    name: "Putar Gambar",
+    slug: "image/rotate",
+    description:
+      "Putar gambar 90°, 180°, atau sesuaikan sudut rotasi secara manual.",
+    icon: <RotateCcw className="w-6 h-6 text-orange-500" />, // ✅ ikon rotasi
     category: "Image Tools",
   },
   {

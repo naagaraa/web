@@ -1,11 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
+import { useBottomNav } from "@/src/context/BottomNavContext";
 
 const CompressImages = () => {
   const [images, setImages] = useState<File[]>([]);
@@ -21,20 +19,22 @@ const CompressImages = () => {
   >([]);
   const [quality, setQuality] = useState(0.7);
   const [progress, setProgress] = useState<number[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeImage, setActiveImage] = useState<{
-    url: string;
-    label: string;
-  } | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isCompressing, setIsCompressing] = useState(false);
+  const [splitPosition, setSplitPosition] = useState(0.5);
+  const [isDragging, setIsDragging] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { setHidden } = useBottomNav();
 
-  const openModal = (url: string, label: string) => {
-    setActiveImage({ url, label });
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setActiveImage(null);
+  const resetAll = () => {
+    setImages([]);
+    setCompressedData([]);
+    setProgress([]);
+    setActiveIndex(0);
+    setSplitPosition(0.5);
+    setIsCompressing(false);
+    setHidden(false);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +43,8 @@ const CompressImages = () => {
     setImages(filesArray);
     setCompressedData([]);
     setProgress(new Array(filesArray.length).fill(0));
-    toast.success("Gambar berhasil diunggah.");
+    setHidden(true);
+    toast.success(`${filesArray.length} gambar diunggah.`);
   };
 
   const compressImage = (
@@ -60,23 +61,11 @@ const CompressImages = () => {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement("canvas");
+        const canvas = canvasRef.current!;
         const ctx = canvas.getContext("2d")!;
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
-
-        // Simulasi progress
-        let fakeProgress = 0;
-        const interval = setInterval(() => {
-          fakeProgress += 20;
-          setProgress((prev) => {
-            const updated = [...prev];
-            updated[index] = Math.min(fakeProgress, 100);
-            return updated;
-          });
-          if (fakeProgress >= 100) clearInterval(interval);
-        }, 200);
 
         canvas.toBlob(
           (blob) => {
@@ -102,234 +91,311 @@ const CompressImages = () => {
   };
 
   const handleCompress = async () => {
-    const compressed = await Promise.all(
-      images.map((img, index) => compressImage(img, index))
-    );
-    setCompressedData(compressed);
-    toast.success(`${compressed.length} gambar berhasil dikompres.`);
+    if (images.length === 0 || isCompressing) return;
+    setIsCompressing(true);
+    const toastId = toast.loading("Sedang mengompres...");
+
+    try {
+      const compressed = await Promise.all(
+        images.map((img, index) => compressImage(img, index))
+      );
+      setCompressedData(compressed);
+      toast.dismiss(toastId);
+      toast.success("Kompresi berhasil!");
+    } catch (err) {
+      toast.dismiss(toastId);
+      toast.error("Gagal mengompres gambar.");
+    } finally {
+      setIsCompressing(false);
+    }
   };
 
-  const handleDownload = (blob: Blob, index: number) => {
+  const handleDownload = (blob: Blob, name: string) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `compressed-${index + 1}.jpg`;
+    a.download = name.replace(/\.[^/.]+$/, "") + "-compressed.jpg";
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Gambar ${index + 1} berhasil diunduh.`);
+
+    resetAll();
+    setTimeout(() => {
+      toast.success("Gambar berhasil diunduh!");
+    }, 100);
   };
 
-  return (
-    <div className="max-w-6xl mx-auto p-6 mt-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Left Side - Upload & Controls */}
-        <div className="space-y-6 bg-white shadow p-6 border">
-          <h1 className="text-2xl font-bold text-gray-900">Compress Images</h1>
-          <p className="text-sm text-gray-600">
-            Kompres gambar dengan mudah dan atur kualitas sesuai kebutuhan.
-          </p>
+  const nextImage = () => {
+    if (activeIndex < images.length - 1) {
+      setActiveIndex(activeIndex + 1);
+      setSplitPosition(0.5);
+    }
+  };
 
-          <div>
+  const prevImage = () => {
+    if (activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+      setSplitPosition(0.5);
+    }
+  };
+
+  // ✅ Gunakan useCallback agar referensi stabil
+  const handleDrag = useCallback(
+    (clientX: number) => {
+      if (!containerRef.current || !isDragging) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const pos = Math.max(0, Math.min(1, x / rect.width));
+      setSplitPosition(pos);
+    },
+    [isDragging]
+  );
+
+  const startDrag = (clientX: number) => {
+    if (!containerRef.current) return;
+    setIsDragging(true);
+  };
+
+  const stopDrag = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Mouse events
+  useEffect(() => {
+    const move = (e: MouseEvent) => handleDrag(e.clientX);
+    const up = () => stopDrag();
+
+    if (isDragging) {
+      window.addEventListener("mousemove", move);
+      window.addEventListener("mouseup", up);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", up);
+    };
+  }, [isDragging, handleDrag, stopDrag]);
+
+  // Touch events
+  useEffect(() => {
+    const move = (e: TouchEvent) => {
+      if (e.touches.length > 0) handleDrag(e.touches[0].clientX);
+    };
+    const end = () => stopDrag();
+
+    if (isDragging) {
+      window.addEventListener("touchmove", move);
+      window.addEventListener("touchend", end);
+    }
+
+    return () => {
+      window.removeEventListener("touchmove", move);
+      window.removeEventListener("touchend", end);
+    };
+  }, [isDragging, handleDrag, stopDrag]);
+
+  const setPreset = (q: number) => {
+    setQuality(q);
+    toast.success(`Kualitas diatur ke ${Math.round(q * 100)}%`);
+  };
+
+  if (images.length === 0) {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <div className="max-w-md mx-auto px-4 py-16 flex flex-col items-center">
+          <div className="text-center mb-10">
+            <h1 className="text-2xl font-bold text-gray-900">Kompres Gambar</h1>
+            <p className="mt-2 text-gray-600">
+              Bandingkan sebelum & sesudah dengan geser.
+            </p>
+          </div>
+          <label className="w-full max-w-xs flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+            Pilih Gambar
             <input
               type="file"
               accept="image/*"
               multiple
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 cursor-pointer"
+              className="hidden"
             />
+          </label>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-gray-50">
+      <div className="fixed inset-0 z-50 flex flex-col bg-black/20">
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/10" />
+        <div className="relative w-full h-screen flex flex-col bg-white">
+          <div className="p-4 pb-2 flex justify-between items-center border-b border-gray-200">
+            <button
+              onClick={resetAll}
+              className="text-sm font-medium text-gray-600 hover:text-gray-900"
+            >
+              Batal
+            </button>
+            <span className="text-sm font-medium text-gray-800">
+              {compressedData.length > 0 ? "Hasil" : "Kompresi"}
+            </span>
+            {!compressedData.length && (
+              <button
+                onClick={handleCompress}
+                disabled={isCompressing}
+                className={`text-sm font-medium ${
+                  isCompressing ? "text-gray-400" : "text-blue-600"
+                }`}
+              >
+                Proses
+              </button>
+            )}
           </div>
 
-          {images.length > 0 && (
-            <div className="grid grid-cols-2 gap-4">
-              {images.map((file, index) => (
-                <div key={index} className="border p-2 bg-gray-50">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`preview-${index + 1}`}
-                    className="w-full h-40 object-contain mb-2 bg-white"
-                  />
-                  <p className="text-xs text-gray-600 truncate">{file.name}</p>
-                  <div className="w-full bg-gray-200 h-2 mt-2">
-                    <div
-                      className="bg-blue-600 h-2 transition-all"
-                      style={{ width: `${progress[index] || 0}%` }}
-                    ></div>
+          <div className="flex-1 flex items-center justify-center p-2 bg-gray-50 overflow-hidden">
+            {compressedData.length > 0 ? (
+              <div
+                ref={containerRef}
+                className="relative w-full max-w-3xl h-full max-h-[70vh] overflow-hidden"
+                onMouseDown={(e) => startDrag(e.clientX)}
+                onTouchStart={(e) => startDrag(e.touches[0].clientX)}
+                style={{ cursor: isDragging ? "grabbing" : "ew-resize" }}
+              >
+                <img
+                  src={compressedData[activeIndex]?.originalUrl}
+                  alt="Asli"
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+                <div
+                  className="absolute top-0 h-full bg-cover bg-center bg-no-repeat"
+                  style={{
+                    left: 0,
+                    width: `${splitPosition * 100}%`,
+                    backgroundImage: `url(${compressedData[activeIndex]?.previewUrl})`,
+                  }}
+                />
+                <div
+                  className="absolute top-0 h-full w-1 bg-white/80 shadow-md z-10"
+                  style={{
+                    left: `${splitPosition * 100}%`,
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white shadow flex items-center justify-center">
+                    <span className="text-xs font-bold text-gray-700">●</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-
-          <div>
-            <label className="font-medium block mb-2 text-gray-800">
-              Kualitas Gambar: {Math.round(quality * 100)}%
-            </label>
-            <input
-              type="range"
-              min={10}
-              max={100}
-              value={Math.round(quality * 100)}
-              onChange={(e) => setQuality(parseInt(e.target.value) / 100)}
-              className="w-full accent-blue-600"
-            />
+                <div className="absolute bottom-4 left-4 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                  Asli
+                </div>
+                <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                  Kompres
+                </div>
+              </div>
+            ) : (
+              <div className="relative w-full max-w-3xl h-full max-h-[70vh] flex flex-col items-center justify-center">
+                <img
+                  src={URL.createObjectURL(images[activeIndex])}
+                  alt="Preview"
+                  className="w-full h-full object-contain"
+                />
+                <div className="absolute bottom-4 text-sm text-gray-600">
+                  {activeIndex + 1} / {images.length}
+                </div>
+              </div>
+            )}
           </div>
 
-          <button
-            onClick={handleCompress}
-            className="w-full bg-blue-600 text-white py-2.5 font-medium hover:bg-blue-700 transition"
-          >
-            Kompres Gambar
-          </button>
-        </div>
-
-        {/* Right Side - Results */}
-        <div className="space-y-6">
-          {compressedData.length > 0 ? (
-            <div className="bg-white shadow p-6 border space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Hasil Kompresi
-                </h2>
-                <span className="text-sm text-gray-600">
-                  {compressedData.length} gambar berhasil dikompres
-                </span>
-              </div>
-
-              {/* Desktop view (side by side) */}
-              <div className="hidden sm:block space-y-8">
-                {compressedData.map((img, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-2 gap-4 border p-3 bg-gray-50"
-                  >
-                    <div className="flex flex-col items-center">
-                      <img
-                        src={img.originalUrl}
-                        alt={`original-${index + 1}`}
-                        onClick={() => openModal(img.originalUrl, "Original")}
-                        className="w-full h-48 object-contain mb-2 bg-white cursor-pointer hover:opacity-80"
-                      />
-                      <p className="text-xs text-gray-600">
-                        Asli: {(img.originalSize / 1024).toFixed(1)} KB
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <img
-                        src={img.previewUrl}
-                        alt={`compressed-${index + 1}`}
-                        onClick={() => openModal(img.previewUrl, "Compressed")}
-                        className="w-full h-48 object-contain mb-2 bg-white cursor-pointer hover:opacity-80"
-                      />
-                      <p className="text-xs text-gray-600 mb-2">
-                        Kompres: {(img.compressedSize / 1024).toFixed(1)} KB
-                      </p>
+          <div className="border-t border-gray-200 bg-white">
+            {compressedData.length > 0 ? (
+              <div className="px-4 py-3 flex justify-between items-center">
+                <div className="flex gap-2">
+                  {images.length > 1 && (
+                    <>
                       <button
-                        onClick={() => handleDownload(img.blob, index)}
-                        className="text-blue-600 font-medium hover:underline text-sm"
+                        onClick={prevImage}
+                        disabled={activeIndex === 0}
+                        className="px-3 py-1.5 text-sm bg-gray-100 rounded disabled:opacity-50"
                       >
-                        Download
+                        ← Sebelumnya
                       </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Mobile view (Swiper horizontal) */}
-              <div className="sm:hidden">
-                <Swiper
-                  spaceBetween={12}
-                  slidesPerView={1}
-                  pagination={{ clickable: true }}
+                      <button
+                        onClick={nextImage}
+                        disabled={activeIndex === images.length - 1}
+                        className="px-3 py-1.5 text-sm bg-gray-100 rounded disabled:opacity-50"
+                      >
+                        Berikutnya →
+                      </button>
+                    </>
+                  )}
+                </div>
+                <button
+                  onClick={() =>
+                    handleDownload(
+                      compressedData[activeIndex].blob,
+                      compressedData[activeIndex].name
+                    )
+                  }
+                  className="px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
                 >
-                  {compressedData.map((img, index) => (
-                    <SwiperSlide key={index}>
-                      <div className="border p-3 bg-gray-50">
-                        <div className="grid grid-cols-2 gap-3 items-start">
-                          <div className="w-full flex flex-col items-center">
-                            <img
-                              src={img.originalUrl}
-                              alt={`original-${index + 1}`}
-                              onClick={() =>
-                                openModal(img.originalUrl, "Original")
-                              }
-                              className="w-full h-36 object-contain bg-white cursor-pointer hover:opacity-80"
-                            />
-                            <p className="text-xs text-gray-600 mt-2">
-                              Asli: {(img.originalSize / 1024).toFixed(1)} KB
-                            </p>
-                          </div>
-                          <div className="w-full flex flex-col items-center">
-                            <img
-                              src={img.previewUrl}
-                              alt={`compressed-${index + 1}`}
-                              onClick={() =>
-                                openModal(img.previewUrl, "Compressed")
-                              }
-                              className="w-full h-36 object-contain bg-white cursor-pointer hover:opacity-80"
-                            />
-                            <p className="text-xs text-gray-600 mt-2 mb-2">
-                              Kompres: {(img.compressedSize / 1024).toFixed(1)}{" "}
-                              KB
-                            </p>
-                            <button
-                              onClick={() => handleDownload(img.blob, index)}
-                              className="text-blue-600 font-medium hover:underline text-sm"
-                            >
-                              Download
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                  Unduh
+                </button>
               </div>
-            </div>
-          ) : (
-            <div className="flex items-center justify-center h-full min-h-[300px] bg-gray-50 border text-gray-400">
-              Belum ada hasil kompresi
-            </div>
-          )}
+            ) : (
+              <div className="px-4 py-3 space-y-3">
+                <div className="flex justify-between text-xs text-gray-600">
+                  <span>Rendah</span>
+                  <span>Kualitas: {Math.round(quality * 100)}%</span>
+                  <span>Tinggi</span>
+                </div>
+                <input
+                  type="range"
+                  min={0.3}
+                  max={0.95}
+                  step={0.05}
+                  value={quality}
+                  onChange={(e) => setQuality(parseFloat(e.target.value))}
+                  className="w-full accent-blue-600"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPreset(0.9)}
+                    className={`flex-1 text-xs py-1.5 rounded text-white ${
+                      quality >= 0.85
+                        ? "bg-blue-600"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    Tinggi (90%)
+                  </button>
+                  <button
+                    onClick={() => setPreset(0.7)}
+                    className={`flex-1 text-xs py-1.5 rounded text-white ${
+                      quality >= 0.65 && quality < 0.85
+                        ? "bg-blue-600"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    Sedang (70%)
+                  </button>
+                  <button
+                    onClick={() => setPreset(0.5)}
+                    className={`flex-1 text-xs py-1.5 rounded text-white ${
+                      quality < 0.65
+                        ? "bg-blue-600"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    Rendah (50%)
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Modal Preview */}
-      {isModalOpen && activeImage && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="relative bg-white w-full max-w-sm sm:max-w-2xl rounded-lg shadow-xl p-3 sm:p-6 transition-transform transform scale-100">
-            {/* Close button */}
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-            >
-              ✕
-            </button>
-
-            {/* Label */}
-            <h3 className="text-sm font-medium mb-3 text-gray-800">
-              {activeImage.label}
-            </h3>
-
-            {/* Image */}
-            <img
-              src={activeImage.url}
-              alt={activeImage.label}
-              className="mx-auto max-h-[50vh] w-auto object-contain"
-            />
-
-            {/* Footer */}
-            <div className="mt-3 flex justify-end">
-              <button
-                onClick={closeModal}
-                className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      <canvas ref={canvasRef} className="hidden" />
+    </main>
   );
 };
 
