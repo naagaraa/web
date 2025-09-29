@@ -10,17 +10,39 @@ import Header from "./Header";
 import Sidebar from "./editor/Sidebar";
 import CategoryButton from "./editor/CategoryButton";
 import PageTransition from "./PageTransition";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  BottomNavProvider,
+  useBottomNav,
+} from "@/src/context/BottomNavContext";
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  return (
+    <BottomNavProvider>
+      <AppLayoutContent>{children}</AppLayoutContent>
+    </BottomNavProvider>
+  );
+}
+
+export function AppLayoutContent({ children }: AppLayoutProps) {
   const router = useRouter();
   const [active, setActive] = useState<string | null>(null);
   const [bottomNavHeight, setBottomNavHeight] = useState(0);
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
+  const { hidden } = useBottomNav();
+
+  // daftar akhir URL yang harus hide nav (tanpa prefix bahasa)
+  // const hiddenRoutes = ["/apps/image/cropper", "/auth/login", "/auth/register"];
+
+  // // cek jika pathname berakhiran route tertentu
+  // const hideBottomNav =
+  //   hidden || hiddenRoutes.some((route) => pathname.endsWith(route));
+
+  console.log({ hidden });
 
   const handleCategoryClick = (catId: string, slug?: string) => {
     if (slug) {
@@ -70,7 +92,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       </div>
 
       {/* Mobile Bottom Bar */}
-      <div
+      {/* <div
         ref={bottomNavRef}
         className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50"
       >
@@ -89,13 +111,39 @@ export default function AppLayout({ children }: AppLayoutProps) {
           ))}
         </div>
 
-        {/* Mobile Tools */}
         {active && categories.find((c) => c.id === active)?.tools && (
           <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
             <RenderToolsMobile category={active} />
           </div>
         )}
-      </div>
+      </div> */}
+      {!hidden && (
+        <div
+          ref={bottomNavRef}
+          className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md z-50"
+        >
+          <div className="flex overflow-x-auto gap-2 px-3 py-2 border-b border-gray-200 scroll-smooth snap-x snap-mandatory scrollbar-hide">
+            {categories.map((cat) => (
+              <div key={cat.id} className="snap-start">
+                <CategoryButton
+                  id={cat.id}
+                  icon={cat.icon}
+                  label={cat.label}
+                  active={active === cat.id}
+                  onClick={() => handleCategoryClick(cat.id, cat.slug)}
+                  isMobile
+                />
+              </div>
+            ))}
+          </div>
+
+          {active && categories.find((c) => c.id === active)?.tools && (
+            <div className="p-3 overflow-x-auto flex gap-3 scrollbar-hide will-change-transform">
+              <RenderToolsMobile category={active} />
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }

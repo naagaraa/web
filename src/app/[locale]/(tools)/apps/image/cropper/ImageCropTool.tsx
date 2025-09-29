@@ -9,6 +9,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import toast from "react-hot-toast";
+import { useBottomNav } from "@/src/context/BottomNavContext";
 
 export default function ImageCropTool() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -16,6 +17,7 @@ export default function ImageCropTool() {
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop | null>(null);
   const [aspectPreset, setAspectPreset] = useState<string>("free");
+  const { setHidden } = useBottomNav();
 
   const imgRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -26,6 +28,7 @@ export default function ImageCropTool() {
     setCrop(undefined);
     setCompletedCrop(null);
     setAspectPreset("free");
+    setHidden(false); // hide nav saat cropper aktif
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -50,8 +53,14 @@ export default function ImageCropTool() {
           height
         )
       );
+      setHidden(true); // hide nav saat cropper aktif
     }
-  }, [isCropping, imageSrc]);
+  }, [isCropping, imageSrc, setHidden]);
+
+  useEffect(() => {
+    // hide nav hanya saat mode cropping aktif
+    setHidden(isCropping);
+  }, [isCropping, setHidden]);
 
   const handlePresetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
