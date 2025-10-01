@@ -8,7 +8,7 @@ import Services from "./home/ServiceSection";
 export default function Home() {
   return (
     <main className="bg-white">
-      <Hero />
+      {/* <Hero /> */}
       <ProductivityTools />
       <Services />
       <ProjectLifecycleSection />

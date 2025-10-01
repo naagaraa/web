@@ -1,54 +1,17 @@
 export const menuItems = [
   { title: "Home", link: "/" },
   {
-    title: "Apps",
+    title: "Solutions",
     megaMenu: false,
     children: [
       {
-        title: "Lihat Semua",
-        children: [
-          {
-            title: "Apps",
-            link: "/apps",
-          },
-        ],
+        title: "Daily Tools",
         link: "/apps",
       },
       {
-        title: "Alarm Online",
-        link: "/apps/daily/alarm-online",
+        title: "Coming Soon",
+        link: "#",
       },
-      {
-        title: "Podomoro Timer",
-        link: "/apps/daily/pomodoro-timer",
-      },
-      {
-        title: "Image Compressor",
-        link: "/apps/image/compressor",
-      },
-      {
-        title: "BMI Calculator",
-        link: "/apps/calculator/bmi",
-      },
-      {
-        title: "Comming Soon",
-        link: "/coming-soon",
-      },
-
-      // {
-      //   title: "Mental Health",
-      //   children: [
-      //     { title: "Anxiety", link: "/apps/mental-health/anxiety" },
-      //     { title: "Depression", link: "/apps/mental-health/depression" },
-      //   ],
-      // },
-      // {
-      //   title: "Image Tools",
-      //   children: [
-      //     { title: "Compressor", link: "/apps/image/compressor" },
-      //     { title: "Watermark", link: "/apps/image/watermark" },
-      //   ],
-      // },
     ],
   },
   {

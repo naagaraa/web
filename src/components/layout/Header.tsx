@@ -1,404 +1,337 @@
+// src/components/layout/Header.tsx
 "use client";
+
 import Link from "next/link";
-import React, { useState } from "react";
 import Image from "next/image";
+import React, { useState, useEffect, useRef } from "react";
 import icon from "@/assets/dev-to.svg";
-import "./header.css"; // Import your custom CSS for animations
 import LanguageSwitcher from "../LanguageSwitcher";
 import { menuItems } from "@/data/MenuHeaderItems";
+import { useHeroObserver } from "@/src/context/HeroObserverContext";
 
-function Logo() {
+function Logo({ isTransparent }: { isTransparent: boolean }) {
   return (
-    <Link className="block text-teal-600" href="/">
+    <Link href="/" className="block">
       <span className="sr-only">Home</span>
-      <Image src={icon} height={30} width={30} alt="Dev.to logo" />
+      <Image
+        src={icon}
+        alt="Dev.to logo"
+        width={30}
+        height={30}
+        className={isTransparent ? "brightness-200" : ""}
+      />
     </Link>
   );
 }
 
-type ListProps = {
+type MenuItem = {
   title: string;
   link?: string;
-  children?: ListProps[];
-  megaMenu?: boolean;
-  isMobile?: boolean;
-  open?: boolean;
-  onToggle?: () => void;
-  onClickItem?: () => void; // Untuk auto-close
+  children?: MenuItem[];
 };
 
-export function List({
-  title = "",
-  link = "",
-  children,
-  megaMenu,
-  isMobile = false,
-  open,
-  onToggle,
-  onClickItem,
-}: ListProps) {
-  // State untuk submenu di mobile
-  const [openIndexes, setOpenIndexes] = useState<Record<number, boolean>>({});
-
-  const handleToggleChild = (idx: number) => {
-    setOpenIndexes((prev) => ({
-      ...prev,
-      [idx]: !prev[idx],
-    }));
-  };
-
-  // Desktop Dropdown
-  if (children && children.length > 0 && !isMobile && !megaMenu) {
-    return (
-      <div className="relative group">
-        <button
-          className="text-gray-500 transition hover:text-gray-500/75 flex items-center gap-1"
-          onClick={onToggle}
-          type="button"
-        >
-          {title}
-          <svg
-            className={`w-4 h-4 ml-1 transition-transform ${
-              open ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-        {open && (
-          <div className="absolute right-1/2 mt-2 w-56 bg-white border rounded shadow-lg z-50 animate-fadeIn">
-            <ul>
-              {children.map((child, idx) => (
-                <li key={idx}>
-                  <Link
-                    prefetch={true}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    href={child.link ?? "#"}
-                    onClick={onClickItem}
-                  >
-                    {child.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // Desktop Mega Menu
-  if (children && children.length > 0 && !isMobile && megaMenu) {
-    return (
-      <div className="relative group">
-        <button
-          type="button"
-          onClick={onToggle}
-          className="flex items-center gap-1 text-gray-600 hover:text-gray-800 transition"
-        >
-          {title}
-          <svg
-            className={`w-4 h-4 ml-1 transform transition-transform duration-200 ${
-              open ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        {open && (
-          <div className="absolute z-50 mt-2 right-1/2 translate-x-1/2 w-xl rounded-lg border border-gray-200 bg-white shadow-xl animate-fadeIn">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6 p-6">
-              {children.map((section, idx) => (
-                <section key={idx}>
-                  <h3 className="mb-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                    {section.title}
-                  </h3>
-
-                  {Array.isArray(section.children) &&
-                    section.children.length > 0 && (
-                      <ul className="space-y-2">
-                        {section.children.map((item, subIdx) => (
-                          <li key={subIdx}>
-                            <Link
-                              href={item.link ?? "#"}
-                              prefetch
-                              onClick={onClickItem}
-                              className="block px-2 py-1 text-sm text-gray-700 rounded hover:text-teal-600 hover:bg-gray-50 transition"
-                            >
-                              {item.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                </section>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // Mobile Nested Dropdown
-  if (children && children.length > 0 && isMobile) {
-    return (
-      <div>
-        <button
-          className="flex items-center justify-between w-full text-gray-700 py-2"
-          onClick={onToggle}
-          type="button"
-        >
-          <span>{title}</span>
-          <svg
-            className={`w-4 h-4 ml-1 transition-transform ${
-              open ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        {open && (
-          <div className="pl-4 border-l-2 border-gray-200 overflow-hidden transition-all duration-300 ease-in-out">
-            <ul>
-              {children.map((child, idx) => (
-                <li key={idx}>
-                  {child.children ? (
-                    <List
-                      {...child}
-                      isMobile
-                      open={!!openIndexes[idx]}
-                      onToggle={() => handleToggleChild(idx)}
-                      onClickItem={onClickItem}
-                    />
-                  ) : (
-                    <Link
-                      prefetch={true}
-                      className="block py-2 text-gray-700 hover:text-teal-600"
-                      href={child.link ?? "#"}
-                      onClick={onClickItem}
-                    >
-                      {child.title}
-                    </Link>
-                    // <p>kosong</p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // Normal Link
-  return (
-    <Link
-      prefetch={true}
-      className="text-gray-500 transition hover:text-gray-500/75 my-5"
-      href={link ?? "#"}
-      onClick={onClickItem}
-    >
-      {title}
-    </Link>
-  );
-}
-
-type MenuProps = {
-  list: Array<{
-    title: string;
-    link?: string;
-    children?: ListProps[];
-    megaMenu?: boolean;
-  }>;
+type ListProps = {
+  item: MenuItem;
   isMobile?: boolean;
   onClickItem?: () => void;
+  isTopLevel?: boolean;
+  isTransparent: boolean;
+  activeMenu?: string | null; // only used on desktop
+  setActiveMenu?: (title: string | null) => void; // only used on desktop
 };
 
-function Menu({ list, isMobile = false, onClickItem }: MenuProps) {
-  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+const List: React.FC<ListProps> = ({
+  item,
+  isMobile = false,
+  onClickItem,
+  isTopLevel = false,
+  isTransparent,
+  activeMenu,
+  setActiveMenu,
+}) => {
+  const hasChildren = item.children && item.children.length > 0;
 
-  const handleToggle = (key: string) => {
-    setOpenMenus((prev) => {
-      const isOpen = !!prev[key];
+  // mobile manages its own state
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isOpen = isMobile ? mobileOpen : activeMenu === item.title;
+
+  const baseText = "text-gray-800";
+  const hoverStyle = "hover:underline underline-offset-4";
+
+  const liClasses =
+    isTopLevel && isMobile
+      ? "border-b border-gray-100 pb-4 mb-4 last:mb-0 last:border-0"
+      : "";
+
+  const toggle = () => {
+    if (isMobile) {
+      setMobileOpen((prev) => !prev);
+    } else {
       if (isOpen) {
-        return { ...prev, [key]: false };
+        setActiveMenu?.(null);
       } else {
-        // Only allow one open at a time at the current level
-        const newState: Record<string, boolean> = {};
-        Object.keys(prev).forEach((k) => {
-          if (k.startsWith(key.split("-").slice(0, -1).join("-"))) {
-            newState[k] = false;
-          }
-        });
-        newState[key] = true;
-        return { ...prev, ...newState };
+        setActiveMenu?.(item.title);
       }
-    });
-  };
-
-  // Recursive render for nested children, supporting megaMenu
-  const renderList = (
-    items: MenuProps["list"],
-    parentKey = ""
-  ): React.ReactNode => {
-    return items.map((value, index) => {
-      const key = parentKey ? `${parentKey}-${index}` : `menu-${index}`;
-      // If this item has megaMenu, pass it recursively
-      return (
-        <li key={key}>
-          <List
-            {...value}
-            isMobile={isMobile}
-            open={!!openMenus[key]}
-            onToggle={() => handleToggle(key)}
-            onClickItem={onClickItem}
-          >
-            {value.children
-              ? value.children.map((child) => ({
-                  ...child,
-                  megaMenu: value.megaMenu, // propagate megaMenu recursively
-                }))
-              : undefined}
-          </List>
-          {/* {value.children && !!openMenus[key] && isMobile && (
-            <ul>{renderList(value.children as MenuProps["list"], key)}</ul>
-          )} */}
-        </li>
-      );
-    });
+    }
   };
 
   return (
-    <nav aria-label="Global">
-      <ul
-        className={`flex ${
-          isMobile
-            ? "flex-col gap-2"
-            : "flex-col md:flex-row items-start md:items-center gap-6"
-        } text-sm`}
-      >
-        {renderList(list)}
+    <li className={`relative ${liClasses}`}>
+      {hasChildren ? (
+        <>
+          <button
+            type="button"
+            className={`flex items-center justify-between w-full ${baseText} ${hoverStyle} transition py-2 px-2 md:px-0`}
+            onClick={toggle}
+            aria-expanded={isOpen}
+          >
+            {item.title}
+            <svg
+              className={`w-4 h-4 ml-1 transition-transform ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+
+          {isOpen && (
+            <ul
+              className={`mt-2 ${
+                isMobile
+                  ? "pl-4 border-l-2 border-gray-200"
+                  : "absolute bg-white backdrop-blur-md rounded-md py-2 px-4 min-w-[200px] z-50 shadow-lg border border-gray-200"
+              }`}
+            >
+              {item.children!.map((child, idx) => (
+                <List
+                  key={idx}
+                  item={child}
+                  isMobile={isMobile}
+                  onClickItem={onClickItem}
+                  isTopLevel={false}
+                  isTransparent={isTransparent}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
+                />
+              ))}
+            </ul>
+          )}
+        </>
+      ) : (
+        <Link
+          href={item.link || "#"}
+          onClick={() => {
+            onClickItem?.();
+            if (!isMobile) setActiveMenu?.(null);
+          }}
+          className={`block py-2 px-2 md:px-0 ${baseText} ${hoverStyle} transition`}
+        >
+          {item.title}
+        </Link>
+      )}
+    </li>
+  );
+};
+
+type MenuProps = {
+  list: MenuItem[];
+  isMobile?: boolean;
+  onClickItem?: () => void;
+  isTransparent: boolean;
+  activeMenu?: string | null;
+  setActiveMenu?: (title: string | null) => void;
+};
+
+const Menu: React.FC<MenuProps> = ({
+  list,
+  isMobile = false,
+  onClickItem,
+  isTransparent,
+  activeMenu,
+  setActiveMenu,
+}) => {
+  return (
+    <ul
+      className={`flex ${
+        isMobile ? "flex-col gap-0" : "flex-row items-center gap-6"
+      }`}
+    >
+      {list.map((item, idx) => (
+        <List
+          key={idx}
+          item={item}
+          isMobile={isMobile}
+          onClickItem={onClickItem}
+          isTopLevel={true}
+          isTransparent={isTransparent}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
+      ))}
+      {isMobile ? (
+        <li className="pt-4 mt-4 border-t border-gray-100">
+          <LanguageSwitcher />
+        </li>
+      ) : (
         <li>
           <LanguageSwitcher />
         </li>
-      </ul>
-    </nav>
+      )}
+    </ul>
   );
-}
+};
 
 export default function Header() {
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const { isOnHero } = useHeroObserver();
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  const isTransparent = isOnHero;
+
+  // close desktop dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        activeMenu &&
+        headerRef.current &&
+        !headerRef.current.contains(e.target as Node)
+      ) {
+        setActiveMenu(null);
+      }
+    };
+
+    if (activeMenu) {
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
+    }
+  }, [activeMenu]);
 
   return (
     <>
-      <header className="bg-white fixed z-20 top-0 start-0 border-b border-gray-200 w-full">
-        <div className="mx-auto max-w-(--breakpoint-xl) px-4 sm:px-6 lg:px-8">
+      <header
+        ref={headerRef}
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+          isTransparent
+            ? "bg-white/20 border-white/30 backdrop-blur-md"
+            : "bg-white border-gray-200"
+        }`}
+      >
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="md:flex md:items-center md:gap-12">
-              <Logo />
-            </div>
+            <Logo isTransparent={isTransparent} />
 
-            {/* Desktop Menu */}
+            {/* Desktop */}
             <div className="hidden md:block">
-              <Menu list={menuItems} />
+              <Menu
+                list={menuItems}
+                isTransparent={isTransparent}
+                activeMenu={activeMenu}
+                setActiveMenu={setActiveMenu}
+              />
             </div>
 
-            {/* Mobile Hamburger */}
-            <div className="md:hidden flex items-center gap-4">
+            {/* Mobile hamburger / close */}
+            <div className="md:hidden">
               <button
-                onClick={() => setOpen(true)}
+                onClick={() => setMobileOpen((prev) => !prev)}
                 className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-600"
-                aria-label="Open menu"
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
               >
-                <svg
-                  className="h-6 w-6 text-gray-700"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                {mobileOpen ? (
+                  <svg
+                    className="h-6 w-6 text-gray-800"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className={`h-6 w-6 ${
+                      isTransparent ? "text-white" : "text-gray-800"
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Sidenav Overlay */}
-      {open && (
-        <div>
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-black bg-opacity-40 z-30"
-            onClick={() => setOpen(false)}
-          />
-
-          {/* Drawer */}
-          <aside className="fixed top-0 left-0 z-40 h-full w-64 bg-white shadow-lg flex flex-col p-6 transition-transform duration-300">
-            <div className="flex items-center justify-between mb-8">
-              <Logo />
-              <button
-                onClick={() => setOpen(false)}
-                className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-600"
-                aria-label="Close menu"
+      {/* Mobile Drawer */}
+      <div
+        className={`fixed inset-0 z-40 transition-opacity duration-300 ${
+          mobileOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40"
+          onClick={() => setMobileOpen(false)}
+        />
+        <aside
+          className={`absolute top-0 left-0 h-full w-64 bg-white shadow-lg p-6 overflow-y-auto transition-transform duration-300 ${
+            mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <Logo isTransparent={false} />
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-teal-600"
+              aria-label="Close menu"
+            >
+              <svg
+                className="h-6 w-6 text-gray-800"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
               >
-                <svg
-                  className="h-6 w-6 text-gray-700"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
 
-            {/* Mobile menu with dropdown */}
-            <Menu
-              list={menuItems}
-              isMobile
-              onClickItem={() => setOpen(false)}
-            />
-          </aside>
-        </div>
-      )}
+          {/* Mobile menu uses local state per item */}
+          <Menu
+            list={menuItems}
+            isMobile
+            onClickItem={() => setMobileOpen(false)}
+            isTransparent={false}
+          />
+        </aside>
+      </div>
     </>
   );
 }

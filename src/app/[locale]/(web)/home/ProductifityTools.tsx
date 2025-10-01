@@ -1,32 +1,11 @@
-import {
-  Activity,
-  Baby,
-  BedDouble,
-  Brain,
-  Calculator,
-  Code,
-  Code2,
-  Crop,
-  Divide,
-  Droplet,
-  FileCode,
-  FileInput,
-  FileText,
-  Flame,
-  HeartPulse,
-  ImageIcon,
-  ListOrdered,
-  PieChart,
-  QrCode,
-  ShieldCheck,
-  Smile,
-  Utensils,
-} from "lucide-react";
+"use client";
+
+import { tools } from "./ToolsData";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 
-function CategoryButton({
+function CategoryPill({
   label,
   active,
   onClick,
@@ -38,10 +17,10 @@ function CategoryButton({
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 text-sm rounded-full transition font-medium ${
+      className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap flex-shrink-0 ${
         active
-          ? "bg-blue-600 text-white shadow"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          ? "bg-blue-500 text-white"
+          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
       }`}
     >
       {label}
@@ -49,291 +28,199 @@ function CategoryButton({
   );
 }
 
-interface Tool {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  icon: React.ReactNode;
-  category: string;
-  isNew?: boolean;
-}
-
-const tools: Tool[] = [
-  // Calculator
-  {
-    id: 1,
-    name: "Blood Glucose",
-    slug: "calculator/blood-glucose",
-    description: "Hitung dan pantau kadar gula darah harian Anda.",
-    icon: <Droplet className="w-6 h-6 text-blue-600" />,
-    category: "Calculator",
-  },
-  {
-    id: 2,
-    name: "BMI",
-    slug: "calculator/bmi",
-    description:
-      "Menghitung Body Mass Index berdasarkan tinggi dan berat badan.",
-    icon: <Activity className="w-6 h-6 text-green-600" />,
-    category: "Calculator",
-  },
-  {
-    id: 3,
-    name: "BMR",
-    slug: "calculator/bmr",
-    description:
-      "Mengukur kebutuhan kalori harian Anda dalam keadaan istirahat.",
-    icon: <HeartPulse className="w-6 h-6 text-pink-500" />,
-    category: "Calculator",
-  },
-  {
-    id: 4,
-    name: "Calorie",
-    slug: "calculator/calorie",
-    description: "Menghitung konsumsi dan kebutuhan kalori harian.",
-    icon: <Utensils className="w-6 h-6 text-yellow-600" />,
-    category: "Calculator",
-  },
-  {
-    id: 5,
-    name: "Macronutrient",
-    slug: "calculator/macronutrient",
-    description: "Tentukan distribusi protein, karbohidrat, dan lemak.",
-    icon: <PieChart className="w-6 h-6 text-purple-600" />,
-    category: "Calculator",
-  },
-  {
-    id: 6,
-    name: "Pregnancy",
-    slug: "calculator/pregnancy",
-    description: "Perkiraan tanggal kelahiran dan status kehamilan.",
-    icon: <Baby className="w-6 h-6 text-rose-500" />,
-    category: "Calculator",
-  },
-  {
-    id: 7,
-    name: "Sleep Time",
-    slug: "calculator/sleep-time",
-    description: "Rencanakan waktu tidur yang optimal untuk produktivitas.",
-    icon: <BedDouble className="w-6 h-6 text-indigo-500" />,
-    category: "Calculator",
-  },
-  {
-    id: 8,
-    name: "Vitamins",
-    slug: "calculator/vitamins",
-    description: "Cek kebutuhan vitamin harian berdasarkan usia dan gender.",
-    icon: <Calculator className="w-6 h-6 text-orange-500" />,
-    category: "Calculator",
-  },
-  {
-    id: 9,
-    name: "Water",
-    slug: "calculator/water",
-    description: "Rekomendasi jumlah air minum harian.",
-    icon: <Droplet className="w-6 h-6 text-cyan-600" />,
-    category: "Calculator",
-  },
-  {
-    id: 10,
-    name: "Anxiety",
-    slug: "mental-health/anxiety",
-    description: "Alat bantu evaluasi dan manajemen kecemasan.",
-    icon: <Brain className="w-6 h-6 text-fuchsia-600" />,
-    category: "Mental Health",
-  },
-  {
-    id: 11,
-    name: "Depression",
-    slug: "mental-health/depression",
-    description: "Skrining awal dan informasi seputar depresi.",
-    icon: <Smile className="w-6 h-6 text-sky-500" />,
-    category: "Mental Health",
-  },
-  {
-    id: 12,
-    name: "PDF Tools",
-    slug: "pdf tools",
-    description: "Gabung, kompres, atau pisahkan file PDF Anda.",
-    icon: <FileInput className="w-6 h-6 text-gray-600" />,
-    category: "Documents",
-  },
-  {
-    id: 13,
-    name: "Text Tools",
-    slug: "Text Tools",
-    description: "Alat bantu analisis, konversi, atau edit teks.",
-    icon: <FileText className="w-6 h-6 text-gray-700" />,
-    category: "Documents",
-  },
-  {
-    id: 14,
-    name: "Image Compressor",
-    slug: "image/compressor",
-    description:
-      "Kompres gambar untuk ukuran lebih kecil tanpa kehilangan kualitas secara signifikan.",
-    icon: <ImageIcon className="w-6 h-6 text-pink-700" />,
-    category: "Image Tools",
-  },
-  {
-    id: 15,
-    name: "Burnout Checker",
-    slug: "mental-health/burnout-checker",
-    description: "Tes untuk mengukur tingkat burnout emosional.",
-    icon: <Flame className="w-6 h-6 text-orange-500" />,
-    category: "Mental Health",
-  },
-  {
-    id: 16,
-    name: "JWT Decoder",
-    slug: "text/jwt-decoder",
-    description: "Dekode dan periksa struktur token JWT dengan mudah.",
-    icon: <ShieldCheck className="w-6 h-6 text-purple-500" />,
-    category: "Developer Tools",
-  },
-  {
-    id: 17,
-    name: "Base64 Decoder Encoder",
-    slug: "text/base64-decoder-encoder",
-    description:
-      "Encode dan decode teks ke atau dari format Base64 secara instan.",
-    icon: <FileCode className="w-6 h-6 text-indigo-500" />,
-    category: "Developer Tools",
-  },
-  {
-    id: 18,
-    name: "JSON Formatter",
-    slug: "text/json-formatter",
-    description: "Format dan perindah struktur JSON dengan validasi otomatis.",
-    icon: <Code className="w-6 h-6 text-green-500" />,
-    category: "Developer Tools",
-  },
-  {
-    id: 19,
-    name: "QR Code Generator",
-    slug: "text/qrcode",
-    description:
-      "Buat dan unduh QR Code dari teks atau tautan hanya dengan sekali klik.",
-    icon: <QrCode className="w-6 h-6 text-pink-500" />,
-    category: "Utilities",
-  },
-  {
-    id: 20,
-    name: "Image Converter",
-    slug: "image/converter",
-    description:
-      "Ubah format gambar ke JPG, PNG, WebP, dan lainnya secara instan.",
-    icon: <ImageIcon className="w-6 h-6 text-yellow-500" />,
-    category: "Image Tools",
-  },
-  {
-    id: 21,
-    name: "Image Cropper",
-    slug: "image/cropper",
-    description: "Crop gambar dengan aspek rasio tertentu atau secara bebas.",
-    icon: <Crop className="w-6 h-6 text-green-500" />,
-    category: "Image Tools",
-  },
-  {
-    id: 22,
-    name: "Image Watermark Tool",
-    slug: "image/watermark",
-    description: "Tambahkan watermark berupa teks atau logo ke dalam gambar.",
-    icon: <Droplet className="w-6 h-6 text-blue-500" />,
-    category: "Image Tools",
-  },
-  {
-    id: 23,
-    name: "Conversion Tools",
-    slug: "calculator/conversion-tools",
-    description: "Konversi IP ke biner, CIDR ke subnet mask, dan sebaliknya.",
-    icon: <Code2 className="w-6 h-6 text-green-500" />,
-    category: "Network Tools",
-  },
-  {
-    id: 24,
-    name: "IP Subnetting Calculator",
-    slug: "calculator/ip-subnetting",
-    description:
-      "Hitung subnet, IP range, broadcast, dan jumlah host dari CIDR.",
-    icon: <Divide className="w-6 h-6 text-purple-500" />,
-    category: "Network Tools",
-  },
-  {
-    id: 25,
-    name: "VLSM Calculator",
-    slug: "calculator/vlsm-calculator",
-    description: "Alat perhitungan subnet dengan panjang variabel (VLSM).",
-    icon: <ListOrdered className="w-6 h-6 text-orange-500" />,
-    category: "Network Tools",
-  },
-];
-
 const categories = Array.from(new Set(tools.map((tool) => tool.category)));
 
 export default function ProductivityTools() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const filteredTools = selectedCategory
     ? tools.filter((tool) => tool.category === selectedCategory)
     : tools;
 
   return (
-    <section id="tools" className="bg-white">
-      <div className="container mx-auto px-6 mb-10">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+    <section className="relative py-16 sm:py-20 overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: `linear-gradient(120deg, #93c5fd, #bfdbfe, #dbeafe, #93c5fd)`,
+          backgroundSize: "400% 400%",
+          animation: "gradient-move 20s ease infinite",
+        }}
+      />
+
+      {/* Moving Wave Overlay */}
+      <div
+        className="absolute inset-0 -z-10 opacity-30"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 30%, rgba(59,130,246,0.2), transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(147,197,253,0.15), transparent 50%)
+          `,
+          animation: "wave-move 25s ease-in-out infinite",
+        }}
+      />
+
+      {/* Glassmorphism Overlay */}
+      <div className="absolute inset-0 bg-white/50 backdrop-blur-md" />
+
+      <style jsx>{`
+        @keyframes gradient-move {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        @keyframes wave-move {
+          0%,
+          100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          33% {
+            transform: translate(20px, -20px) rotate(5deg);
+          }
+          66% {
+            transform: translate(-20px, 20px) rotate(-5deg);
+          }
+        }
+
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .perspective {
+          perspective: 1000px;
+        }
+      `}</style>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
             Alat Produktivitas
           </h2>
-          <p className="text-gray-500 mt-2 text-sm md:text-base">
+          <p className="mt-3 text-gray-600 text-base sm:text-lg">
             Jelajahi alat digital kami untuk mendukung kesehatan dan efisiensi
             kerja.
             <Link
-              prefetch
               href="/apps"
-              className="ml-2 text-blue-600 hover:underline"
+              className="ml-2 font-medium text-blue-600 hover:text-blue-500 transition"
             >
-              Lihat Semua
+              Lihat Semua →
             </Link>
           </p>
         </div>
-        {/* Kategori */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <CategoryButton
-            label="Semua"
-            active={!selectedCategory}
-            onClick={() => setSelectedCategory(null)}
-          />
-          {categories.map((cat) => (
-            <CategoryButton
-              key={cat}
-              label={cat}
-              active={selectedCategory === cat}
-              onClick={() => setSelectedCategory(cat)}
+
+        {/* Category Pills */}
+        <div className="mb-8 sm:mb-10 relative">
+          {/* Mobile Scroll */}
+          <div
+            ref={scrollRef}
+            className="flex md:hidden overflow-x-auto gap-2 pb-2 hide-scrollbar snap-x snap-mandatory"
+          >
+            <div className="flex gap-2 px-4">
+              <CategoryPill
+                label="Semua"
+                active={!selectedCategory}
+                onClick={() => setSelectedCategory(null)}
+              />
+              {categories.map((cat) => (
+                <CategoryPill
+                  key={cat}
+                  label={cat}
+                  active={selectedCategory === cat}
+                  onClick={() => setSelectedCategory(cat)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop Flex Wrap */}
+          <div className="hidden md:flex flex-wrap justify-center gap-2 sm:gap-3">
+            <CategoryPill
+              label="Semua"
+              active={!selectedCategory}
+              onClick={() => setSelectedCategory(null)}
             />
-          ))}
-        </div>
-        {/* Tools */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredTools.map((tool) => (
-            <Link key={tool.id} href={`/apps/${tool.slug}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                viewport={{ once: true }}
-                className="p-5 bg-white border rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer"
+            {categories.map((cat) => (
+              <CategoryPill
+                key={cat}
+                label={cat}
+                active={selectedCategory === cat}
+                onClick={() => setSelectedCategory(cat)}
+              />
+            ))}
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="md:hidden text-center mt-2">
+            <div className="inline-flex items-center gap-1 text-xs text-gray-400">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <div className="flex items-start gap-4">
-                  <div className="bg-gray-100 p-2 rounded-lg">{tool.icon}</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-base">
-                      {tool.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1 break-words line-clamp-2 md:line-clamp-3">
-                      {tool.description}
-                    </p>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                />
+              </svg>
+              <span>Geser untuk melihat kategori lainnya</span>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Tools Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
+          {filteredTools.map((tool) => (
+            <Link key={tool.id} href={`/apps/${tool.slug}`} className="block">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.25 }}
+                className="group h-full perspective"
+              >
+                <div className="h-full p-4 sm:p-5 bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:rotate-1 hover:scale-105 transform-gpu">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex-shrink-0 mt-0.5 p-2 bg-gray-50 rounded-lg text-gray-700 group-hover:bg-gray-100 transition-colors">
+                      {tool.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-sm sm:text-base group-hover:text-blue-600 transition-colors">
+                        {tool.name}
+                      </h3>
+                      <p className="mt-1 text-gray-600 text-xs sm:text-sm leading-relaxed line-clamp-2">
+                        {tool.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </motion.div>

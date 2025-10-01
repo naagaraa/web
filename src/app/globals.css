@@ -10,6 +10,9 @@
   display: none; 
 }
 
+.perspective {
+  perspective: 1000px;
+}
 
 
 /* Hanya sembunyikan scrollbar di mobile & tablet (≤768px) */

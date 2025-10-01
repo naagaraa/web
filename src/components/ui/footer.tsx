@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
                 key={idx}
                 className="flex items-center gap-2 hover:text-white transition"
               >
-                {tool.icon}
+                {/* {tool.icon} */}
                 {tool.name}
               </li>
             ))}
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
                 key={idx}
                 className="flex items-center gap-2 hover:text-white transition"
               >
-                {service.icon}
+                {/* {service.icon} */}
                 {service.title}
               </li>
             ))}
