@@ -1,6 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Hanken_Grotesk } from "next/font/google";
+import InAppBrowserWarning from "../components/InAppBrowserWarning";
 
 const hanken = Hanken_Grotesk({ weight: "400", subsets: ["latin"] });
 

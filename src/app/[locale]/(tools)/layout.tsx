@@ -15,6 +15,7 @@ import {
   BottomNavProvider,
   useBottomNav,
 } from "@/src/context/BottomNavContext";
+import InAppBrowserWarning from "@/src/components/InAppBrowserWarning";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -61,6 +62,7 @@ export function AppLayoutContent({ children }: AppLayoutProps) {
   return (
     <main className="h-screen overflow-hidden bg-gray-50">
       <Header />
+      <InAppBrowserWarning />
 
       <div className="flex flex-col h-full md:flex-row">
         <Sidebar active={active} handleClick={handleCategoryClick} />
