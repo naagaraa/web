@@ -5,7 +5,6 @@ import { User, X, Search, Mail, Github, Facebook } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/dev-to.svg";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -83,181 +82,155 @@ export default function Header() {
       </header>
 
       {/* Mobile Drawer */}
-      <AnimatePresence>
-        {openMenu && (
-          <motion.div
-            className="fixed inset-0 z-50 flex"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div
-              className="flex-1 bg-black/40 backdrop-blur-sm"
-              onClick={() => setOpenMenu(false)}
-            />
-            <motion.div
-              className="w-72 bg-white/70 backdrop-blur-lg shadow-2xl p-4 flex flex-col"
-              initial={{ x: 300 }}
-              animate={{ x: 0 }}
-              exit={{ x: 300 }}
-              transition={{ type: "tween" }}
-            >
-              <div className="flex justify-between items-center mb-6">
-                <span className="font-semibold text-lg">Menu</span>
-                <button onClick={() => setOpenMenu(false)}>
-                  <X className="w-5 h-5 text-zinc-600" />
-                </button>
-              </div>
-
-              <div className="relative mb-4">
-                <input
-                  type="text"
-                  placeholder="Search tools..."
-                  className="w-full rounded-md border border-zinc-300 bg-zinc-100/50 pl-3 pr-9 py-2 text-sm outline-none focus:outline focus:outline-blue-500 focus:bg-white/40 backdrop-blur-sm"
-                />
-                <Search className="absolute right-3 top-2.5 h-4 w-4 text-zinc-500" />
-              </div>
-
-              <button
-                onClick={() => {
-                  setOpenLogin(true);
-                  setOpenMenu(false);
-                }}
-                className="text-sm text-left px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
-              >
-                Log in
+      {openMenu && (
+        <div className="fixed inset-0 z-50 flex">
+          <div
+            className="flex-1 bg-black/40 backdrop-blur-sm"
+            onClick={() => setOpenMenu(false)}
+          />
+          <div className="w-72 bg-white/70 backdrop-blur-lg shadow-2xl p-4 flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <span className="font-semibold text-lg">Menu</span>
+              <button onClick={() => setOpenMenu(false)}>
+                <X className="w-5 h-5 text-zinc-600" />
               </button>
-              <Link
-                href="/submit-tool"
-                className="text-sm px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
-                onClick={() => setOpenMenu(false)}
-              >
-                Submit a tool
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
-                onClick={() => setOpenMenu(false)}
-              >
-                Dev ?
-              </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+
+            <div className="relative mb-4">
+              <input
+                type="text"
+                placeholder="Search tools..."
+                className="w-full rounded-md border border-zinc-300 bg-zinc-100/50 pl-3 pr-9 py-2 text-sm outline-none focus:outline focus:outline-blue-500 focus:bg-white/40 backdrop-blur-sm"
+              />
+              <Search className="absolute right-3 top-2.5 h-4 w-4 text-zinc-500" />
+            </div>
+
+            <button
+              onClick={() => {
+                setOpenLogin(true);
+                setOpenMenu(false);
+              }}
+              className="text-sm text-left px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
+            >
+              Log in
+            </button>
+            <Link
+              href="/submit-tool"
+              className="text-sm px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
+              onClick={() => setOpenMenu(false)}
+            >
+              Submit a tool
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm px-3 py-2 rounded-md hover:bg-zinc-100 transition-all"
+              onClick={() => setOpenMenu(false)}
+            >
+              Dev ?
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Login/Register Modal */}
-      <AnimatePresence>
-        {openLogin && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+      {openLogin && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setOpenLogin(false)}
+          />
+
+          <div className="relative w-full max-w-md bg-white backdrop-blur-xl rounded-2xl shadow-2xl p-6">
+            <button
+              className="absolute top-3 right-3 text-zinc-500 hover:text-zinc-800"
               onClick={() => setOpenLogin(false)}
-            />
-
-            <motion.div
-              className="relative w-full max-w-md bg-white backdrop-blur-xl rounded-2xl shadow-2xl p-6"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.25 }}
             >
-              <button
-                className="absolute top-3 right-3 text-zinc-500 hover:text-zinc-800"
-                onClick={() => setOpenLogin(false)}
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <X className="w-5 h-5" />
+            </button>
 
-              {/* Tabs */}
-              <div className="flex mb-4 rounded-full bg-zinc-100/50 p-1">
-                <button
-                  onClick={() => setLoginMode("login")}
-                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-                    loginMode === "login"
-                      ? "bg-white shadow text-blue-600"
-                      : "text-zinc-500"
-                  }`}
-                >
+            {/* Tabs */}
+            <div className="flex mb-4 rounded-full bg-zinc-100/50 p-1">
+              <button
+                onClick={() => setLoginMode("login")}
+                className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+                  loginMode === "login"
+                    ? "bg-white shadow text-blue-600"
+                    : "text-zinc-500"
+                }`}
+              >
+                Login
+              </button>
+              <button
+                onClick={() => setLoginMode("register")}
+                className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
+                  loginMode === "register"
+                    ? "bg-white shadow text-blue-600"
+                    : "text-zinc-500"
+                }`}
+              >
+                Register
+              </button>
+            </div>
+
+            {/* Form */}
+            {loginMode === "login" ? (
+              <form className="space-y-3">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
+                />
+                <button className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition-all">
                   Login
                 </button>
-                <button
-                  onClick={() => setLoginMode("register")}
-                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-all ${
-                    loginMode === "register"
-                      ? "bg-white shadow text-blue-600"
-                      : "text-zinc-500"
-                  }`}
-                >
+              </form>
+            ) : (
+              <form className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
+                />
+                <button className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition-all">
                   Register
                 </button>
-              </div>
+              </form>
+            )}
 
-              {/* Form */}
-              {loginMode === "login" ? (
-                <form className="space-y-3">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
-                  />
-                  <button className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition-all">
-                    Login
-                  </button>
-                </form>
-              ) : (
-                <form className="space-y-3">
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
-                  />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full border rounded-md px-3 py-2 text-sm outline-none focus:outline focus:outline-blue-500 backdrop-blur-sm"
-                  />
-                  <button className="w-full bg-blue-600 text-white py-2 rounded-md text-sm hover:bg-blue-700 transition-all">
-                    Register
-                  </button>
-                </form>
-              )}
+            <div className="my-4 text-center text-sm text-zinc-400">
+              or continue with
+            </div>
 
-              <div className="my-4 text-center text-sm text-zinc-400">
-                or continue with
-              </div>
-
-              <div className="space-y-2">
-                <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
-                  <Mail className="w-4 h-4" /> Continue with Email
-                </button>
-                <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
-                  <Github className="w-4 h-4" /> Continue with GitHub
-                </button>
-                <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
-                  <Facebook className="w-4 h-4 text-blue-600" /> Continue with
-                  Facebook
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className="space-y-2">
+              <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
+                <Mail className="w-4 h-4" /> Continue with Email
+              </button>
+              <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
+                <Github className="w-4 h-4" /> Continue with GitHub
+              </button>
+              <button className="w-full flex items-center justify-center gap-2 border border-zinc-300 rounded-md py-2 text-sm hover:bg-zinc-100 transition-all">
+                <Facebook className="w-4 h-4 text-blue-600" /> Continue with
+                Facebook
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
