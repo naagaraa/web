@@ -10,20 +10,23 @@ export async function generateMetadata(props: {
   const searchParams = await props.searchParams;
   const locale = searchParams?.locale === "id" ? "id" : "en";
 
-  const title = locale === "id" ? "Kalkulator BMI" : "BMI Calculator";
+  const title = locale === "id" ? "Alat Filter Gambar" : "Image Filter Tool";
   const description =
     locale === "id"
-      ? "Hitung indeks massa tubuh (BMI) Anda dan ketahui apakah berat badan Anda ideal."
-      : "Calculate your Body Mass Index (BMI) and check if your weight is ideal.";
+      ? "Tambahkan berbagai filter profesional pada gambar Anda secara online, termasuk Black & White, Sepia, dan banyak lainnya."
+      : "Apply professional image filters online, including Black & White, Sepia, and many more.";
 
   return {
     title,
     description,
     keywords: [
-      "BMI calculator",
-      "kalkulator BMI",
-      "ideal weight",
-      "body mass index",
+      "image filter",
+      "foto editor",
+      "filter gambar",
+      "online photo tools",
+      "photo effects",
+      "black and white",
+      "sepia",
     ],
     openGraph: {
       title,

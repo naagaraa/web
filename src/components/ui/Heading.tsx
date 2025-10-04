@@ -7,12 +7,18 @@ export default function Heading({
   title,
   stack,
   backgroundImage,
-}: HeadingProps & { backgroundImage?: string }) {
+  backgroundColor = "bg-gray-100", // default bg
+  textColor = "text-white", // default text
+}: HeadingProps & {
+  backgroundImage?: string;
+  backgroundColor?: string;
+  textColor?: string;
+}) {
   const { isLoading } = useLoading(true, 500);
 
   return (
     <section
-      className="relative bg-gray-100 bg-cover bg-center"
+      className={`relative bg-cover bg-center ${backgroundColor}`}
       style={{
         backgroundImage: backgroundImage
           ? `url(${backgroundImage})`
@@ -20,11 +26,11 @@ export default function Heading({
       }}
     >
       {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32 text-center">
         <motion.h1
-          className="text-4xl md:text-6xl font-extrabold text-white tracking-tight"
+          className={`text-4xl md:text-6xl font-extrabold tracking-tight ${textColor}`}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -33,7 +39,7 @@ export default function Heading({
         </motion.h1>
 
         <motion.p
-          className="mt-6 text-lg md:text-xl text-white/90"
+          className={`mt-6 text-lg md:text-xl ${textColor}/90`}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -43,7 +49,7 @@ export default function Heading({
 
         {stack?.title && (
           <motion.p
-            className="mt-2 text-sm text-white/70"
+            className={`mt-2 text-sm ${textColor}/70`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}

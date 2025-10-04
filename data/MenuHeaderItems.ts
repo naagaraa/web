@@ -17,7 +17,7 @@ export const menuItems = [
   {
     title: "About",
     children: [
-      { title: "Developer", link: "/about" },
+      { title: "Tim", link: "/about" },
       { title: "Sponsorship", link: "/sponsorship" },
     ],
   },

@@ -29,7 +29,7 @@ function PricingSection() {
           transition={{ duration: 0.5 }}
           className="text-4xl font-bold text-gray-900 mb-4"
         >
-          All Tools are Free — For Now
+          Semua Tools Gratis Digunakan
         </motion.h2>
 
         <motion.p
@@ -38,49 +38,28 @@ function PricingSection() {
           transition={{ duration: 0.5 }}
           className="text-gray-600 mb-12 max-w-2xl mx-auto text-base"
         >
-          We believe in giving access to everyone. All tools are currently free
-          to use. Our paid plans are coming soon with additional features and
-          dedicated support.
+          Nikmati semua tools kami tanpa biaya! Setiap tool dapat digunakan
+          secara gratis, dengan batasan penggunaan wajar agar layanan tetap
+          optimal.
         </motion.p>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-1 gap-6 max-w-3xl mx-auto">
           <PlanCard
-            title="Free Plan"
+            title="Gratis"
             price="Rp 0"
-            description="Unlimited access to all current tools."
+            description="Gunakan semua tools yang tersedia secara gratis."
             features={[
-              "Unlimited usage",
-              "All categories",
-              "No signup required",
-              "Regular updates",
+              "Akses semua tools",
+              "Batas penggunaan wajar per tool",
+              "Tidak perlu daftar akun",
+              "Update berkala untuk semua tools",
+              "Semua Di Process di browser",
+              "Tidak menyimpan di data",
+              "Aman tdak ada masalah",
             ]}
             highlight
-            ctaLabel="Start Using"
+            ctaLabel="Mulai Menggunakan"
             ctaHref="/apps"
-          />
-          <PlanCard
-            title="Pro Plan"
-            price="Coming Soon"
-            description="Ideal for teams needing more control and reliability."
-            features={[
-              "Priority access",
-              "Faster load & dedicated resources",
-              "Team collaboration features",
-              "Early access to beta tools",
-            ]}
-            comingSoon
-          />
-          <PlanCard
-            title="Enterprise"
-            price="Coming Soon"
-            description="Custom plans for large teams or special integrations."
-            features={[
-              "Custom tools & workflows",
-              "Dedicated support",
-              "SLA & Uptime guarantees",
-              "Integration with internal systems",
-            ]}
-            comingSoon
           />
         </div>
       </div>
@@ -126,11 +105,7 @@ function PlanCard({
       <ul className="text-left space-y-3 text-sm text-gray-700 mb-6">
         {features.map((feature, i) => (
           <li key={i} className="flex items-start gap-2">
-            {comingSoon ? (
-              <Clock className="w-4 h-4 text-gray-400 mt-1" />
-            ) : (
-              <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
-            )}
+            <CheckCircle className="w-4 h-4 text-green-500 mt-1" />
             <span>{feature}</span>
           </li>
         ))}
@@ -143,12 +118,6 @@ function PlanCard({
         >
           {ctaLabel}
         </a>
-      )}
-
-      {comingSoon && (
-        <div className="text-xs text-orange-500 font-medium uppercase tracking-wide">
-          Coming Soon
-        </div>
       )}
     </motion.div>
   );

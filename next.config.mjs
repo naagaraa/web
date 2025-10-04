@@ -6,6 +6,19 @@ const withNextIntl = createNextIntlPlugin(intlConfig);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self' https://www.google.com",
+          },
+        ],
+      },
+    ];
+  },
   allowedDevOrigins: ["local-origin.dev", "*.local-origin.dev"],
   compress: true,
   images: {

@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { HeroObserverProvider } from "@/src/context/HeroObserverContext"; // ✅
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import Script from "next/script";
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -21,6 +22,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <Script
+        id="recaptcha"
+        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+        strategy="afterInteractive"
+      />
       <HeroObserverProvider>
         <Header />
         <main className="min-h-screen">{children}</main>

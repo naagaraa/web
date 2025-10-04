@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ContactContent() {
   const [formData, setFormData] = useState({
@@ -13,10 +14,55 @@ export default function ContactContent() {
     budget: "",
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Data form:", formData);
-    alert("Form berhasil dikirim!"); // placeholder
+    setLoading(true);
+
+    try {
+      // Jalankan reCAPTCHA v3
+      const token = await (window as any).grecaptcha.execute(
+        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+        { action: "submit" }
+      );
+
+      // Payload form + token
+      const payload = {
+        ...formData,
+        company: formData.company || "N/A",
+        token,
+      };
+
+      const res = await fetch("/.netlify/functions/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        toast.success("Form berhasil dikirim!");
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          industry: "",
+          need: "",
+          message: "",
+          budget: "",
+        });
+      } else {
+        console.error(result);
+        toast.error("Gagal mengirim form, coba lagi.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Terjadi kesalahan saat mengirim form.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -28,9 +74,8 @@ export default function ContactContent() {
             Web Development & IT Support
           </h2>
           <p className="text-gray-600 mb-8 leading-relaxed">
-            Solusi praktis untuk tim yang membutuhkan sistem handal tanpa ribet.
-            Kami mendukung pengembangan web, alat internal, dan dukungan IT
-            jarak jauh.
+            Solusi praktis untuk startup, tim kecil, maupun perusahaan yang
+            membutuhkan sistem handal tanpa ribet.
           </p>
 
           <div className="space-y-6">
@@ -58,6 +103,7 @@ export default function ContactContent() {
               onChange={(e: any) =>
                 setFormData({ ...formData, name: e.target.value })
               }
+              required
             />
             <Input
               type="email"
@@ -66,6 +112,7 @@ export default function ContactContent() {
               onChange={(e: any) =>
                 setFormData({ ...formData, email: e.target.value })
               }
+              required
             />
             <Input
               placeholder="Nama perusahaan (opsional)"
@@ -84,9 +131,11 @@ export default function ContactContent() {
                 "UKM",
                 "Enterprise",
                 "NGO / Komunitas",
+                "Freelancer",
                 "Lainnya",
               ]}
               placeholder="Jenis industri"
+              required
             />
             <Select
               value={formData.need}
@@ -100,6 +149,7 @@ export default function ContactContent() {
                 "Lainnya",
               ]}
               placeholder="Kebutuhan"
+              required
             />
             <TextArea
               value={formData.message}
@@ -107,6 +157,7 @@ export default function ContactContent() {
                 setFormData({ ...formData, message: e.target.value })
               }
               placeholder="Ceritakan sedikit tentang proyek Anda..."
+              required
             />
             <Select
               value={formData.budget}
@@ -119,9 +170,10 @@ export default function ContactContent() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Kirim Pesan
+              {loading ? "Mengirim..." : "Kirim Pesan"}
             </button>
           </form>
         </div>
@@ -142,11 +194,12 @@ function Input({ type = "text", ...props }) {
   );
 }
 
-function Select({ value, onChange, options, placeholder }: any) {
+function Select({ value, onChange, options, placeholder, required }: any) {
   return (
     <select
       value={value}
       onChange={onChange}
+      required={required}
       className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
     >
       <option value="">{placeholder}</option>

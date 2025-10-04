@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Code,
   Wrench,
@@ -11,6 +13,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 interface ToolCategory {
   name: string;
@@ -60,6 +63,40 @@ const services: Service[] = [
 ];
 
 const Footer: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!email) {
+      toast.error("Masukkan email dulu ya!");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/.netlify/functions/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        toast.success("Berhasil subscribe!");
+        setEmail("");
+      } else {
+        toast.error("Gagal subscribe, coba lagi.");
+        console.error(result);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Terjadi kesalahan, coba lagi.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-black text-white px-6 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
@@ -131,9 +168,15 @@ const Footer: React.FC = () => {
             type="email"
             placeholder="Email kamu..."
             className="w-full p-2 rounded bg-gray-800 text-white text-sm focus:outline-none"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          <button className="mt-2 px-4 py-2 bg-blue-600 text-sm rounded hover:bg-blue-700 transition w-full">
-            Subscribe
+          <button
+            onClick={handleSubscribe}
+            disabled={loading}
+            className="mt-2 px-4 py-2 bg-blue-600 text-sm rounded hover:bg-blue-700 transition w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Menyimpan..." : "Subscribe"}
           </button>
         </div>
       </div>
