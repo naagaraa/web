@@ -2,6 +2,8 @@
 
 #excep
 personal-website-474104-e42b8a6a8d4f.json
+.env
+.env.local
 
 # dependencies
 /node_modules
