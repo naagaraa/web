@@ -38,7 +38,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="py-20 bg-gradient-to-b from-gray-50 to-gray-100"
+      className="py-20 bg-linear-to-b from-gray-50 to-gray-100"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
@@ -57,7 +57,7 @@ export default function Services() {
           {services.map((service, index) => (
             <motion.div
               key={index}
-              className="flex-shrink-0 w-72 snap-start group perspective"
+              className="shrink-0 w-72 snap-start group perspective"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}

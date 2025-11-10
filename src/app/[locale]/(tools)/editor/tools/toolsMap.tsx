@@ -32,6 +32,7 @@ import {
   Type,
   RotateCcw,
   Palette,
+  DockIcon,
 } from "lucide-react";
 
 export type ToolItem = {
@@ -163,19 +164,25 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: "documents",
-    label: "Documents",
+    id: "Seo-Tools",
+    label: "Seo Tools",
     icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
     tools: [
       {
-        name: "PDF Tools",
-        slug: "apps/documents/pdf-tools",
+        name: "Meta Tag Generator",
+        slug: "apps/seo-tools/meta-tag-generator",
         description: "Gabung, kompres, atau pisahkan file PDF Anda.",
         icon: <FileInput className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {
-        name: "Text Tools",
-        slug: "apps/documents/text-tools",
+        name: "Robots.txt Generator",
+        slug: "apps/seo-tools/robots-txt-generator",
+        description: "Alat bantu analisis, konversi, atau edit teks.",
+        icon: <FileText className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "Sitemap Generator",
+        slug: "apps/seo-tools/sitemap-generator",
         description: "Alat bantu analisis, konversi, atau edit teks.",
         icon: <FileText className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
@@ -278,6 +285,31 @@ export const categories: Category[] = [
         slug: "apps/daily/pomodoro-timer",
         description: "Pomodoro timer untuk meningkatkan produktivitas.",
         icon: <TimerReset className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+    ],
+  },
+  {
+    id: "PDF",
+    label: "PDF",
+    icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+    tools: [
+      {
+        name: "Image To PDF",
+        slug: "apps/pdf/image-to-pdf",
+        description: "Konversi berbagai format gambar menjadi file PDF.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "PDF Merger",
+        slug: "apps/pdf/merger",
+        description: "Gabung beberapa file PDF menjadi satu dokumen.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "PDF Splitter",
+        slug: "apps/pdf/splitter",
+        description: "Pisah file PDF berdasarkan halaman atau rentang halaman.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
     ],
   },

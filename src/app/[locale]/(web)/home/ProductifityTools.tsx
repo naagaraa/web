@@ -17,7 +17,7 @@ function CategoryPill({
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap flex-shrink-0 ${
+      className={`px-4 py-2 text-sm font-medium rounded-full transition-colors whitespace-nowrap shrink-0 ${
         active
           ? "bg-blue-500 text-white"
           : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -200,7 +200,11 @@ export default function ProductivityTools() {
         {/* Tools Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
           {filteredTools.map((tool) => (
-            <Link key={tool.id} href={`/apps/${tool.slug}`} className="block">
+            <Link
+              key={Math.random()}
+              href={`/apps/${tool.slug}`}
+              className="block"
+            >
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -210,7 +214,7 @@ export default function ProductivityTools() {
               >
                 <div className="h-full p-4 sm:p-5 bg-white/80 backdrop-blur-md rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:rotate-1 hover:scale-105 transform-gpu">
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="flex-shrink-0 mt-0.5 p-2 bg-gray-50 rounded-lg text-gray-700 group-hover:bg-gray-100 transition-colors">
+                    <div className="shrink-0 mt-0.5 p-2 bg-gray-50 rounded-lg text-gray-700 group-hover:bg-gray-100 transition-colors">
                       {tool.icon}
                     </div>
                     <div className="min-w-0">

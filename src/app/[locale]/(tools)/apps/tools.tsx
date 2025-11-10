@@ -30,7 +30,6 @@ import {
 import { ReactNode } from "react";
 
 export interface ToolInterface {
-  id: number;
   name: string;
   slug: string;
   description: string;
@@ -41,7 +40,6 @@ export interface ToolInterface {
 
 export const tools: ToolInterface[] = [
   {
-    id: 1,
     name: "Blood Glucose",
     slug: "calculator/blood-glucose",
     description: "Hitung dan pantau kadar gula darah harian Anda.",
@@ -49,7 +47,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 2,
     name: "BMI",
     slug: "calculator/bmi",
     description:
@@ -58,7 +55,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 3,
     name: "BMR",
     slug: "calculator/bmr",
     description:
@@ -67,7 +63,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 5,
     name: "Macronutrient",
     slug: "calculator/macronutrient",
     description: "Tentukan distribusi protein, karbohidrat, dan lemak.",
@@ -75,7 +70,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 6,
     name: "Pregnancy",
     slug: "calculator/pregnancy",
     description: "Perkiraan tanggal kelahiran dan status kehamilan.",
@@ -83,7 +77,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 7,
     name: "Sleep Time",
     slug: "calculator/sleep-time",
     description: "Rencanakan waktu tidur yang optimal untuk produktivitas.",
@@ -91,7 +84,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 8,
     name: "Vitamins",
     slug: "calculator/vitamins",
     description: "Cek kebutuhan vitamin harian berdasarkan usia dan gender.",
@@ -99,7 +91,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 9,
     name: "Water",
     slug: "calculator/water",
     description: "Rekomendasi jumlah air minum harian.",
@@ -107,7 +98,6 @@ export const tools: ToolInterface[] = [
     category: "Calculator",
   },
   {
-    id: 10,
     name: "Anxiety Checker",
     slug: "mental-health/anxiety",
     description: "Tes singkat untuk mengenali tingkat kecemasan Anda.",
@@ -115,7 +105,6 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 11,
     name: "Depression Screening",
     slug: "mental-health/depression",
     description: "Alat skrining awal untuk mengenali gejala depresi.",
@@ -123,7 +112,6 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 12,
     name: "Self-Esteem Scale",
     slug: "mental-health/self-esteem-scale",
     description: "Ukur tingkat kepercayaan diri Anda secara objektif.",
@@ -131,7 +119,6 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 13,
     name: "Stress Level Test",
     slug: "mental-health/stress-level",
     description: "Kenali tingkat stres harian Anda dengan cepat.",
@@ -139,7 +126,28 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 14,
+    name: "Meta Tag Generator",
+    slug: "seo-tools/meta-tag-generator",
+    description: "Gabung, kompres, atau pisahkan file PDF Anda.",
+    icon: <FileInput className={`w-5 h-5 text-gray-600`} />,
+    category: "Seo Tools",
+  },
+  {
+    name: "Robots.txt Generator",
+    slug: "seo-tools/robots-txt-generator",
+    description: "Alat bantu analisis, konversi, atau edit teks.",
+    icon: <FileText className={`w-5 h-5 text-gray-600`} />,
+    category: "Seo Tools",
+  },
+
+  {
+    name: "Sitemap Generator",
+    slug: "seo-tools/sitemap-generator",
+    description: "Alat bantu analisis, konversi, atau edit teks.",
+    icon: <FileText className={`w-5 h-5 text-gray-600`} />,
+    category: "Seo Tools",
+  },
+  {
     name: "Suicidal Ideation Check",
     slug: "mental-health/suicidal-ideation",
     description: "Skrining awal untuk mendeteksi ide bunuh diri.",
@@ -147,32 +155,13 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 15,
     name: "PTSD Screening",
     slug: "mental-health/ptsd",
     description: "Alat bantu awal untuk mengidentifikasi gejala PTSD.",
     icon: <Flame className="w-6 h-6 text-purple-600" />,
     category: "Mental Health",
   },
-
   {
-    id: 12,
-    name: "PDF Tools",
-    slug: "pdf tools",
-    description: "Gabung, kompres, atau pisahkan file PDF Anda.",
-    icon: <FileInput className="w-6 h-6 text-gray-600" />,
-    category: "Documents",
-  },
-  {
-    id: 13,
-    name: "Text Tools",
-    slug: "text-tools",
-    description: "Alat bantu analisis, konversi, atau edit teks.",
-    icon: <FileText className="w-6 h-6 text-gray-700" />,
-    category: "Documents",
-  },
-  {
-    id: 14,
     name: " Compressor",
     slug: "image/compressor",
     description:
@@ -181,7 +170,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 15,
     name: "Burnout Checker",
     slug: "mental-health/burnout-checker",
     description: "Tes untuk mengukur tingkat burnout emosional.",
@@ -189,7 +177,6 @@ export const tools: ToolInterface[] = [
     category: "Mental Health",
   },
   {
-    id: 16,
     name: "JWT Decoder",
     slug: "text/jwt-decoder",
     description: "Dekode dan periksa struktur token JWT dengan mudah.",
@@ -197,7 +184,6 @@ export const tools: ToolInterface[] = [
     category: "Developer Tools",
   },
   {
-    id: 17,
     name: "Base64 Decoder Encoder",
     slug: "text/base64-decoder-encoder",
     description:
@@ -206,7 +192,6 @@ export const tools: ToolInterface[] = [
     category: "Developer Tools",
   },
   {
-    id: 18,
     name: "JSON Formatter",
     slug: "text/json-formatter",
     description: "Format dan perindah struktur JSON dengan validasi otomatis.",
@@ -214,7 +199,6 @@ export const tools: ToolInterface[] = [
     category: "Developer Tools",
   },
   {
-    id: 19,
     name: "QR Code Generator",
     slug: "text/qrcode",
     description:
@@ -223,7 +207,6 @@ export const tools: ToolInterface[] = [
     category: "Utilities",
   },
   {
-    id: 20,
     name: "Konverter Gambar",
     slug: "image/converter",
     description:
@@ -232,7 +215,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 21,
     name: "Crop Gambar",
     slug: "image/cropper",
     description:
@@ -241,7 +223,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 22,
     name: "Watermark Gambar",
     slug: "image/watermark",
     description: "Tambahkan teks atau logo sebagai watermark ke dalam gambar.",
@@ -249,7 +230,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 23, // ✅ unik
     name: "Filter Gambar",
     slug: "image/filter",
     description:
@@ -258,7 +238,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 24, // ✅ unik
     name: "Putar Gambar",
     slug: "image/rotate",
     description:
@@ -267,7 +246,6 @@ export const tools: ToolInterface[] = [
     category: "Image Tools",
   },
   {
-    id: 23,
     name: "Conversion Tools",
     slug: "calculator/conversion-tools",
     description: "Konversi IP ke biner, CIDR ke subnet mask, dan sebaliknya.",
@@ -275,7 +253,6 @@ export const tools: ToolInterface[] = [
     category: "Network Tools",
   },
   {
-    id: 24,
     name: "IP Subnetting Calculator",
     slug: "calculator/ip-subnetting",
     description:
@@ -284,7 +261,6 @@ export const tools: ToolInterface[] = [
     category: "Network Tools",
   },
   {
-    id: 25,
     name: "VLSM Calculator",
     slug: "calculator/vlsm-calculator",
     description: "Alat perhitungan subnet dengan panjang variabel (VLSM).",
