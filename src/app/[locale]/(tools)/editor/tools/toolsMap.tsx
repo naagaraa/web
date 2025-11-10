@@ -311,6 +311,19 @@ export const categories: Category[] = [
         description: "Pisah file PDF berdasarkan halaman atau rentang halaman.",
         icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
+      {
+        name: "PDF Rotator",
+        slug: "apps/pdf/rotator",
+        description: "Putar halaman PDF sesuai kebutuhan Anda.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "PDF Compressor",
+        slug: "apps/pdf/compressor",
+        description:
+          "Kompres file PDF untuk mengurangi ukuran tanpa kehilangan kualitas.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
     ],
   },
 ];

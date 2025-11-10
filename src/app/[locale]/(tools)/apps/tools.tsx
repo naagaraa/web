@@ -25,6 +25,7 @@ import {
   RotateCcw,
   Palette,
   Type,
+  File,
 } from "lucide-react";
 
 import { ReactNode } from "react";
@@ -197,6 +198,42 @@ export const tools: ToolInterface[] = [
     description: "Format dan perindah struktur JSON dengan validasi otomatis.",
     icon: <Code className="w-6 h-6 text-green-500" />,
     category: "Developer Tools",
+  },
+  {
+    name: "Image To PDF",
+    slug: "apps/pdf/image-to-pdf",
+    description: "Konversi berbagai format gambar menjadi file PDF.",
+    icon: <File className={`w-5 h-5  text-gray-500`} />,
+    category: "PDF Tools",
+  },
+  {
+    name: "PDF Merger",
+    slug: "apps/pdf/merger",
+    description: "Gabung beberapa file PDF menjadi satu dokumen.",
+    icon: <File className={`w-5 h-5  text-gray-500`} />,
+    category: "PDF Tools",
+  },
+  {
+    name: "PDF Splitter",
+    slug: "apps/pdf/splitter",
+    description: "Pisah file PDF berdasarkan halaman atau rentang halaman.",
+    icon: <File className={`w-5 h-5  text-gray-500`} />,
+    category: "PDF Tools",
+  },
+  {
+    name: "PDF Rotator",
+    slug: "apps/pdf/rotator",
+    description: "Putar halaman PDF sesuai kebutuhan Anda.",
+    icon: <File className={`w-5 h-5  text-gray-500`} />,
+    category: "PDF Tools",
+  },
+  {
+    name: "PDF Compressor",
+    slug: "apps/pdf/compressor",
+    description:
+      "Kompres file PDF untuk mengurangi ukuran tanpa kehilangan kualitas.",
+    icon: <File className={`w-5 h-5 text-gray-500`} />,
+    category: "PDF Tools",
   },
   {
     name: "QR Code Generator",

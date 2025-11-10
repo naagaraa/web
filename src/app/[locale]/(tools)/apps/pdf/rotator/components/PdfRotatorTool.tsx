@@ -140,6 +140,9 @@ export default function PdfRotatorTool() {
           <p className="mt-2 text-gray-600">
             Pilih halaman dan atur rotasi (90°, 180°, 270°).
           </p>
+          <p className="text-xs text-gray-500 mt-1">
+            100% di browser — tidak ada data disimpan.
+          </p>
         </div>
 
         <div className="mb-4">

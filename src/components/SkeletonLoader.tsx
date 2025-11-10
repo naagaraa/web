@@ -23,7 +23,7 @@ const SkeletonLoader = ({ className }: SkeletonProps) => {
         }}
         className="
           absolute inset-0
-          bg-gradient-to-r 
+          bg-linear-to-r 
           from-transparent 
           via-gray-200/40 
           to-transparent
