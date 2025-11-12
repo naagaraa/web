@@ -2,6 +2,7 @@
 
 import {
   Activity,
+  AlarmClock,
   Baby,
   BedDouble,
   Brain,
@@ -17,12 +18,14 @@ import {
   FileText,
   Flame,
   HeartPulse,
+  Hourglass,
   ImageIcon,
   ListOrdered,
   PieChart,
   QrCode,
   ShieldCheck,
   Smile,
+  TimerReset,
   Utensils,
 } from "lucide-react";
 export interface Toolinterface {
@@ -175,19 +178,40 @@ export const tools: Toolinterface[] = [
     category: "Developer Tools",
   },
   {
-    name: "QR Code Generator",
+    name: "QR  Generator",
     slug: "text/qrcode-generator",
     description:
       "Buat dan unduh QR Code dari teks atau tautan hanya dengan sekali klik.",
     icon: <QrCode className="w-6 h-6 text-pink-500" />,
-    category: "Utilities",
+    category: "QR Code",
   },
   {
-    name: "QR Code Reader",
+    name: "QR  Reader",
     slug: "text/qrcode-reader",
     description:
       "Pindai dan baca konten dari QR Code dengan mudah menggunakan kamera atau unggahan gambar.",
     icon: <QrCode className="w-6 h-6 text-pink-500" />,
+    category: "QR Code",
+  },
+  {
+    name: "Alarm Clock",
+    slug: "daily/alarm-online",
+    description: "Alarm clock untuk mengatur pengingat waktu.",
+    icon: <AlarmClock className={`w-5 h-5 text-gray-500`} />,
+    category: "Utilities",
+  },
+  {
+    name: "Countdown Timer",
+    slug: "daily/countdown-timer",
+    description: "Countdown timer untuk mengatur waktu.",
+    icon: <Hourglass className={`w-5 h-5 text-gray-500`} />,
+    category: "Utilities",
+  },
+  {
+    name: "Pomodoro Timer",
+    slug: "daily/pomodoro-timer",
+    description: "Pomodoro timer untuk meningkatkan produktivitas.",
+    icon: <TimerReset className={`w-5 h-5 text-gray-500`} />,
     category: "Utilities",
   },
   {

@@ -263,18 +263,6 @@ export const categories: Category[] = [
     icon: <Puzzle className={`w-5 h-5 ${ICON_COLOR}`} />,
     tools: [
       {
-        name: "QR Code Generator",
-        slug: "apps/text/qrcode-generator",
-        description: "Buat QR Code dari teks atau tautan.",
-        icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
-      },
-      {
-        name: "QR Code Reader",
-        slug: "apps/text/qrcode-reader",
-        description: "Pindai dan baca konten dari QR Code dengan mudah.",
-        icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
-      },
-      {
         name: "Alarm Clock",
         slug: "apps/daily/alarm-online",
         description: "Alarm clock untuk mengatur pengingat waktu.",
@@ -291,6 +279,25 @@ export const categories: Category[] = [
         slug: "apps/daily/pomodoro-timer",
         description: "Pomodoro timer untuk meningkatkan produktivitas.",
         icon: <TimerReset className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+    ],
+  },
+  {
+    id: "QR Code",
+    label: "QR Code",
+    icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
+    tools: [
+      {
+        name: "QR Generator",
+        slug: "apps/text/qrcode-generator",
+        description: "Buat QR Code dari teks atau tautan.",
+        icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "QR Reader",
+        slug: "apps/text/qrcode-reader",
+        description: "Pindai dan baca konten dari QR Code dengan mudah.",
+        icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
     ],
   },
