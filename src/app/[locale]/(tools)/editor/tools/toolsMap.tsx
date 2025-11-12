@@ -264,8 +264,14 @@ export const categories: Category[] = [
     tools: [
       {
         name: "QR Code Generator",
-        slug: "apps/text/qrcode",
+        slug: "apps/text/qrcode-generator",
         description: "Buat QR Code dari teks atau tautan.",
+        icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
+      {
+        name: "QR Code Reader",
+        slug: "apps/text/qrcode-reader",
+        description: "Pindai dan baca konten dari QR Code dengan mudah.",
         icon: <QrCode className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
       {

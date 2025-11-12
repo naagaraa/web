@@ -176,9 +176,17 @@ export const tools: Toolinterface[] = [
   },
   {
     name: "QR Code Generator",
-    slug: "text/qrcode",
+    slug: "text/qrcode-generator",
     description:
       "Buat dan unduh QR Code dari teks atau tautan hanya dengan sekali klik.",
+    icon: <QrCode className="w-6 h-6 text-pink-500" />,
+    category: "Utilities",
+  },
+  {
+    name: "QR Code Reader",
+    slug: "text/qrcode-reader",
+    description:
+      "Pindai dan baca konten dari QR Code dengan mudah menggunakan kamera atau unggahan gambar.",
     icon: <QrCode className="w-6 h-6 text-pink-500" />,
     category: "Utilities",
   },
