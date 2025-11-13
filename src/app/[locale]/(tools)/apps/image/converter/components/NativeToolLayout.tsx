@@ -1,3 +1,4 @@
+// src/app/[locale]/(tools)/apps/components/NativeToolLayout.tsx
 "use client";
 
 import { ReactNode, useEffect } from "react";
@@ -13,9 +14,7 @@ interface NativeToolLayoutProps {
     disabled?: boolean;
     loading?: boolean;
   };
-  bottomSlot?: ReactNode;
-  // ✅ Tambahkan opsi background
-  background?: "black" | "white" | "transparent";
+  topControls?: ReactNode; // ✅ DITAMBAHKAN
 }
 
 export default function NativeToolLayout({
@@ -23,8 +22,7 @@ export default function NativeToolLayout({
   title,
   onBack,
   actionButton,
-  bottomSlot,
-  background = "white", // default putih
+  topControls, // ✅ DITAMBAHKAN
 }: NativeToolLayoutProps) {
   const { setHidden } = useBottomNav();
 
@@ -33,79 +31,46 @@ export default function NativeToolLayout({
     return () => setHidden(false);
   }, [setHidden]);
 
-  // Tentukan kelas background
-  const bgClass =
-    background === "black"
-      ? "bg-black text-white"
-      : background === "transparent"
-      ? "bg-transparent text-gray-900"
-      : "bg-white text-gray-900"; // default
-
-  const headerBgClass =
-    background === "black"
-      ? "bg-gradient-to-b from-black/80 to-transparent"
-      : background === "transparent"
-      ? "bg-white/80 backdrop-blur-md"
-      : "bg-white/90 backdrop-blur-md";
-
-  const buttonClass =
-    background === "black" ? "text-white" : "text-blue-600 hover:text-blue-700";
-
-  const bottomBgClass =
-    background === "black"
-      ? "bg-black/80 backdrop-blur-md"
-      : "bg-white/80 backdrop-blur-md";
-
   return (
-    // ✅ Fullscreen: fixed + inset-0
-    <main className={`fixed inset-0 z-50 ${bgClass} overflow-hidden`}>
-      <div className="relative w-full h-full flex flex-col">
-        {/* Header Native (pt-12 untuk safe area notch) */}
-        <header
-          className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 pt-12 pb-3 ${headerBgClass}`}
-        >
+    <div className="fixed inset-0 z-50 flex flex-col bg-black/20">
+      <div className="absolute inset-0 backdrop-blur-sm bg-black/10" />
+      <div className="relative w-full h-screen flex flex-col bg-white">
+        {/* Header */}
+        <div className="p-4 pb-2 flex justify-between items-center border-b border-gray-200">
           <button
             onClick={onBack}
-            className={`${buttonClass} text-base font-medium`}
+            className="text-sm font-medium text-gray-600 hover:text-gray-900"
           >
-            Cancel
+            Batal
           </button>
-          <h1
-            className={`${
-              background === "black" ? "text-white" : "text-gray-900"
-            } font-semibold text-base`}
-          >
-            {title}
-          </h1>
+          <span className="text-sm font-medium text-gray-800">{title}</span>
           {actionButton ? (
             <button
               onClick={actionButton.onClick}
               disabled={actionButton.disabled}
-              className={`${buttonClass} font-medium ${
-                actionButton.loading ? "opacity-60" : "opacity-100"
+              className={`text-sm font-medium ${
+                actionButton.disabled ? "text-gray-400" : "text-blue-600"
               }`}
             >
-              {actionButton.loading ? "Processing..." : actionButton.label}
+              {actionButton.loading ? "Memproses..." : actionButton.label}
             </button>
           ) : (
             <div className="w-14" />
           )}
-        </header>
-
-        {/* Konten Fitur — tetap muncul setelah upload */}
-        <div className="flex-1 flex items-center justify-center p-4">
-          {children}
         </div>
 
-        {/* Bottom Controls — tetap muncul selama ada */}
-        {bottomSlot && (
-          <div
-            className={`absolute bottom-0 left-0 right-0 z-10 ${bottomBgClass} p-4 pb-6`}
-          >
-            {bottomSlot}
+        {/* ✅ Top Controls (opsional) */}
+        {topControls && (
+          <div className="px-4 py-2 border-b border-gray-100">
+            {topControls}
           </div>
         )}
+
+        {/* Konten */}
+        <div className="flex-1 flex items-center justify-center p-2 bg-gray-50 overflow-hidden">
+          {children}
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
