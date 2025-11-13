@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { JsonFormatter } from "./JsonFormatter";
 import Image from "next/image";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "JSON Formatter",

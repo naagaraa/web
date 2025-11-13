@@ -50,7 +50,7 @@ export type Category = {
   tools?: ToolItem[];
 };
 
-const ICON_COLOR = "text-indigo-500"; // Modern single color
+const ICON_COLOR = "text-black"; // Modern single color
 
 export const categories: Category[] = [
   {
@@ -58,6 +58,7 @@ export const categories: Category[] = [
     label: "Home",
     icon: <House className={`w-5 h-5 ${ICON_COLOR}`} />,
     slug: "apps",
+    tools: [],
   },
   {
     id: "calculator",

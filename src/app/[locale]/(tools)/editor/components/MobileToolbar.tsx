@@ -92,7 +92,7 @@ const MobileToolbar = ({
           key={i}
           onClick={() => setSelectedTool(tool.label)}
           className={cn(
-            "flex flex-col items-center justify-center p-2 rounded-md w-[64px] text-center shrink-0",
+            "flex flex-col items-center justify-center p-2 rounded-md w-16 text-center shrink-0",
             selectedTool === tool.label
               ? "bg-blue-100 text-blue-600"
               : "bg-gray-100"

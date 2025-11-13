@@ -1,15 +1,17 @@
 // src/app/[locale]/(tools)/apps/layout.tsx
+import type { Metadata } from "next";
+import AppLayoutClient from "../AppLayoutClient";
+
+// Optional: SEO metadata
+export const metadata: Metadata = {
+  title: "Alat Digital | Home",
+  description: "Kumpulan alat produktivitas untuk kesehatan & kerja.",
+};
 
 export default function AppsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="pb-[100px]">
-      {" "}
-      {/* sesuaikan 70px dengan height bottom nav */}
-      {children}
-    </div>
-  );
+  return <AppLayoutClient>{children}</AppLayoutClient>;
 }

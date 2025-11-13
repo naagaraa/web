@@ -97,7 +97,7 @@ const ToolPanel = ({ active }: ToolPanelProps) => {
   };
 
   return (
-    <div className="hidden md:block w-[240px] bg-gray-50 border-r p-4">
+    <div className="hidden md:block w-60 bg-gray-50 border-r p-4">
       {active && toolsMap[active]}
     </div>
   );

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import CountdownTool from "./CountdownTool";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Countdown Timer",

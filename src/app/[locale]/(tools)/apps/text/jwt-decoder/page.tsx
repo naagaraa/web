@@ -1,6 +1,6 @@
 import Link from "next/link";
 import JwtDecoder from "./JwtDecoder";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 import Image from "next/image";
 
 export const metadata = {

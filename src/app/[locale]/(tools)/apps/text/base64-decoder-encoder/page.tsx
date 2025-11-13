@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Base64Tool from "./Base64Tool";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Base64 Encoder & Decoder",

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import AlarmTool from "./AlarmTool";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Alarm Online",

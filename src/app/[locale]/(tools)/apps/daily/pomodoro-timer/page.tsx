@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import PomodoroTool from "./PomodoroTool";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Pomodoro Timer",

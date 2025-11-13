@@ -1,13 +1,34 @@
-/* eslint-disable jsx-a11y/alt-text */
 "use client";
 
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import { useState, useEffect } from "react";
+
 import { ToolInterface } from "./tools";
 import { tools } from "./tools";
 
-// Kelompokkan tools berdasarkan kategori
+// === Konfigurasi UI ===
+const uiConfig = {
+  colors: {
+    textPrimary: "text-gray-900",
+    textSecondary: "text-gray-600",
+    bgCard: "bg-background",
+    borderCard: "border-border",
+    bgIcon: "bg-muted/50",
+    textIcon: "text-muted-foreground",
+    link: "text-primary hover:underline",
+    heading: "text-gray-900",
+  },
+  spacing: {
+    cardPadding: "p-4",
+    iconPadding: "p-2.5",
+    gap: "gap-3",
+  },
+};
+
 const groupToolsByCategory = (tools: ToolInterface[]) => {
   const grouped: Record<string, ToolInterface[]> = {};
   tools.forEach((tool) => {
@@ -22,20 +43,26 @@ const groupToolsByCategory = (tools: ToolInterface[]) => {
 const groupedTools = groupToolsByCategory(tools);
 const categories = Object.keys(groupedTools);
 
-// --- Komponen Tool Card ---
-function ToolCard({ tool }: { tool: (typeof tools)[0] }) {
+function ToolCard({ tool }: { tool: ToolInterface }) {
+  const { colors, spacing } = uiConfig;
   return (
-    <Link href={`/apps/${tool.slug}`} className="shrink-0 w-80">
-      <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all h-full flex flex-col">
-        <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 bg-gray-100 p-2.5 rounded-lg text-gray-700">
+    <Link href={`/apps/${tool.slug}`} className="block min-w-0">
+      <div
+        className={`${colors.bgCard} ${colors.borderCard} rounded-xl border p-4 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col`}
+      >
+        <div className={`flex items-start ${spacing.gap}`}>
+          <div
+            className={`${colors.bgIcon} ${colors.textIcon} ${spacing.iconPadding} shrink-0 rounded-lg`}
+          >
             {tool.icon}
           </div>
-          <div className="min-w-0 flex-grow">
-            <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
+          <div className="min-w-0 grow overflow-hidden">
+            <h3
+              className={`${colors.textPrimary} font-semibold text-sm line-clamp-1`}
+            >
               {tool.name}
             </h3>
-            <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+            <p className={`${colors.textSecondary} text-xs mt-1 line-clamp-2`}>
               {tool.description}
             </p>
           </div>
@@ -45,8 +72,7 @@ function ToolCard({ tool }: { tool: (typeof tools)[0] }) {
   );
 }
 
-// --- Komponen Horizontal Scroll Section --
-
+// --- CategorySection dengan pagination kondisional ---
 function CategorySection({
   title,
   tools,
@@ -54,19 +80,40 @@ function CategorySection({
   title: string;
   tools: ToolInterface[];
 }) {
+  const { colors } = uiConfig;
+  const [showPagination, setShowPagination] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      // Anggap mobile jika <= 768px (tailwind: md breakpoint)
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      setShowPagination(!isMobile);
+    };
+
+    // Jalankan saat mount
+    checkScreenSize();
+
+    // Tambahkan listener saat resize
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   return (
-    <section className="mb-10">
-      <h2 className="text-xl font-bold text-gray-900 mb-4 px-4">{title}</h2>
+    <section className="mb-8 px-4">
+      <h2 className={`${colors.heading} text-xl font-bold mb-4`}>{title}</h2>
       <Swiper
         spaceBetween={16}
-        slidesPerView={"auto"}
-        className="px-4"
-        // Jika mau pagination:
-        pagination={{ clickable: true }}
-        // modules={[Pagination]}
+        slidesPerView="auto"
+        pagination={showPagination ? { clickable: true } : false}
+        modules={showPagination ? [Pagination] : []}
+        className="-mx-4 px-4"
       >
-        {tools.map((tool: ToolInterface) => (
-          <SwiperSlide key={tool.slug} style={{ width: "12rem" }}>
+        {tools.map((tool) => (
+          <SwiperSlide
+            key={tool.slug}
+            style={{ width: "12rem" }}
+            className="flex! h-auto!"
+          >
             <ToolCard tool={tool} />
           </SwiperSlide>
         ))}
@@ -75,27 +122,23 @@ function CategorySection({
   );
 }
 
-// --- Halaman Utama ---
-export default function page() {
+export default function Page() {
+  const { colors } = uiConfig;
   return (
-    <main className="bg-white min-h-screen pb-16">
-      <div className="pt-6 pb-4 text-start">
-        <h1 className="text-2xl font-bold text-gray-900 px-4">
+    <main className="bg-background min-h-screen pb-16">
+      <div className="pt-6 pb-4 px-4">
+        <h1 className={`${colors.heading} text-2xl font-bold`}>
           Alat Produktivitas
         </h1>
-        <p className="text-gray-600 text-sm mt-1 px-4">
+        <p className={`${colors.textSecondary} text-sm mt-1`}>
           Jelajahi alat digital untuk kesehatan & efisiensi kerja.
-          <Link
-            href="/"
-            className="ml-1 text-blue-600 font-medium hover:underline"
-          >
+          <Link href="/" className={`ml-1 font-medium ${colors.link}`}>
             Kembali ke Home
           </Link>
         </p>
       </div>
 
       <div className="space-y-8">
-        {/* Tampilkan semua kategori */}
         {categories.map((category) => (
           <CategorySection
             key={category}

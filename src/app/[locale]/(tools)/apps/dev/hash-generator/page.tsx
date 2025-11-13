@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import HashTool from "./HashTool";
 import { useEffect, useState } from "react";
-import ScrollToTopButton from "../../../editor/ScrollToTopButton";
+import ScrollToTopButton from "../../../editor/components/ScrollToTopButton";
 
 export const metadata = {
   title: "Hash Generator",

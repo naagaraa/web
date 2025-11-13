@@ -41,7 +41,7 @@ export function RenderTools({ category }: RenderToolsProps) {
                   : "hover:bg-gray-100 text-gray-700"
               }`}
             >
-              <span className="w-5 h-5 flex-shrink-0">{tool.icon}</span>
+              <span className="w-5 h-5 shrink-0">{tool.icon}</span>
               <span>{tool.name}</span>
             </Link>
           </li>
