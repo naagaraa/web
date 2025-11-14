@@ -14,7 +14,8 @@ interface NativeToolLayoutProps {
     disabled?: boolean;
     loading?: boolean;
   };
-  topControls?: ReactNode; // ✅ DITAMBAHKAN
+  topControls?: ReactNode;
+  contentClassName?: string; // ✅ BARU: untuk kustomisasi area konten
 }
 
 export default function NativeToolLayout({
@@ -22,7 +23,8 @@ export default function NativeToolLayout({
   title,
   onBack,
   actionButton,
-  topControls, // ✅ DITAMBAHKAN
+  topControls,
+  contentClassName = "bg-gray-50", // default seperti sebelumnya
 }: NativeToolLayoutProps) {
   const { setHidden } = useBottomNav();
 
@@ -59,15 +61,15 @@ export default function NativeToolLayout({
           )}
         </div>
 
-        {/* ✅ Top Controls (opsional) */}
+        {/* Top Controls */}
         {topControls && (
           <div className="px-4 py-2 border-b border-gray-100">
             {topControls}
           </div>
         )}
 
-        {/* Konten */}
-        <div className="flex-1 flex items-center justify-center p-2 bg-gray-50 overflow-hidden">
+        {/* ✅ Konten: SEKARANG FLEKSIBEL */}
+        <div className={`flex-1 overflow-auto p-2 ${contentClassName}`}>
           {children}
         </div>
       </div>
