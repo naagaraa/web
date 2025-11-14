@@ -4,6 +4,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
+import { FaCompress } from "react-icons/fa";
+import { ShieldCheck } from "lucide-react";
 
 const CompressImages = () => {
   const [images, setImages] = useState<File[]>([]);
@@ -185,30 +187,52 @@ const CompressImages = () => {
   // === MODE AWAL: UPLOAD ===
   if (images.length === 0) {
     return (
-      <main className="min-h-screen bg-gray-50 flex flex-col">
-        <div className="flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-20">
-          <div className="text-center max-w-md">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Kompres Gambar
-            </h1>
-            <p className="text-sm text-gray-600 mb-10">
-              Bandingkan sebelum & sesudah dengan geser.
-            </p>
-            <label className="w-full max-w-xs">
-              <div className="w-full py-3.5 bg-blue-600 text-white text-center rounded-xl font-medium transition-colors active:opacity-90">
-                Pilih Gambar
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          {/* Header branding */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FaCompress className="size-4 text-primary" strokeWidth={2} />
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </label>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
+
+          {/* Judul utama */}
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Compress images without quality loss
+          </h1>
+
+          {/* Microcopy SaaS */}
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Reduce file size instantly. Processed locally — no uploads, no
+            tracking.
+          </p>
+
+          {/* CTA utama */}
+          <label className="w-full max-w-xs">
+            <div className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm">
+              Upload images
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
+
+          {/* Trust badge */}
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% private • Free forever
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 

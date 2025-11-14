@@ -1,15 +1,15 @@
-// src/app/[locale]/(tools)/apps/filter/layout.tsx
+// src/app/[locale]/(tools)/apps/image/converter/layout.tsx
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { generateCropMetadata } from "./metadata";
+import { generateFilterMetadata } from "./metadata";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  return generateCropMetadata(params.locale);
+  return generateFilterMetadata(params.locale);
 }
 
-export default function FilterLayout({ children }: { children: ReactNode }) {
+export default function ConverterLayout({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }

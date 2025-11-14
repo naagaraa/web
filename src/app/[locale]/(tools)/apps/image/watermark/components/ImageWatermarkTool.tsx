@@ -3,7 +3,8 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useBottomNav } from "@/src/context/BottomNavContext";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
+import { Droplets, ShieldCheck } from "lucide-react"; // ikon watermark
 
 export default function WatermarkTool() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -22,12 +23,12 @@ export default function WatermarkTool() {
     height: 0,
   });
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
-  const [renderScale, setRenderScale] = useState(1); // skala dari natural → preview
+  const [renderScale, setRenderScale] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const { setHidden } = useBottomNav();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const BASE_TEXT_SIZE = 32;
   const BASE_LOGO_SIZE = 120;
@@ -43,7 +44,7 @@ export default function WatermarkTool() {
     setImageNaturalSize({ width: 0, height: 0 });
     setPreviewSize({ width: 0, height: 0 });
     setRenderScale(1);
-    setHidden(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +59,6 @@ export default function WatermarkTool() {
           height: img.naturalHeight,
         });
         setImageSrc(reader.result as string);
-        setHidden(true);
       };
       img.src = reader.result as string;
     };
@@ -134,13 +134,7 @@ export default function WatermarkTool() {
 
   // === DOWNLOAD ===
   const handleDownload = () => {
-    if (
-      !imageSrc ||
-      !canvasRef.current ||
-      !imgRef.current ||
-      imageNaturalSize.width === 0 ||
-      renderScale === 1 // belum dihitung
-    ) {
+    if (!imageSrc || !canvasRef.current || imageNaturalSize.width === 0) {
       toast.error("Gambar belum siap");
       return;
     }
@@ -162,8 +156,6 @@ export default function WatermarkTool() {
 
       const x = position.x * outW;
       const y = position.y * outH;
-
-      // ✅ INI KUNCI: skala dari preview ke natural = 1 / renderScale
       const previewToNaturalScale = 1 / renderScale;
 
       const triggerDownload = () => {
@@ -210,14 +202,13 @@ export default function WatermarkTool() {
     };
   };
 
-  // === RENDER PREVIEW ===
   const renderPreview = () => {
     if (!imageSrc) return null;
     const textSize = BASE_TEXT_SIZE * scale;
     const logoWidth = BASE_LOGO_SIZE * scale;
 
     return (
-      <div className="relative max-w-3xl w-full">
+      <div className="relative max-w-3xl w-full mx-auto">
         <img
           ref={imgRef}
           src={imageSrc}
@@ -225,13 +216,11 @@ export default function WatermarkTool() {
           className="w-full h-auto max-h-[70vh] object-contain"
           onLoad={() => {
             if (imgRef.current && imageNaturalSize.width > 0) {
-              // Hitung skala render sebenarnya karena object-contain
               const scaleX =
                 imgRef.current.clientWidth / imageNaturalSize.width;
               const scaleY =
                 imgRef.current.clientHeight / imageNaturalSize.height;
-              const actualRenderScale = Math.min(scaleX, scaleY); // object-contain
-
+              const actualRenderScale = Math.min(scaleX, scaleY);
               setPreviewSize({
                 width: imgRef.current.clientWidth,
                 height: imgRef.current.clientHeight,
@@ -290,125 +279,139 @@ export default function WatermarkTool() {
     }
   }, [imageSrc]);
 
-  // === UI ===
+  // ✅ MODE AWAL: TIDAK PAKAI NATIVE TOOL LAYOUT
   if (!imageSrc) {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <div className="max-w-md mx-auto px-4 py-16 flex flex-col items-center">
-          <div className="text-center mb-10">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Watermark Gambar
-            </h1>
-            <p className="mt-2 text-gray-600">
-              Tambahkan teks atau logo ke gambar Anda.
-            </p>
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          {/* Header branding */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Droplets className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
           </div>
-          <label className="w-full max-w-xs flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition">
-            Pilih Gambar
+
+          {/* Judul utama */}
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Add watermark to images
+          </h1>
+
+          {/* Microcopy SaaS */}
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Add text or logo watermarks — all processed in your browser.
+          </p>
+
+          {/* CTA utama */}
+          <label className="w-full max-w-xs">
+            <div className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm">
+              Upload an image
+            </div>
             <input
               type="file"
               accept="image/*"
+              ref={fileInputRef}
               onChange={handleImageUpload}
               className="hidden"
             />
           </label>
+
+          {/* Trust badge */}
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% client-side • No data leaves your device
+          </div>
         </div>
-      </main>
+      </div>
     );
   }
 
+  // ✅ MODE EDITING: PAKAI NATIVE TOOL LAYOUT
+  const hasWatermark = useText || !!logoSrc;
+  const canSave = hasWatermark && !isLoading;
+
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="fixed inset-0 z-50 flex flex-col bg-black/20">
-        <div className="absolute inset-0 backdrop-blur-sm bg-black/10" />
-        <div className="relative w-full h-screen flex flex-col bg-white">
-          <div className="p-4 pb-2 flex justify-between items-center border-b border-gray-200">
-            <button
-              onClick={resetAll}
-              className="text-sm font-medium text-gray-600 hover:text-gray-900"
-            >
-              Batal
-            </button>
-            <span className="text-sm font-medium text-gray-800">Watermark</span>
-            <button
-              onClick={handleDownload}
-              disabled={isLoading}
-              className={`text-sm font-medium ${
-                isLoading ? "text-gray-400" : "text-blue-600"
-              }`}
-            >
-              Simpan
-            </button>
+    <NativeToolLayout
+      title="Watermark"
+      onBack={resetAll}
+      actionButton={{
+        label: "Simpan",
+        onClick: handleDownload,
+        disabled: !canSave,
+        loading: isLoading,
+      }}
+      topControls={
+        <select
+          value={useText ? "text" : "logo"}
+          onChange={(e) => setUseText(e.target.value === "text")}
+          className="w-full text-sm border border-gray-300 rounded px-2 py-1"
+        >
+          <option value="logo">Logo</option>
+          <option value="text">Teks</option>
+        </select>
+      }
+      contentClassName="bg-gray-50"
+    >
+      <div className="flex-1 flex items-center justify-center min-h-0 p-2">
+        {renderPreview()}
+      </div>
+
+      <div className="px-4 pb-4 space-y-4">
+        {useText ? (
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={textWatermark}
+              onChange={(e) => setTextWatermark(e.target.value)}
+              className="flex-1 text-sm border border-gray-300 rounded px-3 py-2 bg-white"
+              placeholder="Teks watermark"
+            />
+            <input
+              type="color"
+              value={textColor}
+              onChange={(e) => setTextColor(e.target.value)}
+              className="w-10 h-10 rounded border border-gray-300 cursor-pointer"
+            />
           </div>
-
-          <div className="flex-1 flex items-center justify-center p-2 bg-gray-50 overflow-hidden">
-            {renderPreview()}
-          </div>
-
-          <div className="border-t border-gray-200 bg-white">
-            <div className="px-4 py-2 border-b border-gray-100">
-              <select
-                value={useText ? "text" : "logo"}
-                onChange={(e) => setUseText(e.target.value === "text")}
-                className="w-full text-sm border border-gray-300 rounded px-2 py-1"
-              >
-                <option value="logo">Logo</option>
-                <option value="text">Teks</option>
-              </select>
-            </div>
-
-            {useText ? (
-              <div className="px-4 py-2 border-b border-gray-100 flex gap-2">
-                <input
-                  type="text"
-                  value={textWatermark}
-                  onChange={(e) => setTextWatermark(e.target.value)}
-                  className="flex-1 text-sm border border-gray-300 rounded px-2 py-1"
-                  placeholder="Teks watermark"
-                />
-                <input
-                  type="color"
-                  value={textColor}
-                  onChange={(e) => setTextColor(e.target.value)}
-                  className="w-8 h-8 rounded border border-gray-300"
-                />
-              </div>
-            ) : (
-              <div className="px-4 py-2 border-b border-gray-100">
-                <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-                  <span>Upload Logo</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLogoUpload}
-                    className="hidden"
-                  />
-                  {logoSrc && (
-                    <span className="text-green-600 text-xs">✓ Siap</span>
-                  )}
-                </label>
-              </div>
-            )}
-
-            <div className="px-4 py-3">
-              <label className="block text-xs text-gray-600 mb-1">
-                Ukuran: {scale.toFixed(2)}x
-              </label>
+        ) : (
+          <div>
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer bg-white px-3 py-2 rounded border border-gray-300 w-full">
+              Upload Logo
               <input
-                type="range"
-                min={0.2}
-                max={2}
-                step={0.05}
-                value={scale}
-                onChange={(e) => setScale(parseFloat(e.target.value))}
-                className="w-full"
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                className="hidden"
               />
-            </div>
+              {logoSrc && (
+                <span className="ml-auto text-green-600 text-xs">✓ Siap</span>
+              )}
+            </label>
           </div>
+        )}
+
+        <div>
+          <div className="flex justify-between text-xs text-gray-600 mb-1">
+            <span>Ukuran</span>
+            <span>{scale.toFixed(2)}x</span>
+          </div>
+          <input
+            type="range"
+            min={0.2}
+            max={2}
+            step={0.05}
+            value={scale}
+            onChange={(e) => setScale(parseFloat(e.target.value))}
+            className="w-full"
+          />
         </div>
       </div>
 
       <canvas ref={canvasRef} className="hidden" />
-    </main>
+    </NativeToolLayout>
   );
 }

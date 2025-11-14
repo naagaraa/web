@@ -10,6 +10,7 @@ import ReactCrop, {
 import "react-image-crop/dist/ReactCrop.css";
 import toast from "react-hot-toast";
 import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
+import { Scissors, ShieldCheck } from "lucide-react";
 
 export default function ImageCropTool() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -153,30 +154,51 @@ export default function ImageCropTool() {
   // === MODE UPLOAD AWAL ===
   if (!isCropping || !imageSrc) {
     return (
-      <main className="min-h-screen bg-gray-50 flex flex-col">
-        <div className="flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-20">
-          <div className="text-center max-w-md">
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Crop Gambar
-            </h1>
-            <p className="text-sm text-gray-600 mb-10">
-              Unggah gambar, pilih area, lalu unduh hasilnya.
-            </p>
-            <label className="w-full max-w-xs">
-              <div className="w-full py-3.5 bg-blue-600 text-white text-center rounded-xl font-medium transition-colors active:opacity-90">
-                Pilih Gambar
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          {/* Header branding */}
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Scissors className="size-4 text-primary" strokeWidth={2} />
               </div>
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleUpload}
-                className="hidden"
-              />
-            </label>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
+
+          {/* Judul utama */}
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Crop images precisely
+          </h1>
+
+          {/* Microcopy SaaS */}
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Select any area, adjust ratio, and download — all in your browser.
+          </p>
+
+          {/* CTA utama */}
+          <label className="w-full max-w-xs">
+            <div className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm">
+              Upload an image
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+
+          {/* Trust badge */}
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% client-side • No data leaves your device
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
