@@ -1,36 +1,14 @@
-// src/app/tools/qr-code/page.tsx
-import { Metadata } from "next";
-import { Suspense } from "react";
-import BackButton from "@/src/components/BackButton";
-import SkeletonLoader from "@/src/components/SkeletonLoader";
+// src/app/[locale]/(tools)/apps/qr-code-generator/page.tsx
+"use client";
+
+import React from "react";
 import QRCodeGenerator from "./components/QrCodeGenerator";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "QR Code Generator",
-    description:
-      "Buat QR code dari teks atau tautan secara instan. Semua proses terjadi di browser — tidak ada data dikirim atau disimpan.",
-    keywords: [
-      "qr code generator",
-      "buat qr code",
-      "qr code online",
-      "privacy first qr",
-      "download qr code",
-    ],
-    openGraph: {
-      title: "QR Code Generator – Buat QR Secara Instan",
-      description:
-        "100% offline. Tidak ada data dikirim ke server. Hasil langsung diunduh sebagai PNG.",
-      type: "website",
-    },
-  };
-}
-
-export default function QRCodePage() {
+export default function Page() {
   return (
-    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
-      <BackButton />
+    <React.Suspense fallback={<SkeletonLoader className="h-screen" />}>
       <QRCodeGenerator />
-    </Suspense>
+    </React.Suspense>
   );
 }

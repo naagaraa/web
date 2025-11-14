@@ -1,15 +1,16 @@
-// src/app/tools/qr-code/components/QRCodeGenerator.tsx
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
 import QRCodeStyling from "qr-code-styling";
-import { useBottomNav } from "@/src/context/BottomNavContext";
+import { ShieldCheck, FileText, QrCode } from "lucide-react";
+import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 
-// Tipe bentuk modul
 type DotType = "square" | "dots";
 type CornerSquareType = "square" | "extra-rounded";
 
 export default function QRCodeGenerator() {
+  const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState("");
   const [filename, setFilename] = useState("");
   const [qrForeground, setQrForeground] = useState("#000000");
@@ -24,59 +25,36 @@ export default function QRCodeGenerator() {
 
   const qrRef = useRef<HTMLDivElement>(null);
   const qrCodeRef = useRef<QRCodeStyling | null>(null);
-  const { setHidden } = useBottomNav();
-
-  // Sembunyikan bottom nav
-  useEffect(() => {
-    setHidden(true);
-    return () => setHidden(false);
-  }, [setHidden]);
 
   // Inisialisasi QR Code
   useEffect(() => {
+    if (!isEditing) return;
+
     qrCodeRef.current = new QRCodeStyling({
       width: 300,
       height: 300,
       data: inputText || " ",
       margin: showFrame ? 20 : 10,
-      qrOptions: {
-        typeNumber: 0,
-        mode: "Byte",
-        errorCorrectionLevel: "Q", // Q = ~25% recovery, cukup untuk logo
-      },
-      imageOptions: {
-        hideBackgroundDots: true,
-        imageSize: 0.25,
-        margin: 10,
-      },
-      dotsOptions: {
-        type: dotType,
-        color: qrForeground,
-      },
-      backgroundOptions: {
-        color: qrBackground,
-      },
-      cornersSquareOptions: {
-        type: cornerSquareType,
-        color: qrForeground,
-      },
-      cornersDotOptions: {
-        type: "square",
-        color: qrForeground,
-      },
+      qrOptions: { typeNumber: 0, mode: "Byte", errorCorrectionLevel: "Q" },
+      imageOptions: { hideBackgroundDots: true, imageSize: 0.25, margin: 10 },
+      dotsOptions: { type: dotType, color: qrForeground },
+      backgroundOptions: { color: qrBackground },
+      cornersSquareOptions: { type: cornerSquareType, color: qrForeground },
+      cornersDotOptions: { type: "square", color: qrForeground },
       image: logoUrl || undefined,
     });
 
     const container = qrRef.current;
     if (container) {
       container.innerHTML = "";
-      if (qrCodeRef.current) qrCodeRef.current.append(container);
+      qrCodeRef.current.append(container);
     }
 
     return () => {
       if (container) container.innerHTML = "";
     };
   }, [
+    isEditing,
     inputText,
     qrForeground,
     qrBackground,
@@ -86,13 +64,12 @@ export default function QRCodeGenerator() {
     showFrame,
   ]);
 
-  // Handle logo upload
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (!file.type.match("image.*")) {
-      alert("File harus berupa gambar (PNG, JPG, dll).");
+      toast.error("File harus berupa gambar (PNG, JPG, dll).");
       return;
     }
 
@@ -111,37 +88,85 @@ export default function QRCodeGenerator() {
   };
 
   const handleDownload = () => {
-    if (!qrCodeRef.current) return;
+    if (!qrCodeRef.current) {
+      toast.error("QR code belum siap.");
+      return;
+    }
 
     let baseName = filename.trim();
     if (baseName === "") {
       baseName = `qrcode-${Date.now()}`;
     } else {
-      // Hanya bersihkan karakter ilegal, jangan tambah ekstensi
       baseName = baseName.replace(/[^a-zA-Z0-9-_]/g, "_");
     }
 
-    qrCodeRef.current.download({ name: baseName }); // ⬅️ tanpa ".png"
+    qrCodeRef.current.download({ name: baseName });
+    toast.success("QR code berhasil diunduh!", {
+      duration: 2000,
+      position: "bottom-center",
+    });
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-20">
-      <div className="max-w-md mx-auto px-4 py-6">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
-            QR Code Generator
-          </h1>
-          <p className="mt-2 text-gray-600">
-            Buat QR code dengan logo, warna, dan frame sesuai kebutuhan.
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => setIsEditing(false);
 
+  // ✅ MODE AWAL: TAMPILAN PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <QrCode className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
+
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Custom QR Code Generator
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Create branded QR codes with logo, colors, and frame — all in your
+            browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Buat QR Code
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% client-side • No data leaves your device
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING: PAKAI NATIVE TOOL LAYOUT
+  return (
+    <NativeToolLayout
+      title="QR Code"
+      onBack={handleBack}
+      actionButton={{
+        label: "Unduh",
+        onClick: handleDownload,
+        disabled: !inputText,
+        loading: false,
+      }}
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-5">
         {/* Input Teks */}
-        <div className="mb-6">
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Teks atau Tautan
           </label>
@@ -150,14 +175,14 @@ export default function QRCodeGenerator() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="https://example.com"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
           />
         </div>
 
         {inputText && (
           <>
             {/* Opsi Warna */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Warna QR
@@ -183,7 +208,7 @@ export default function QRCodeGenerator() {
             </div>
 
             {/* Bentuk & Sudut */}
-            <div className="mb-6 grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Bentuk Titik
@@ -191,7 +216,7 @@ export default function QRCodeGenerator() {
                 <select
                   value={dotType}
                   onChange={(e) => setDotType(e.target.value as DotType)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
                 >
                   <option value="square">Kotak</option>
                   <option value="dots">Bulat</option>
@@ -206,7 +231,7 @@ export default function QRCodeGenerator() {
                   onChange={(e) =>
                     setCornerSquareType(e.target.value as CornerSquareType)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
                 >
                   <option value="square">Kotak</option>
                   <option value="extra-rounded">Bulat</option>
@@ -215,7 +240,7 @@ export default function QRCodeGenerator() {
             </div>
 
             {/* Logo Upload */}
-            <div className="mb-6">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Logo (Opsional)
               </label>
@@ -243,8 +268,8 @@ export default function QRCodeGenerator() {
             </div>
 
             {/* Frame */}
-            <div className="mb-6">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                 <input
                   type="checkbox"
                   checked={showFrame}
@@ -259,13 +284,13 @@ export default function QRCodeGenerator() {
                   value={frameText}
                   onChange={(e) => setFrameText(e.target.value)}
                   placeholder="Scan Me"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
                 />
               )}
             </div>
 
             {/* Nama File */}
-            <div className="mb-6">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nama File (Opsional)
               </label>
@@ -274,23 +299,19 @@ export default function QRCodeGenerator() {
                 value={filename}
                 onChange={(e) => setFilename(e.target.value)}
                 placeholder="qrcode-brand"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
               />
             </div>
 
             {/* Preview QR */}
-            {/* Preview QR */}
-            <div className="mb-8 flex flex-col items-center">
+            <div className="flex flex-col items-center pt-4">
               {showFrame ? (
                 <div
-                  className="relative bg-white p-6 rounded-xl border border-gray-200 shadow-sm"
+                  className="relative bg-white p-4 rounded-xl border border-gray-200"
                   style={{ backgroundColor: qrBackground }}
                 >
-                  {/* QR Code di tengah */}
                   <div ref={qrRef} className="flex justify-center" />
-
-                  {/* Teks bingkai di bawah */}
-                  <div className="mt-4 text-center">
+                  <div className="mt-3 text-center">
                     <p
                       className="text-sm font-medium"
                       style={{ color: qrForeground }}
@@ -300,21 +321,14 @@ export default function QRCodeGenerator() {
                   </div>
                 </div>
               ) : (
-                <div className="p-4 bg-white border border-gray-200 rounded-xl w-full flex flex-col items-center gap-4">
+                <div className="p-3 bg-white border border-gray-200 rounded-xl">
                   <div ref={qrRef} className="flex justify-center" />
                 </div>
               )}
-
-              <button
-                onClick={handleDownload}
-                className="w-full mt-4 py-3 px-4 rounded-xl font-medium text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Unduh QR Code
-              </button>
             </div>
           </>
         )}
       </div>
-    </main>
+    </NativeToolLayout>
   );
 }
