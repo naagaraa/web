@@ -1,12 +1,22 @@
-// src/app/tools/pdf/merge/PdfMergerTool.tsx
+// src/app/[locale]/(tools)/apps/pdf-merge/components/PdfMergerTool.tsx
 "use client";
 
 import React, { useState, useRef, useId, useEffect } from "react";
+import {
+  FileText,
+  Upload,
+  FileDown,
+  ShieldCheck,
+  File,
+  Trash2,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import { PDFDocument } from "pdf-lib";
 
 export default function PdfMergerTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [pdfFiles, setPdfFiles] = useState<{ file: File; name: string }[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileName, setFileName] = useState("merged-document");
@@ -15,9 +25,20 @@ export default function PdfMergerTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
+    if (isEditing) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
     return () => setHidden(false);
-  }, [setHidden]);
+  }, [isEditing, setHidden]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    setPdfFiles([]);
+    setFileName("merged-document");
+    setIsEditing(false);
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -67,7 +88,6 @@ export default function PdfMergerTool() {
       for (const { file } of pdfFiles) {
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
-
         const copiedPages = await mergedPdf.copyPages(
           pdfDoc,
           pdfDoc.getPageIndices()
@@ -76,8 +96,9 @@ export default function PdfMergerTool() {
       }
 
       const pdfBytes = await mergedPdf.save();
-      const uint8Array = new Uint8Array(pdfBytes); // 👈 pastikan tipe benar
-      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(pdfBytes)], {
+        type: "application/pdf",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -97,24 +118,95 @@ export default function PdfMergerTool() {
   const handleReset = () => {
     setPdfFiles([]);
     setFileName("merged-document");
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-20">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">PDF Merger</h1>
-          <p className="mt-2 text-gray-600">
-            Unggah 2+ file PDF, lalu gabung jadi satu dokumen.
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
 
-        {/* Input Nama File */}
-        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Gabung PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Gabungkan beberapa file PDF jadi satu dokumen — langsung di browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Mulai Gabung
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Gabung PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleReset,
+        disabled: pdfFiles.length === 0,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`pdf-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> Unggah
+            <input
+              id={`pdf-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="application/pdf"
+              multiple
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={handleMerge}
+            disabled={pdfFiles.length < 2 || isProcessing}
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              pdfFiles.length >= 2 && !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <FileDown className="size-3.5" /> Gabung
+          </button>
+        </div>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Nama File Hasil */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nama File Hasil
           </label>
@@ -127,50 +219,18 @@ export default function PdfMergerTool() {
           />
         </div>
 
-        {/* Upload PDF */}
-        <div className="mb-8">
-          <label
-            htmlFor={`pdf-upload-${uniqueId}`}
-            className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-          >
-            <svg
-              className="w-8 h-8 mb-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Unggah File PDF
-            <input
-              id={`pdf-upload-${uniqueId}`}
-              type="file"
-              ref={fileInputRef}
-              accept="application/pdf"
-              multiple
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-          </label>
-        </div>
-
         {/* Daftar File */}
         {pdfFiles.length > 0 && (
-          <div className="mb-8">
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="text-sm font-medium text-gray-700">
-                File ({pdfFiles.length})
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                <File className="size-3.5" /> File ({pdfFiles.length})
               </h2>
               <button
                 onClick={handleReset}
-                className="text-xs text-red-500 hover:text-red-700"
+                className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1"
               >
-                Hapus Semua
+                <Trash2 className="size-3" /> Hapus Semua
               </button>
             </div>
             <div className="space-y-2">
@@ -192,19 +252,21 @@ export default function PdfMergerTool() {
           </div>
         )}
 
-        {/* Tombol Gabung */}
-        <button
-          onClick={handleMerge}
-          disabled={pdfFiles.length < 2 || isProcessing}
-          className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-            pdfFiles.length < 2 || isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isProcessing ? "Menggabungkan…" : "Gabung PDF"}
-        </button>
+        {pdfFiles.length > 0 && pdfFiles.length < 2 && (
+          <p className="text-xs text-orange-600 bg-orange-50 p-2 rounded text-center">
+            Butuh minimal 2 file PDF untuk digabung.
+          </p>
+        )}
       </div>
-    </main>
+
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-700">Menggabungkan PDF...</p>
+          </div>
+        </div>
+      )}
+    </NativeToolLayout>
   );
 }

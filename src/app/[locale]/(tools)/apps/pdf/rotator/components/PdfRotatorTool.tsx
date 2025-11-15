@@ -1,14 +1,24 @@
-// src/app/tools/pdf/rotate/PdfRotatorTool.tsx
+// src/app/[locale]/(tools)/apps/pdf-rotate/components/PdfRotatorTool.tsx
 "use client";
 
 import React, { useState, useRef, useId, useEffect } from "react";
+import {
+  FileText,
+  Upload,
+  FileDown,
+  ShieldCheck,
+  RotateCcw,
+  RotateCw,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import { PDFDocument, degrees } from "pdf-lib";
 
 let pdfjs: typeof import("pdfjs-dist");
 
 export default function PdfRotatorTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pagePreviews, setPagePreviews] = useState<string[]>([]);
   const [rotations, setRotations] = useState<number[]>([]);
@@ -20,9 +30,22 @@ export default function PdfRotatorTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
+    if (isEditing) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
     return () => setHidden(false);
-  }, [setHidden]);
+  }, [isEditing, setHidden]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    setPdfFile(null);
+    setPagePreviews([]);
+    setRotations([]);
+    setFileName("rotated-pdf");
+    setIsEditing(false);
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,7 +65,7 @@ export default function PdfRotatorTool() {
       }
 
       const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = pdfjs.getDocument({ data: arrayBuffer }); // ✅ 'data', bukan 'arrayBuffer'
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
       const pdf = await loadingTask.promise;
       const totalPages = pdf.numPages;
 
@@ -58,13 +81,7 @@ export default function PdfRotatorTool() {
 
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-
-        await page.render({
-          canvasContext: context,
-          viewport,
-          canvas: canvas,
-        }).promise;
-
+        await page.render({ canvasContext: context, viewport, canvas }).promise;
         previews.push(canvas.toDataURL("image/png"));
         initialRotations.push(0);
       }
@@ -91,7 +108,7 @@ export default function PdfRotatorTool() {
   };
 
   const handleRotate = async () => {
-    if (!pdfFile) {
+    if (!pdfFile || pagePreviews.length === 0) {
       toast.error("Unggah file PDF terlebih dahulu.");
       return;
     }
@@ -107,8 +124,9 @@ export default function PdfRotatorTool() {
       });
 
       const pdfBytes = await pdfDoc.save();
-      const uint8Array = new Uint8Array(pdfBytes);
-      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(pdfBytes)], {
+        type: "application/pdf",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -132,20 +150,93 @@ export default function PdfRotatorTool() {
     setFileName("rotated-pdf");
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-28">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">PDF Rotator</h1>
-          <p className="mt-2 text-gray-600">
-            Pilih halaman dan atur rotasi (90°, 180°, 270°).
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
 
-        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Putar PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Atur rotasi tiap halaman PDF (0°, 90°, 180°, 270°) — langsung di
+            browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Mulai Putar
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Putar PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleReset,
+        disabled: pagePreviews.length === 0,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`pdf-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> Unggah
+            <input
+              id={`pdf-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="application/pdf"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={handleRotate}
+            disabled={pagePreviews.length === 0 || isProcessing}
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              pagePreviews.length > 0 && !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <FileDown className="size-3.5" /> Simpan
+          </button>
+        </div>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Nama File Hasil */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nama File Hasil
           </label>
@@ -158,79 +249,48 @@ export default function PdfRotatorTool() {
           />
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor={`pdf-upload-${uniqueId}`}
-            className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-          >
-            <svg
-              className="w-8 h-8 mb-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Unggah File PDF
-            <input
-              id={`pdf-upload-${uniqueId}`}
-              type="file"
-              ref={fileInputRef}
-              accept="application/pdf"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-          </label>
-        </div>
-
+        {/* Status Loading */}
         {isRendering && (
-          <div className="text-center py-6 text-gray-500">
+          <div className="text-center py-4 text-gray-500 flex flex-col items-center gap-1">
+            <RotateCw className="size-4 animate-spin" />
             Memuat preview...
           </div>
         )}
 
+        {/* Preview & Rotasi */}
         {pagePreviews.length > 0 && !isRendering && (
-          <div className="mb-6">
-            <h2 className="text-sm font-medium text-gray-700 mb-3">
-              Atur Rotasi Halaman
+          <div>
+            <h2 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-1">
+              <RotateCcw className="size-3.5" /> Atur Rotasi Halaman
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {pagePreviews.map((preview, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 rounded-lg p-3"
+                  className="border border-gray-200 rounded-lg p-3 bg-white"
                 >
                   <div className="flex items-start gap-3">
-                    {/* ✅ Gunakan <picture> untuk mematuhi aturan Next.js */}
-                    <picture>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={preview}
-                        alt={`Halaman ${index + 1}`}
-                        className="w-20 h-28 object-contain border rounded"
-                      />
-                    </picture>
+                    <img
+                      src={preview}
+                      alt={`Halaman ${index + 1}`}
+                      className="w-16 h-24 object-contain border rounded shrink-0"
+                    />
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-800 mb-1">
                         Halaman {index + 1}
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-1 flex-wrap">
                         {[0, 90, 180, 270].map((angle) => (
                           <button
                             key={angle}
                             onClick={() => setRotation(index, angle)}
-                            className={`px-2 py-1 text-xs rounded ${
+                            className={`px-2 py-1 text-xs rounded whitespace-nowrap ${
                               rotations[index] === angle
                                 ? "bg-blue-600 text-white"
                                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                             }`}
                           >
-                            {angle === 0 ? "0°" : `${angle}°`}
+                            {angle}°
                           </button>
                         ))}
                       </div>
@@ -241,19 +301,16 @@ export default function PdfRotatorTool() {
             </div>
           </div>
         )}
-
-        <button
-          onClick={handleRotate}
-          disabled={pagePreviews.length === 0 || isProcessing}
-          className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-            pagePreviews.length === 0 || isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isProcessing ? "Memutar..." : "Simpan PDF Hasil"}
-        </button>
       </div>
-    </main>
+
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-700">Memutar PDF...</p>
+          </div>
+        </div>
+      )}
+    </NativeToolLayout>
   );
 }

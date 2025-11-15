@@ -338,6 +338,13 @@ export const categories: Category[] = [
           "Kompres file PDF untuk mengurangi ukuran tanpa kehilangan kualitas.",
         icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
       },
+      {
+        name: "PDF Watermark",
+        slug: "apps/pdf/watermark",
+        description:
+          "Tambahkan watermark teks atau gambar ke halaman PDF Anda.",
+        icon: <File className={`w-5 h-5 ${ICON_COLOR}`} />,
+      },
     ],
   },
 ];

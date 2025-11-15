@@ -1,8 +1,17 @@
-// src/app/tools/image-to-pdf/ImageToPdfTool.tsx
+// src/app/[locale]/(tools)/apps/image-to-pdf/components/ImageToPdfTool.tsx
 "use client";
 
 import React, { useState, useRef, useId, useEffect } from "react";
+import {
+  Camera,
+  Upload,
+  Trash2,
+  FileText,
+  ShieldCheck,
+  FileDown,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import jsPDF from "jspdf";
 
@@ -16,6 +25,7 @@ const SUPPORTED_IMAGE_TYPES = [
 ];
 
 export default function ImageToPdfTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [images, setImages] = useState<{ src: string; file: File }[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileName, setFileName] = useState("image-to-pdf");
@@ -29,14 +39,19 @@ export default function ImageToPdfTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
-    return () => {
+    if (isEditing) {
+      setHidden(true);
+    } else {
       setHidden(false);
-      // Tidak perlu revoke di sini, karena:
-      // - Saat unmount, browser otomatis bersihkan object URLs
-      // - Atau kita revoke manual via removeImage / handleReset
-    };
-  }, [setHidden]); // ← hanya `setHidden`, bukan `images`
+    }
+    return () => setHidden(false);
+  }, [isEditing, setHidden]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    handleReset();
+    setIsEditing(false);
+  };
 
   const handleFileSelect = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -111,7 +126,6 @@ export default function ImageToPdfTool() {
         img.src = images[i].src;
 
         try {
-          // Tunggu hingga gambar benar-benar siap
           await new Promise<void>((resolve, reject) => {
             let resolved = false;
             const checkReady = () => {
@@ -135,7 +149,6 @@ export default function ImageToPdfTool() {
             checkReady();
           });
 
-          // 🔥 Hanya tambah halaman jika ini BUKAN gambar valid pertama
           if (validImageCount > 0) {
             pdf.addPage([widthPx, heightPx]);
           }
@@ -169,7 +182,6 @@ export default function ImageToPdfTool() {
             undefined,
             compression
           );
-
           validImageCount++;
         } catch (err) {
           console.warn(
@@ -184,11 +196,6 @@ export default function ImageToPdfTool() {
       }
 
       if (validImageCount === 0) {
-        toast.error("Tidak ada gambar valid untuk dikonversi.");
-        return;
-      }
-
-      if (!validImageCount) {
         toast.error("Tidak ada gambar valid untuk dikonversi.");
         return;
       }
@@ -212,188 +219,188 @@ export default function ImageToPdfTool() {
     setCustomHeight("842");
   };
 
-  return (
-    <>
-      <main className="min-h-screen bg-gray-50 pb-20">
-        <div className="max-w-md mx-auto px-4 py-6">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Image to PDF</h1>
-            <p className="mt-2 text-gray-600">
-              Upload atau ambil foto, atur ukuran & nama file, lalu unduh PDF.
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              100% di browser — tidak ada data disimpan.
-            </p>
-          </div>
-
-          {/* Input Nama File */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nama File
-            </label>
-            <input
-              type="text"
-              value={fileName}
-              onChange={(e) => setFileName(e.target.value)}
-              placeholder="image-to-pdf"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-            />
-          </div>
-
-          {/* Upload & Kamera */}
-          <div className="flex gap-3 mb-6">
-            <label
-              htmlFor={`file-upload-${uniqueId}`}
-              className="flex-1 flex flex-col items-center justify-center px-3 py-3 border border-gray-300 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-            >
-              <svg
-                className="w-5 h-5 mb-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                />
-              </svg>
-              Upload
-              <input
-                id={`file-upload-${uniqueId}`}
-                type="file"
-                ref={fileInputRef}
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                onChange={(e) => handleFileSelect(e)}
-                className="hidden"
-              />
-            </label>
-
-            <label
-              htmlFor={`camera-upload-${uniqueId}`}
-              className="flex-1 flex flex-col items-center justify-center px-3 py-3 border border-gray-300 rounded-lg text-xs font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-            >
-              <svg
-                className="w-5 h-5 mb-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              Kamera
-              <input
-                id={`camera-upload-${uniqueId}`}
-                type="file"
-                ref={cameraInputRef}
-                accept="image/jpeg,image/png"
-                capture="environment"
-                onChange={(e) => handleFileSelect(e, true)}
-                className="hidden"
-              />
-            </label>
-          </div>
-
-          {/* Preview Gambar */}
-          {images.length > 0 && (
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="text-sm font-medium text-gray-700">
-                  Gambar ({images.length})
-                </h2>
-                <button
-                  onClick={handleReset}
-                  className="text-xs text-red-500 hover:text-red-700"
-                >
-                  Hapus Semua
-                </button>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
               </div>
-              <div className="grid grid-cols-3 gap-3">
-                {images.map((img, index) => (
-                  <div key={index} className="relative group">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img.src}
-                      alt={`preview-${index}`}
-                      className="w-full aspect-square object-cover rounded border border-gray-200"
-                    />
-                    <button
-                      onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-[10px] shadow"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
             </div>
-          )}
-
-          {/* Pilihan Ukuran */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Ukuran Kertas
-            </label>
-            <select
-              value={pageSize}
-              onChange={(e) => setPageSize(e.target.value as PageSize)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm mb-3"
-            >
-              <option value="a4">A4 (210 × 297 mm)</option>
-              <option value="letter">Letter (8.5 × 11 in)</option>
-              <option value="legal">Legal (8.5 × 14 in)</option>
-              <option value="custom">Custom (px)</option>
-            </select>
-
-            {pageSize === "custom" && (
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={customWidth}
-                  onChange={(e) => setCustomWidth(e.target.value)}
-                  placeholder="Lebar (px)"
-                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm"
-                  min="100"
-                />
-                <input
-                  type="number"
-                  value={customHeight}
-                  onChange={(e) => setCustomHeight(e.target.value)}
-                  placeholder="Tinggi (px)"
-                  className="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm"
-                  min="100"
-                />
-              </div>
-            )}
           </div>
 
-          {/* Tombol Konversi */}
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Gambar ke PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Ubah foto atau screenshot jadi PDF dalam sekejap — langsung di
+            browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Mulai Konversi
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Gambar ke PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleReset,
+        disabled: images.length === 0,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`file-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> Upload
+            <input
+              id={`file-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              onChange={(e) => handleFileSelect(e)}
+              className="hidden"
+            />
+          </label>
+
+          <label
+            htmlFor={`camera-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-gray-700 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Camera className="size-3.5" /> Kamera
+            <input
+              id={`camera-upload-${uniqueId}`}
+              type="file"
+              ref={cameraInputRef}
+              accept="image/jpeg,image/png"
+              capture="environment"
+              onChange={(e) => handleFileSelect(e, true)}
+              className="hidden"
+            />
+          </label>
+
           <button
             onClick={handleConvert}
             disabled={images.length === 0 || isProcessing}
-            className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-              images.length === 0 || isProcessing
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              images.length > 0 && !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
             }`}
           >
-            {isProcessing ? "Membuat PDF…" : "Buat & Unduh PDF"}
+            <FileDown className="size-3.5" /> Unduh
           </button>
         </div>
-      </main>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Input Nama File */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nama File
+          </label>
+          <input
+            type="text"
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
+            placeholder="image-to-pdf"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+          />
+        </div>
+
+        {/* Preview Gambar */}
+        {images.length > 0 && (
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-sm font-medium text-gray-700">
+                Gambar ({images.length})
+              </h2>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {images.map((img, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={img.src}
+                    alt={`preview-${index}`}
+                    className="w-full aspect-square object-cover rounded border border-gray-200"
+                  />
+                  <button
+                    onClick={() => removeImage(index)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-[10px] shadow"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pilihan Ukuran */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Ukuran Kertas
+          </label>
+          <select
+            value={pageSize}
+            onChange={(e) => setPageSize(e.target.value as PageSize)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm mb-2"
+          >
+            <option value="a4">A4 (210 × 297 mm)</option>
+            <option value="letter">Letter (8.5 × 11 in)</option>
+            <option value="legal">Legal (8.5 × 14 in)</option>
+            <option value="custom">Custom (px)</option>
+          </select>
+
+          {pageSize === "custom" && (
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={customWidth}
+                onChange={(e) => setCustomWidth(e.target.value)}
+                placeholder="Lebar (px)"
+                className="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm"
+                min="100"
+              />
+              <input
+                type="number"
+                value={customHeight}
+                onChange={(e) => setCustomHeight(e.target.value)}
+                placeholder="Tinggi (px)"
+                className="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm"
+                min="100"
+              />
+            </div>
+          )}
+        </div>
+      </div>
 
       {isProcessing && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -403,6 +410,6 @@ export default function ImageToPdfTool() {
           </div>
         </div>
       )}
-    </>
+    </NativeToolLayout>
   );
 }

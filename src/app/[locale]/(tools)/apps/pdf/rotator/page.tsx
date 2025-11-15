@@ -1,35 +1,14 @@
-// src/app/tools/pdf/rotate/page.tsx
-import { Metadata } from "next";
-import { Suspense } from "react";
-import BackButton from "@/src/components/BackButton";
-import SkeletonLoader from "@/src/components/SkeletonLoader";
+// src/app/[locale]/(tools)/apps/pdf-rotate/page.tsx
+"use client";
+
+import React from "react";
 import PdfRotatorTool from "./components/PdfRotatorTool";
+import SkeletonLoader from "@/src/components/SkeletonLoader";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "PDF Rotator",
-    description:
-      "Putar halaman PDF sesuai kebutuhan. Pilih halaman dan sudut rotasi. Semua proses di browser — tidak ada data disimpan.",
-    keywords: [
-      "rotate pdf",
-      "putar pdf",
-      "pdf rotator",
-      "rotate pages",
-      "privacy first",
-    ],
-    openGraph: {
-      title: "PDF Rotator – Putar Halaman PDF Secara Instan",
-      description: "100% offline. Tidak ada upload ke server.",
-      type: "website",
-    },
-  };
-}
-
-export default function PdfRotatePage() {
+export default function Page() {
   return (
-    <Suspense fallback={<SkeletonLoader className="h-screen" />}>
-      <BackButton />
+    <React.Suspense fallback={<SkeletonLoader className="h-screen" />}>
       <PdfRotatorTool />
-    </Suspense>
+    </React.Suspense>
   );
 }

@@ -1,14 +1,24 @@
-// src/app/tools/pdf/compress/components/PdfCompressTool.tsx
+// src/app/[locale]/(tools)/apps/pdf-compress/components/PdfCompressTool.tsx
 "use client";
 
 import React, { useState, useRef, useId, useEffect } from "react";
+import {
+  FileText,
+  Upload,
+  FileDown,
+  ShieldCheck,
+  File,
+  Eye,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import { PDFDocument } from "pdf-lib";
 
 let pdfjs: typeof import("pdfjs-dist");
 
 export default function PdfCompressTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [originalSize, setOriginalSize] = useState<number | null>(null);
   const [compressedSize, setCompressedSize] = useState<number | null>(null);
@@ -28,13 +38,25 @@ export default function PdfCompressTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
-    return () => {
+    if (isEditing) {
+      setHidden(true);
+    } else {
       setHidden(false);
       if (originalPreview) URL.revokeObjectURL(originalPreview);
       if (compressedPreview) URL.revokeObjectURL(compressedPreview);
-    };
-  }, [setHidden, originalPreview, compressedPreview]);
+    }
+    return () => setHidden(false);
+  }, [isEditing, setHidden, originalPreview, compressedPreview]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    setPdfFile(null);
+    setOriginalSize(null);
+    setCompressedSize(null);
+    setOriginalPreview(null);
+    setCompressedPreview(null);
+    setIsEditing(false);
+  };
 
   const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,7 +71,6 @@ export default function PdfCompressTool() {
     setCompressedSize(null);
     setCompressedPreview(null);
     setIsRendering(true);
-    if (fileInputRef.current) fileInputRef.current.value = "";
 
     try {
       if (!pdfjs) {
@@ -105,23 +126,19 @@ export default function PdfCompressTool() {
     try {
       const arrayBuffer = await pdfFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
-
-      // Simpan ulang PDF (beberapa file akan berkurang ukurannya)
       const modifiedBytes = await pdfDoc.save({ useObjectStreams: false });
       const compressedBlob = new Blob([new Uint8Array(modifiedBytes)], {
         type: "application/pdf",
       });
       setCompressedSize(compressedBlob.size);
 
-      // ✅ Konversi Blob ke ArrayBuffer untuk pdfjs
+      // Render preview compressed
       const compressedArrayBuffer = await compressedBlob.arrayBuffer();
-
       if (!pdfjs) {
         pdfjs = await import("pdfjs-dist");
         pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
       }
 
-      // ✅ Gunakan property 'data' yang benar
       const compressedPdf = await pdfjs.getDocument({
         data: compressedArrayBuffer,
       }).promise;
@@ -174,20 +191,93 @@ export default function PdfCompressTool() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-28">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Kompres PDF</h1>
-          <p className="mt-2 text-gray-600">
-            Kurangi ukuran file PDF tanpa kehilangan kualitas penting.
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
 
-        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Kompres PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Kurangi ukuran file PDF tanpa kehilangan kualitas penting — langsung
+            di browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Mulai Kompresi
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Kompres PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleBack,
+        disabled: !pdfFile,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`pdf-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> Unggah
+            <input
+              id={`pdf-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="application/pdf"
+              onChange={handlePdfUpload}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={handleCompress}
+            disabled={!pdfFile || isProcessing}
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              pdfFile && !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <FileDown className="size-3.5" /> Unduh
+          </button>
+        </div>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Nama File Hasil */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nama File Hasil
           </label>
@@ -200,48 +290,26 @@ export default function PdfCompressTool() {
           />
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor={`pdf-upload-${uniqueId}`}
-            className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-          >
-            <svg
-              className="w-8 h-8 mb-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Unggah File PDF
-            <input
-              id={`pdf-upload-${uniqueId}`}
-              type="file"
-              ref={fileInputRef}
-              accept="application/pdf"
-              onChange={handlePdfUpload}
-              className="hidden"
-            />
-          </label>
-        </div>
-
+        {/* Preview */}
         {isRendering && (
           <div className="text-center py-4 text-gray-500">
+            <Eye className="size-4 inline mr-1" />
             Memuat preview...
           </div>
         )}
 
         {originalPreview && !isRendering && (
-          <div className="mb-6 space-y-4">
+          <div className="space-y-4">
             <div>
-              <h2 className="text-sm font-medium text-gray-700 mb-2">Asli</h2>
+              <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                <File className="size-3.5" /> Asli
+              </h2>
               <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-                <img src={originalPreview} alt="Original" className="w-full" />
+                <img
+                  src={originalPreview}
+                  alt="Original"
+                  className="w-full h-auto max-h-48 object-contain"
+                />
               </div>
               <p className="text-xs text-gray-500 mt-1 text-center">
                 Ukuran: {formatBytes(originalSize)}
@@ -250,14 +318,14 @@ export default function PdfCompressTool() {
 
             {compressedPreview && (
               <div>
-                <h2 className="text-sm font-medium text-gray-700 mb-2">
-                  Setelah Kompresi
+                <h2 className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1">
+                  <File className="size-3.5" /> Setelah Kompresi
                 </h2>
                 <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
                   <img
                     src={compressedPreview}
                     alt="Compressed"
-                    className="w-full"
+                    className="w-full h-auto max-h-48 object-contain"
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1 text-center">
@@ -274,7 +342,8 @@ export default function PdfCompressTool() {
           </div>
         )}
 
-        <div className="mb-6">
+        {/* Tingkat Kompresi */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Tingkat Kompresi
           </label>
@@ -303,19 +372,16 @@ export default function PdfCompressTool() {
               "Ukuran lebih kecil, kualitas sedikit menurun"}
           </p>
         </div>
-
-        <button
-          onClick={handleCompress}
-          disabled={!pdfFile || isProcessing}
-          className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-            !pdfFile || isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isProcessing ? "Mengompresi..." : "Kompres & Unduh PDF"}
-        </button>
       </div>
-    </main>
+
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-700">Mengompresi PDF...</p>
+          </div>
+        </div>
+      )}
+    </NativeToolLayout>
   );
 }

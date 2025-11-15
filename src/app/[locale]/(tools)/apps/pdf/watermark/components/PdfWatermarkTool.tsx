@@ -1,8 +1,17 @@
-// src/app/tools/pdf/watermark/PdfWatermarkTool.tsx
+// src/app/[locale]/(tools)/apps/pdf-watermark/components/PdfWatermarkTool.tsx
 "use client";
 
 import React, { useState, useRef, useId, useEffect, useCallback } from "react";
+import {
+  FileText,
+  Upload,
+  FileDown,
+  ShieldCheck,
+  Type,
+  Image as ImageIcon,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import { PDFDocument, rgb, degrees } from "pdf-lib";
 
@@ -11,11 +20,12 @@ let pdfjs: typeof import("pdfjs-dist");
 type WatermarkType = "text" | "image";
 
 export default function PdfWatermarkTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [watermarkType, setWatermarkType] = useState<WatermarkType>("text");
   const [watermarkText, setWatermarkText] = useState("DRAFT");
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoBase64, setLogoBase64] = useState<string | null>(null); // ✅ base64, bukan ObjectURL
+  const [logoBase64, setLogoBase64] = useState<string | null>(null);
   const [opacity, setOpacity] = useState(0.3);
   const [rotation, setRotation] = useState(45);
   const [position, setPosition] = useState("center");
@@ -35,13 +45,31 @@ export default function PdfWatermarkTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
-    return () => {
+    if (isEditing) {
+      setHidden(true);
+    } else {
       setHidden(false);
       if (originalPreview) URL.revokeObjectURL(originalPreview);
       if (watermarkedPreview) URL.revokeObjectURL(watermarkedPreview);
-    };
-  }, [setHidden, originalPreview, watermarkedPreview]);
+    }
+    return () => setHidden(false);
+  }, [isEditing, setHidden, originalPreview, watermarkedPreview]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    setPdfFile(null);
+    setLogoFile(null);
+    setLogoBase64(null);
+    setOriginalPreview(null);
+    setWatermarkedPreview(null);
+    setWatermarkText("DRAFT");
+    setOpacity(0.3);
+    setRotation(45);
+    setPosition("center");
+    setFontSize(48);
+    setFileName("watermarked-pdf");
+    setIsEditing(false);
+  };
 
   const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +80,6 @@ export default function PdfWatermarkTool() {
     }
     setPdfFile(file);
     setIsRendering(true);
-    if (fileInputRef.current) fileInputRef.current.value = "";
 
     try {
       if (!pdfjs) {
@@ -71,7 +98,6 @@ export default function PdfWatermarkTool() {
 
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-
       await page.render({ canvasContext: context, viewport, canvas }).promise;
       const url = canvas.toDataURL("image/png");
       setOriginalPreview(url);
@@ -81,6 +107,7 @@ export default function PdfWatermarkTool() {
       toast.error("Gagal memuat preview PDF.");
     } finally {
       setIsRendering(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -99,9 +126,7 @@ export default function PdfWatermarkTool() {
         setLogoFile(file);
       }
     };
-    reader.onerror = () => {
-      toast.error("Gagal membaca file logo.");
-    };
+    reader.onerror = () => toast.error("Gagal membaca file logo.");
     reader.readAsDataURL(file);
 
     if (logoInputRef.current) logoInputRef.current.value = "";
@@ -165,7 +190,6 @@ export default function PdfWatermarkTool() {
       try {
         await logoImg.decode();
       } catch (err) {
-        console.error("Gagal decode logo:", err);
         toast.error("Gambar logo tidak valid.");
         return;
       }
@@ -199,7 +223,6 @@ export default function PdfWatermarkTool() {
       }
       ctx.drawImage(logoImg, x - w / 2, y - h / 2, w, h);
     }
-
     ctx.restore();
     return canvas.toDataURL("image/png");
   }, [
@@ -219,17 +242,7 @@ export default function PdfWatermarkTool() {
         if (url) setWatermarkedPreview(url);
       });
     }
-  }, [
-    drawWatermarkOnCanvas,
-    originalPreview,
-    logoBase64,
-    watermarkType,
-    watermarkText,
-    opacity,
-    rotation,
-    position,
-    fontSize,
-  ]);
+  }, [drawWatermarkOnCanvas]);
 
   const handleWatermark = async () => {
     if (!pdfFile) {
@@ -283,8 +296,9 @@ export default function PdfWatermarkTool() {
       }
 
       const modifiedPdfBytes = await pdfDoc.save();
-      const uint8Array = new Uint8Array(modifiedPdfBytes);
-      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(modifiedPdfBytes)], {
+        type: "application/pdf",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -313,42 +327,126 @@ export default function PdfWatermarkTool() {
         return { x: 50, y: 50 };
       case "bottom-right":
         return { x: width - size - 50, y: 50 };
-      case "center":
       default:
         return { x: (width - size) / 2, y: (height - size) / 2 };
     }
   };
 
   const handleReset = () => {
-    setPdfFile(null);
-    setLogoFile(null);
-    setLogoBase64(null);
-    setOriginalPreview(null);
-    setWatermarkedPreview(null);
-    setWatermarkText("DRAFT");
-    setOpacity(0.3);
-    setRotation(45);
-    setPosition("center");
-    setFontSize(48);
-    setFileName("watermarked-pdf");
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    if (logoInputRef.current) logoInputRef.current.value = "";
+    handleBack();
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-28">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">PDF Watermark</h1>
-          <p className="mt-2 text-gray-600">
-            Tambahkan watermark & lihat preview-nya.
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
 
-        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Watermark PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Tambahkan teks atau logo sebagai watermark ke dokumen PDF Anda —
+            langsung di browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Tambah Watermark
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Watermark PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleReset,
+        disabled: !pdfFile,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`pdf-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> PDF
+            <input
+              id={`pdf-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="application/pdf"
+              onChange={handlePdfUpload}
+              className="hidden"
+            />
+          </label>
+
+          {watermarkType === "image" && (
+            <label
+              htmlFor={`logo-upload-${uniqueId}`}
+              className="flex-1 min-w-[100px] py-2 bg-gray-700 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+            >
+              <ImageIcon className="size-3.5" /> Logo
+              <input
+                id={`logo-upload-${uniqueId}`}
+                type="file"
+                ref={logoInputRef}
+                accept="image/png,image/jpeg"
+                onChange={handleLogoUpload}
+                className="hidden"
+              />
+            </label>
+          )}
+
+          <button
+            onClick={handleWatermark}
+            disabled={
+              !pdfFile ||
+              (watermarkType === "image" && !logoFile) ||
+              isProcessing
+            }
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              pdfFile &&
+              (watermarkType === "text" ||
+                (watermarkType === "image" && logoFile)) &&
+              !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <FileDown className="size-3.5" /> Unduh
+          </button>
+        </div>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Nama File Hasil */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nama File Hasil
           </label>
@@ -361,36 +459,7 @@ export default function PdfWatermarkTool() {
           />
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor={`pdf-upload-${uniqueId}`}
-            className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-          >
-            <svg
-              className="w-8 h-8 mb-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Unggah File PDF
-            <input
-              id={`pdf-upload-${uniqueId}`}
-              type="file"
-              ref={fileInputRef}
-              accept="application/pdf"
-              onChange={handlePdfUpload}
-              className="hidden"
-            />
-          </label>
-        </div>
-
+        {/* Preview */}
         {isRendering && (
           <div className="text-center py-4 text-gray-500">
             Memuat preview...
@@ -398,50 +467,50 @@ export default function PdfWatermarkTool() {
         )}
 
         {watermarkedPreview && !isRendering && (
-          <div className="mb-6">
+          <div>
             <h2 className="text-sm font-medium text-gray-700 mb-2">Preview</h2>
             <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-              <picture>
-                <img
-                  src={watermarkedPreview}
-                  alt="Preview dengan watermark"
-                  className="w-full"
-                />
-              </picture>
+              <img
+                src={watermarkedPreview}
+                alt="Preview dengan watermark"
+                className="w-full h-auto max-h-64 object-contain"
+              />
             </div>
           </div>
         )}
 
-        <div className="mb-6">
+        {/* Jenis Watermark */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Jenis Watermark
           </label>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <button
               onClick={() => setWatermarkType("text")}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium ${
+              className={`flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 ${
                 watermarkType === "text"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
             >
-              Teks
+              <Type className="size-3.5" /> Teks
             </button>
             <button
               onClick={() => setWatermarkType("image")}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium ${
+              className={`flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 ${
                 watermarkType === "image"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700"
               }`}
             >
-              Logo
+              <ImageIcon className="size-3.5" /> Logo
             </button>
           </div>
         </div>
 
-        {watermarkType === "text" ? (
-          <div className="mb-4">
+        {/* Input Teks */}
+        {watermarkType === "text" && (
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Teks Watermark
             </label>
@@ -452,44 +521,10 @@ export default function PdfWatermarkTool() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
             />
           </div>
-        ) : (
-          <div className="mb-6">
-            <label
-              htmlFor={`logo-upload-${uniqueId}`}
-              className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-            >
-              <svg
-                className="w-8 h-8 mb-2 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              Unggah Logo (PNG/JPG)
-              <input
-                id={`logo-upload-${uniqueId}`}
-                type="file"
-                ref={logoInputRef}
-                accept="image/png,image/jpeg"
-                onChange={handleLogoUpload}
-                className="hidden"
-              />
-            </label>
-            {logoFile && (
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                {logoFile.name}
-              </p>
-            )}
-          </div>
         )}
 
-        <div className="space-y-4 mb-6">
+        {/* Slider & Posisi */}
+        <div className="space-y-3">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Transparansi: {Math.round(opacity * 100)}%
@@ -552,21 +587,16 @@ export default function PdfWatermarkTool() {
             </div>
           )}
         </div>
-
-        <button
-          onClick={handleWatermark}
-          disabled={
-            !pdfFile || (watermarkType === "image" && !logoFile) || isProcessing
-          }
-          className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-            !pdfFile || (watermarkType === "image" && !logoFile) || isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isProcessing ? "Menambahkan..." : "Unduh PDF dengan Watermark"}
-        </button>
       </div>
-    </main>
+
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-700">Menambahkan watermark...</p>
+          </div>
+        </div>
+      )}
+    </NativeToolLayout>
   );
 }

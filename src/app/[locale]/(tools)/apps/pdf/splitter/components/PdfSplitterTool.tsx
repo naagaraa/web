@@ -1,15 +1,25 @@
-// src/app/tools/pdf/split/PdfSplitterTool.tsx
+// src/app/[locale]/(tools)/apps/pdf-split/components/PdfSplitterTool.tsx
 "use client";
 
-import React, { useState, useRef, useId, useEffect, useCallback } from "react";
+import React, { useState, useRef, useId, useEffect } from "react";
+import {
+  FileText,
+  Upload,
+  FileDown,
+  ShieldCheck,
+  File,
+  Check,
+  Square,
+} from "lucide-react";
 import toast from "react-hot-toast";
+import NativeToolLayout from "@/src/app/[locale]/(tools)/apps/components/NativeToolLayout";
 import { useBottomNav } from "@/src/context/BottomNavContext";
 import { PDFDocument } from "pdf-lib";
 
-// Lazy load pdfjs hanya saat dibutuhkan
 let pdfjs: typeof import("pdfjs-dist");
 
 export default function PdfSplitterTool() {
+  const [isEditing, setIsEditing] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pagePreviews, setPagePreviews] = useState<string[]>([]);
   const [selectedPages, setSelectedPages] = useState<boolean[]>([]);
@@ -21,9 +31,22 @@ export default function PdfSplitterTool() {
   const uniqueId = useId();
 
   useEffect(() => {
-    setHidden(true);
+    if (isEditing) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
     return () => setHidden(false);
-  }, [setHidden]);
+  }, [isEditing, setHidden]);
+
+  const handleStartEditing = () => setIsEditing(true);
+  const handleBack = () => {
+    setPdfFile(null);
+    setPagePreviews([]);
+    setSelectedPages([]);
+    setFileName("split-pdf");
+    setIsEditing(false);
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,10 +61,8 @@ export default function PdfSplitterTool() {
     setSelectedPages([]);
 
     try {
-      // Lazy load pdfjs hanya saat pertama kali dibutuhkan
       if (!pdfjs) {
         pdfjs = await import("pdfjs-dist");
-        // Atur worker (wajib untuk pdf.js)
         pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
       }
 
@@ -62,15 +83,9 @@ export default function PdfSplitterTool() {
 
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-
-        await page.render({
-          canvasContext: context,
-          viewport,
-          canvas: canvas,
-        }).promise;
-
+        await page.render({ canvasContext: context, viewport, canvas }).promise;
         previews.push(canvas.toDataURL("image/png"));
-        selections.push(true); // default semua terpilih
+        selections.push(true);
       }
 
       setPagePreviews(previews);
@@ -127,8 +142,9 @@ export default function PdfSplitterTool() {
       copiedPages.forEach((page) => newPdf.addPage(page));
 
       const pdfBytes = await newPdf.save();
-      const uint8Array = new Uint8Array(pdfBytes);
-      const blob = new Blob([uint8Array], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(pdfBytes)], {
+        type: "application/pdf",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -152,21 +168,93 @@ export default function PdfSplitterTool() {
     setFileName("split-pdf");
   };
 
-  return (
-    <main className="min-h-screen bg-gray-50 pb-28">
-      <div className="max-w-md mx-auto px-4 py-6">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">PDF Splitter</h1>
-          <p className="mt-2 text-gray-600">
-            Pilih halaman yang ingin Anda ekstrak.
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            100% di browser — tidak ada data disimpan.
-          </p>
-        </div>
+  // ✅ MODE PROMOSI
+  if (!isEditing) {
+    return (
+      <div className="min-h-screen bg-background font-sans flex flex-col">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 pb-12">
+          <div className="mb-2">
+            <div className="flex items-center gap-2">
+              <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <FileText className="size-4 text-primary" strokeWidth={2} />
+              </div>
+              <span className="text-sm font-semibold text-foreground">
+                Tools
+              </span>
+            </div>
+          </div>
 
-        {/* Input Nama File */}
-        <div className="mb-4">
+          <h1 className="text-2xl font-bold text-foreground text-center mb-2 max-w-[320px]">
+            Pisah PDF
+          </h1>
+
+          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
+            Pilih halaman PDF yang ingin Anda ekstrak jadi file baru — langsung
+            di browser.
+          </p>
+
+          <button
+            onClick={handleStartEditing}
+            className="w-full max-w-xs py-3 bg-primary text-primary-foreground rounded-lg font-medium text-center transition-colors hover:bg-primary/90 active:opacity-90 select-none shadow-sm"
+          >
+            Mulai Pisah
+          </button>
+
+          <div className="mt-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} />
+            100% di perangkat Anda • Tidak ada data yang dikirim
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ MODE EDITING
+  return (
+    <NativeToolLayout
+      title="Pisah PDF"
+      onBack={handleBack}
+      actionButton={{
+        label: "Reset",
+        onClick: handleReset,
+        disabled: pagePreviews.length === 0,
+        loading: false,
+      }}
+      topControls={
+        <div className="px-2 flex flex-wrap gap-2">
+          <label
+            htmlFor={`pdf-upload-${uniqueId}`}
+            className="flex-1 min-w-[100px] py-2 bg-blue-600 text-white rounded text-sm font-medium flex items-center justify-center gap-1 cursor-pointer"
+          >
+            <Upload className="size-3.5" /> Unggah
+            <input
+              id={`pdf-upload-${uniqueId}`}
+              type="file"
+              ref={fileInputRef}
+              accept="application/pdf"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={handleSplit}
+            disabled={pagePreviews.length === 0 || isProcessing}
+            className={`flex-1 min-w-[100px] py-2 rounded text-sm font-medium flex items-center justify-center gap-1 ${
+              pagePreviews.length > 0 && !isProcessing
+                ? "bg-green-600 text-white hover:bg-green-700"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
+          >
+            <FileDown className="size-3.5" /> Ekstrak
+          </button>
+        </div>
+      }
+      contentClassName="bg-gray-50 p-4"
+    >
+      <div className="max-w-md mx-auto w-full space-y-4">
+        {/* Nama File Hasil */}
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Nama File Hasil
           </label>
@@ -179,57 +267,25 @@ export default function PdfSplitterTool() {
           />
         </div>
 
-        {/* Upload PDF */}
-        <div className="mb-6">
-          <label
-            htmlFor={`pdf-upload-${uniqueId}`}
-            className="w-full flex flex-col items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 cursor-pointer transition"
-          >
-            <svg
-              className="w-8 h-8 mb-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            Unggah File PDF
-            <input
-              id={`pdf-upload-${uniqueId}`}
-              type="file"
-              ref={fileInputRef}
-              accept="application/pdf"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-          </label>
-        </div>
-
-        {/* Preview Halaman */}
+        {/* Status Render */}
         {isRendering && (
-          <div className="text-center py-6 text-gray-500">
-            Memuat preview...
+          <div className="text-center py-4 text-gray-500">
+            Memuat preview halaman...
           </div>
         )}
 
+        {/* Preview Halaman */}
         {pagePreviews.length > 0 && !isRendering && (
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="text-sm font-medium text-gray-700">
-                Halaman ({pagePreviews.length})
+          <div>
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                <File className="size-3.5" /> Halaman ({pagePreviews.length})
               </h2>
               <button
                 onClick={toggleAll}
                 className="text-xs text-blue-600 hover:text-blue-800"
               >
-                {selectedPages.some(Boolean)
-                  ? "Batal Pilih Semua"
-                  : "Pilih Semua"}
+                {selectedPages.some(Boolean) ? "Batal Semua" : "Pilih Semua"}
               </button>
             </div>
 
@@ -244,15 +300,16 @@ export default function PdfSplitterTool() {
                   }`}
                   onClick={() => togglePage(index)}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={preview}
                     alt={`Halaman ${index + 1}`}
-                    className="w-full h-auto"
+                    className="w-full aspect-2/3 object-contain bg-white"
                   />
-                  <div className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-white rounded-full border border-gray-300">
-                    {selectedPages[index] && (
-                      <span className="text-blue-600 text-sm">✓</span>
+                  <div className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center bg-white rounded-full border">
+                    {selectedPages[index] ? (
+                      <Check className="size-3 text-blue-600" />
+                    ) : (
+                      <Square className="size-3 text-gray-400" />
                     )}
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-center text-xs py-1">
@@ -263,20 +320,16 @@ export default function PdfSplitterTool() {
             </div>
           </div>
         )}
-
-        {/* Tombol Ekstrak */}
-        <button
-          onClick={handleSplit}
-          disabled={pagePreviews.length === 0 || isProcessing}
-          className={`w-full py-3 px-4 rounded-xl font-medium text-white ${
-            pagePreviews.length === 0 || isProcessing
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
-          }`}
-        >
-          {isProcessing ? "Mengekstrak..." : "Ekstrak Halaman Terpilih"}
-        </button>
       </div>
-    </main>
+
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 text-center">
+            <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mb-2"></div>
+            <p className="text-sm text-gray-700">Mengekstrak halaman...</p>
+          </div>
+        </div>
+      )}
+    </NativeToolLayout>
   );
 }
